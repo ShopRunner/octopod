@@ -1,0 +1,1 @@
+from tonks.text.models.multi_task_bert import BertForMultiTaskClassification
