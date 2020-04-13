@@ -1,0 +1,9 @@
+creevey
+fastprogress
+joblib
+numpy
+pillow==6.2.1
+scikit-learn
+transformers==2.3.0
+torch==1.2.0
+torchvision==0.2.1
