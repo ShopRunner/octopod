@@ -5,6 +5,8 @@ Tonks is a general purpose deep learning library developed by the ShopRunner Dat
 
 What differentiates our library is that you can train a multi-task model with different datasets for each of your tasks. For example, you could train one model to label dress length for dresses and pants length for pants.
 
+See the [docs](https://tonks.readthedocs.io/en/latest/) for more details.
+
 To quickly get started, check out one of our tutorials in the `notebooks` folder. In particular, the `synthetic_data` tutorial provides a very quick example of how the code works.
 
 ## Structure
