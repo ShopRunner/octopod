@@ -1,9 +1,11 @@
 creevey
 fastprogress
 joblib
+m2r
 numpy
 pillow==6.2.1
 scikit-learn
+sphinx-rtd-theme==0.4.3
 transformers==2.3.0
 torch==1.2.0
 torchvision==0.2.1
