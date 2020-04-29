@@ -3,8 +3,11 @@ import time
 
 from fastprogress.fastprogress import format_time, master_bar, progress_bar
 import numpy as np
+from sklearn.metrics import accuracy_score
 import torch
-import torch.nn.functional as F
+
+
+from tonks.learner_utils import _get_loss_functions
 
 
 class MultiTaskLearner(object):
@@ -22,19 +25,19 @@ class MultiTaskLearner(object):
     task_dict: dict
         dictionary with all of the tasks as keys and the number of unique labels as the values
     """
-    def __init__(self, model, train_dataloader, val_dataloader, task_dict):
+    def __init__(self, model, train_dataloader, val_dataloader, task_dict, loss_function_dict=None):
         self.model = model
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader
         self.task_dict = task_dict
         self.tasks = [*task_dict]
+        self.loss_function_dict = _get_loss_functions(loss_function_dict, self.tasks)
 
     def fit(
         self,
         num_epochs,
         scheduler,
         step_scheduler_on_batch,
-        loss_function,
         optimizer,
         device='cuda:0',
         best_model=False
@@ -86,13 +89,14 @@ class MultiTaskLearner(object):
             for step, batch in enumerate(progress_bar(self.train_dataloader, parent=pbar)):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
-                y = y.type(torch.LongTensor)
+                y = self.loss_function_dict[task_type]['preprocessing'](y)
                 y = y.to(device)
+
                 num_rows = self._get_num_rows(x)
 
                 output = self.model(x)
 
-                current_loss = loss_function(output[task_type], y)
+                current_loss = self.loss_function_dict[task_type]['loss'](output[task_type], y)
 
                 scaled_loss = current_loss.item() * num_rows
 
@@ -118,7 +122,6 @@ class MultiTaskLearner(object):
                 )
 
             overall_val_loss, val_loss_dict, accuracies = self.validate(
-                loss_function,
                 device,
                 pbar
             )
@@ -133,7 +136,10 @@ class MultiTaskLearner(object):
             for task in self.tasks:
                 str_stats.append(f'{training_loss_dict[task]:.6f}')
                 str_stats.append(f'{val_loss_dict[task]:.6f}')
-                str_stats.append(f"{accuracies[task]['accuracy']:.6f}")
+                try:
+                    str_stats.append(f"{accuracies[task]['accuracy']:.6f}")
+                except ValueError:
+                    str_stats.append(f"{accuracies[task]['accuracy']}")
 
             str_stats.append(format_time(time.time() - start_time))
 
@@ -148,7 +154,7 @@ class MultiTaskLearner(object):
             self.model.load_state_dict(best_model_wts)
             print(f'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}')
 
-    def validate(self, loss_function, device='cuda:0', pbar=None):
+    def validate(self, device='cuda:0', pbar=None):
         """
         Evaluate the model on a validation set
 
@@ -170,38 +176,61 @@ class MultiTaskLearner(object):
         accuracies: dict
             accuracy measures for individual tasks
         """
+        preds_dict = {}
+        for task in self.tasks:
+            current_size = len(self.val_dataloader.loader_dict[task].dataset)
+            if self.loss_function_dict[task]['is_multi_class'] is True:
+                preds_dict[task] = {
+                    'y_true': np.zeros([current_size]),
+                    'y_pred': np.zeros([current_size, self.task_dict[task]])
+                }
+            else:
+                preds_dict[task] = {
+                    'y_true': np.zeros([current_size, self.task_dict[task]]),
+                    'y_pred': np.zeros([current_size, self.task_dict[task]])
+                }
+
         val_loss_dict = {task: 0.0 for task in self.tasks}
-        accuracies = {task: {'num_items': 0.0, 'num_correct': 0.0} for task in self.tasks}
+        accuracies = {task: {'accuracy': 0.0} for task in self.tasks}
 
         overall_val_loss = 0.0
 
         self.model.eval()
 
         with torch.no_grad():
+            index_dict = {task: 0 for task in self.tasks}
             for step, batch in enumerate(
                 progress_bar(self.val_dataloader, parent=pbar, leave=(pbar is not None))
             ):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
-                y = y.type(torch.LongTensor)
+
+                y = self.loss_function_dict[task_type]['preprocessing'](y)
                 y = y.to(device)
-                num_rows = self._get_num_rows(x)
 
                 output = self.model(x)
 
-                current_loss = loss_function(
-                    output[task_type], y
-                ).item() * num_rows
+                current_loss = self.loss_function_dict[task_type]['loss'](output[task_type], y)
 
                 val_loss_dict[task_type] += current_loss
-
                 overall_val_loss += current_loss
 
-                accuracies[task_type]['num_correct'] += torch.sum(
-                    torch.max(output[task_type], 1)[1] == y
-                ).item()
+                if self.loss_function_dict[task_type]['final_layer'] is not None:
+                    y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
+                else:
+                    y_pred = output[task_type]
 
-                accuracies[task_type]['num_items'] += num_rows
+                y_pred = y_pred.cpu().numpy()
+                y_true = y.cpu().numpy()
+
+                current_index = index_dict[task_type]
+
+                num_rows = self._get_num_rows(x)
+
+                preds_dict[task_type]['y_true'][current_index: current_index + num_rows] = y_true
+                preds_dict[task_type]['y_pred'][current_index: current_index + num_rows, :] = y_pred
+
+                index_dict[task_type] += num_rows
 
         overall_val_loss = overall_val_loss/self.val_dataloader.total_samples
 
@@ -212,9 +241,16 @@ class MultiTaskLearner(object):
             )
 
         for task in accuracies.keys():
-            accuracies[task]['accuracy'] = (
-                accuracies[task]['num_correct'] / accuracies[task]['num_items']
-            )
+            if self.loss_function_dict[task]['accuracy_pre_processing'] is not None:
+                task_preds = (
+                    self.loss_function_dict[task]
+                    ['accuracy_pre_processing'](preds_dict[task]['y_pred'])
+                )
+                acc = accuracy_score(preds_dict[task]['y_true'], task_preds)
+            else:
+                acc = 'N/A'
+
+            accuracies[task]['accuracy'] = acc
 
         return overall_val_loss, val_loss_dict, accuracies
 
@@ -236,10 +272,16 @@ class MultiTaskLearner(object):
         preds_dict = {}
         for task in self.tasks:
             current_size = len(self.val_dataloader.loader_dict[task].dataset)
-            preds_dict[task] = {
-                'y_true': np.zeros([current_size]),
-                'y_pred': np.zeros([current_size, self.task_dict[task]])
-            }
+            if self.loss_function_dict[task]['is_multi_class'] is True:
+                preds_dict[task] = {
+                    'y_true': np.zeros([current_size]),
+                    'y_pred': np.zeros([current_size, self.task_dict[task]])
+                }
+            else:
+                preds_dict[task] = {
+                    'y_true': np.zeros([current_size, self.task_dict[task]]),
+                    'y_pred': np.zeros([current_size, self.task_dict[task]])
+                }
 
         self.model = self.model.to(device)
         self.model.eval()
@@ -249,13 +291,17 @@ class MultiTaskLearner(object):
             for step, batch in enumerate(progress_bar(self.val_dataloader, leave=False)):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
-                y = y.type(torch.LongTensor)
+
+                y = self.loss_function_dict[task_type]['preprocessing'](y)
                 y = y.to(device)
 
                 output = self.model(x)
+                if self.loss_function_dict[task_type]['final_layer'] is not None:
+                    y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
+                else:
+                    y_pred = output[task_type]
 
-                y_pred = F.softmax(output[task_type], dim=1).cpu().numpy()
-
+                y_pred = y_pred.cpu().numpy()
                 y_true = y.cpu().numpy()
 
                 current_index = index_dict[task_type]
