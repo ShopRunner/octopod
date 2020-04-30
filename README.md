@@ -23,6 +23,8 @@ To quickly get started, check out one of our tutorials in the `notebooks` folder
 pip install tonks
 ```
 
+You may get an error from the `tokenizer` package if you do not have a Rust compiler installed; see https://github.com/huggingface/transformers/issues/2831#issuecomment-592724471.
+
 ## Notes
 Currently, this library supports ResNet50 and BERT models.
 
