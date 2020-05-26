@@ -55,7 +55,7 @@ class TonksImageDataset(Dataset):
         full_img = self.transform(full_img)
         cropped_img = self.crop_transform(cropped_img)
 
-        label = torch.from_numpy(np.array(label)).float()
+        label = torch.from_numpy(np.array(label)).long()
 
         return {'full_img': full_img,
                 'crop_img': cropped_img}, label

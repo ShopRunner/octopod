@@ -89,7 +89,6 @@ class MultiTaskLearner(object):
             for step, batch in enumerate(progress_bar(self.train_dataloader, parent=pbar)):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
-                y = self.loss_function_dict[task_type]['preprocessing'](y)
                 y = y.to(device)
 
                 num_rows = self._get_num_rows(x)
@@ -205,7 +204,6 @@ class MultiTaskLearner(object):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
 
-                y = self.loss_function_dict[task_type]['preprocessing'](y)
                 y = y.to(device)
 
                 output = self.model(x)
@@ -292,7 +290,6 @@ class MultiTaskLearner(object):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
 
-                y = self.loss_function_dict[task_type]['preprocessing'](y)
                 y = y.to(device)
 
                 output = self.model(x)

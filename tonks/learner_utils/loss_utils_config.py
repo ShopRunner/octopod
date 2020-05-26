@@ -33,7 +33,7 @@ DEFAULT_LOSSES_DICT = {
                                   'preprocessing': _cross_entropy_preprocessing,
                                   },
     'bce_logits': {'accuracy_pre_processing': _multi_label_accuracy_preprocess,
-                   'final_layer': F.sigmoid,
+                   'final_layer': torch.sigmoid,
                    'is_multi_class': False,
                    'loss': nn.BCEWithLogitsLoss(),
                    'preprocessing': _bce_logits_preprocessing,
