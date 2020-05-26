@@ -24,6 +24,10 @@ class MultiTaskLearner(object):
         dataloader for all of the validation data
     task_dict: dict
         dictionary with all of the tasks as keys and the number of unique labels as the values
+    loss_function_dict: dict
+        dictionary where keys are task names and values are supported loss functions.
+        Currently supported losses are `categorical_cross_entropy` for multi-class tasks
+        or `bce_logits` for multi-label tasks
     """
     def __init__(self, model, train_dataloader, val_dataloader, task_dict, loss_function_dict=None):
         self.model = model
@@ -213,10 +217,7 @@ class MultiTaskLearner(object):
                 val_loss_dict[task_type] += current_loss
                 overall_val_loss += current_loss
 
-                if self.loss_function_dict[task_type]['final_layer'] is not None:
-                    y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
-                else:
-                    y_pred = output[task_type]
+                y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
 
                 y_pred = y_pred.cpu().numpy()
                 y_true = y.cpu().numpy()
@@ -239,14 +240,11 @@ class MultiTaskLearner(object):
             )
 
         for task in accuracies.keys():
-            if self.loss_function_dict[task]['accuracy_pre_processing'] is not None:
-                task_preds = (
-                    self.loss_function_dict[task]
-                    ['accuracy_pre_processing'](preds_dict[task]['y_pred'])
-                )
-                acc = accuracy_score(preds_dict[task]['y_true'], task_preds)
-            else:
-                acc = 'N/A'
+            task_preds = (
+                self.loss_function_dict[task]
+                ['accuracy_pre_processing'](preds_dict[task]['y_pred'])
+            )
+            acc = accuracy_score(preds_dict[task]['y_true'], task_preds)
 
             accuracies[task]['accuracy'] = acc
 
@@ -293,10 +291,7 @@ class MultiTaskLearner(object):
                 y = y.to(device)
 
                 output = self.model(x)
-                if self.loss_function_dict[task_type]['final_layer'] is not None:
-                    y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
-                else:
-                    y_pred = output[task_type]
+                y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
 
                 y_pred = y_pred.cpu().numpy()
                 y_true = y.cpu().numpy()

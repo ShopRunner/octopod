@@ -13,7 +13,10 @@ def _get_loss_functions(loss_function_dict, tasks):
     loss_function_dict: dictionary
         keys are the tasks, values are either strings for a supported
         loss function or the parts for a custom loss function. nessessary
-        keys are 'loss', 'preprocessing', 'final_layer', and 'accuracy_pre_processing'.
+        keys are 'loss', 'is_multi_class','final_layer', and 'accuracy_pre_processing'.
+    tasks: list
+        list of tasks that that are being used in a Tonks MultiTaskLearner, this list
+        of tasks is used to check that all the tasks are inside of the loss_function_dict
 
     Notes
     -----
