@@ -38,6 +38,23 @@ def test_learner_with_missing_loss(test_missing_task,
     assert ('must provide either valid loss names for ALL tasks' in str(e.value)) is True
 
 
+def test_learner_with_invalid_loss_name(test_invalid_loss_name,
+                                        test_train_val_loaders):
+    loss_function_dict = test_invalid_loss_name
+    task_dict = {'task1': 1, 'task2': 1}
+
+    model = ResnetForMultiTaskClassification(
+        new_task_dict=task_dict)
+
+    with pytest.raises(Exception) as e:
+        MultiInputMultiTaskLearner(model,
+                                   test_train_val_loaders,
+                                   test_train_val_loaders,
+                                   task_dict,
+                                   loss_function_dict)
+    assert ('found invalid loss functions, valid losses' in str(e.value)) is True
+
+
 def test_learner_with_bce_and_cce(test_all_tasks_diff_losses,
                                   test_train_val_loaders):
     loss_function_dict = test_all_tasks_diff_losses

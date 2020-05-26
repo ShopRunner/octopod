@@ -28,6 +28,14 @@ def test_all_tasks_diff_losses():
 
 
 @pytest.fixture()
+def test_invalid_loss_name():
+    loss_dict = {'task1': 'not_supported_loss_name',
+                 'task2': 'categorical_cross_entropy'}
+
+    return loss_dict
+
+
+@pytest.fixture()
 def test_train_val_loaders():
     df = pd.DataFrame({'image_loc': ['sample_data/tonks.jpeg'],
                        'category': [1]})
