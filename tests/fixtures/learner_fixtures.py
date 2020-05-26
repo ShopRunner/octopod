@@ -28,39 +28,6 @@ def test_all_tasks_diff_losses():
 
 
 @pytest.fixture()
-def test_custom_loss_good():
-    loss_dict = {'task1': {'loss': nn.CrossEntropyLoss(),
-                           'preprocessing': None,
-                           'final_layer': None,
-                           'accuracy_pre_processing': None,
-                           'is_multi_class': True},
-                 'task2': 'categorical_cross_entropy'}
-
-    return loss_dict
-
-
-@pytest.fixture()
-def test_custom_loss_missing_keys():
-    loss_dict = {'task1': {'loss': nn.CrossEntropyLoss(),
-                           'preprocessing': None},
-                 'task2': 'categorical_cross_entropy'}
-
-    return loss_dict
-
-
-@pytest.fixture()
-def test_custom_loss_invalid_keys():
-    loss_dict = {'task1': {'INVALID_KEY_loss': nn.CrossEntropyLoss(),
-                           'preprocessing': None,
-                           'final_layer': None,
-                           'accuracy_pre_processing': None,
-                           'is_multi_class': True},
-                 'task2': 'categorical_cross_entropy'}
-
-    return loss_dict
-
-
-@pytest.fixture()
 def test_train_val_loaders():
     df = pd.DataFrame({'image_loc': ['sample_data/tonks.jpeg'],
                        'category': [1]})

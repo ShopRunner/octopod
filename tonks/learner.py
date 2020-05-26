@@ -179,19 +179,7 @@ class MultiTaskLearner(object):
         accuracies: dict
             accuracy measures for individual tasks
         """
-        preds_dict = {}
-        for task in self.tasks:
-            current_size = len(self.val_dataloader.loader_dict[task].dataset)
-            if self.loss_function_dict[task]['is_multi_class'] is True:
-                preds_dict[task] = {
-                    'y_true': np.zeros([current_size]),
-                    'y_pred': np.zeros([current_size, self.task_dict[task]])
-                }
-            else:
-                preds_dict[task] = {
-                    'y_true': np.zeros([current_size, self.task_dict[task]]),
-                    'y_pred': np.zeros([current_size, self.task_dict[task]])
-                }
+        preds_dict = self._create_preds_dict()
 
         val_loss_dict = {task: 0.0 for task in self.tasks}
         accuracies = {task: {'accuracy': 0.0} for task in self.tasks}
@@ -265,19 +253,7 @@ class MultiTaskLearner(object):
             'y_true': numpy array of true labels, shape: (num_rows,)
             'y_pred': numpy of array of predicted probabilities: shape (num_rows, num_labels)
         """
-        preds_dict = {}
-        for task in self.tasks:
-            current_size = len(self.val_dataloader.loader_dict[task].dataset)
-            if self.loss_function_dict[task]['is_multi_class'] is True:
-                preds_dict[task] = {
-                    'y_true': np.zeros([current_size]),
-                    'y_pred': np.zeros([current_size, self.task_dict[task]])
-                }
-            else:
-                preds_dict[task] = {
-                    'y_true': np.zeros([current_size, self.task_dict[task]]),
-                    'y_pred': np.zeros([current_size, self.task_dict[task]])
-                }
+        preds_dict = self._create_preds_dict()
 
         self.model = self.model.to(device)
         self.model.eval()
@@ -312,6 +288,22 @@ class MultiTaskLearner(object):
 
     def _get_num_rows(self, x):
         return x.size(0)
+
+    def _create_preds_dict(self):
+        preds_dict = {}
+        for task in self.tasks:
+            current_size = len(self.val_dataloader.loader_dict[task].dataset)
+            if self.loss_function_dict[task]['is_multi_class'] is True:
+                preds_dict[task] = {
+                    'y_true': np.zeros([current_size]),
+                    'y_pred': np.zeros([current_size, self.task_dict[task]])
+                }
+            else:
+                preds_dict[task] = {
+                    'y_true': np.zeros([current_size, self.task_dict[task]]),
+                    'y_pred': np.zeros([current_size, self.task_dict[task]])
+                }
+        return preds_dict
 
 
 class MultiInputMultiTaskLearner(MultiTaskLearner):

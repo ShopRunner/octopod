@@ -36,8 +36,7 @@ def _get_loss_functions(loss_function_dict, tasks):
     if not all(task in loss_dict for task in tasks):
         missing_tasks = set(tasks)-loss_dict.keys()
 
-        raise Exception('must provide either valid loss names or '
-                        'loss functions and preprocessing steps for ALL tasks '
+        raise Exception('must provide either valid loss names for ALL tasks '
                         f'missing tasks are {missing_tasks}')
 
     for key, value in loss_dict.items():
@@ -46,19 +45,10 @@ def _get_loss_functions(loss_function_dict, tasks):
 
         elif value == 'bce_logits':
             processed_loss_function_dict[key] = DEFAULT_LOSSES_DICT['bce_logits']
+
         else:
-            try:
-                processed_loss_function_dict[key] = (
-                    {'accuracy_pre_processing': value['accuracy_pre_processing'],
-                     'final_layer': value['final_layer'],
-                     'is_multi_class': value['is_multi_class'],
-                     'loss': value['loss'],
-                     'preprocessing': value['preprocessing'],
-                     }
-                )
-            except KeyError:
-                checking_missing_keys = set(VALID_LOSS_KEYS) - value.keys()
-                raise Exception('found invalid or missing keys, check loss dictionary keys for '
-                                f'{key} task, invalid or missing keys are {checking_missing_keys}')
+
+            raise Exception('found invalid loss functions, valid losses are categorical_cross_entropy '
+                            ' or bce_logits, check that all tasks are valid')
 
     return processed_loss_function_dict
