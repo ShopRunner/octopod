@@ -9,7 +9,7 @@ def _cross_entropy_preprocessing(x):
 
 
 def _bce_logits_preprocessing(x):
-    x = x.unsqueeze(1)
+    #x = x.unsqueeze(1)
     return x.type(torch.FloatTensor)
 
 
