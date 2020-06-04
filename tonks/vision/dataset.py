@@ -35,12 +35,12 @@ class TonksImageDataset(Dataset):
         self.x = x
         self.y = y
 
-        if transform == 'train' or 'val':
+        if transform in ('train', 'val'):
             self.transform = full_img_transforms[transform]
         else:
             self.transform = transform
 
-        if crop_transform == 'train' or 'val':
+        if crop_transform in ('train', 'val'):
             self.crop_transform = cropped_transforms[crop_transform]
         else:
             self.crop_transform = crop_transform
@@ -64,17 +64,18 @@ class TonksImageDataset(Dataset):
         return len(self.x)
 
 
-class TonksImageDatasetMultiLabel(Dataset):
+class TonksImageDatasetMultiLabel(TonksImageDataset):
     """
-    Load data specifically for use with a image models
+    Subclass of TonksImageDataset used for multi-label tasks
 
     Parameters
     ----------
     x: pandas Series
         file paths to stored images
     y: list
-        A list of dummy-encoded categories
-        For instance, y might be [0,1,2,0] for a 3 class problem with 4 samples
+        a list of binary encoded categories with length equal to number of
+        classes in the multi-label task. For a 4 class multi-label task
+        a sample list would be [1,0,0,1]
     transform: str or list of PyTorch transforms
         specifies how to preprocess the full image for a Tonks image model
         To use the built-in Tonks image transforms, use the strings: `train` or `val`
@@ -84,23 +85,7 @@ class TonksImageDatasetMultiLabel(Dataset):
         To use the built-in Tonks image transforms, use strings `train` or `val`
         To use custom transformations supply a list of PyTorch transforms
     """
-    def __init__(self,
-                 x,
-                 y,
-                 transform='train',
-                 crop_transform='train'):
-        self.x = x
-        self.y = y
-
-        if transform == 'train' or 'val':
-            self.transform = full_img_transforms[transform]
-        else:
-            self.transform = transform
-
-        if crop_transform == 'train' or 'val':
-            self.crop_transform = cropped_transforms[crop_transform]
-        else:
-            self.crop_transform = crop_transform
+    
 
     def __getitem__(self, index):
         """Return tuple of images as PyTorch tensors and and tensor of labels"""
@@ -111,13 +96,9 @@ class TonksImageDatasetMultiLabel(Dataset):
 
         full_img = self.transform(full_img)
         cropped_img = self.crop_transform(cropped_img)
-        #rint(label,type(label))
+
         label = torch.FloatTensor(label)
 
 
         return {'full_img': full_img,
                 'crop_img': cropped_img}, label
-
-    def __len__(self):
-        return len(self.x)
-

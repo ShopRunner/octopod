@@ -42,7 +42,7 @@ class TonksTextDataset(Dataset):
 
         x_input = torch.from_numpy(np.array(input_ids))
 
-        y_output = torch.from_numpy(np.array(self.y[index]))
+        y_output = torch.from_numpy(np.array(self.y[index])).long()
 
         return x_input, y_output
 

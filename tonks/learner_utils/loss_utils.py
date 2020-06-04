@@ -5,8 +5,7 @@ def _get_loss_functions(loss_function_dict, tasks):
     """
     Takes in dictionary of tasks and their loss configurations
     if it is a supported loss, CrossEntropyLoss() or BCELogits()
-    then it auto configures. If it is a custom loss then the custom
-    loss is checked to make sure it contains nessessary keys.
+    then it auto configures other specifications
 
     Parameters
     ----------
@@ -14,16 +13,13 @@ def _get_loss_functions(loss_function_dict, tasks):
         keys are the tasks, values are either strings for a supported
         loss function or the parts for a custom loss function. nessessary
         keys are 'loss', 'is_multi_class','final_layer', and 'accuracy_pre_processing'.
+        If the 'loss_function_dict' is set to None, then all tasks will be set to have
+        `categorical_cross_entropy` loss.
     tasks: list
         list of tasks that that are being used in a Tonks MultiTaskLearner, this list
         of tasks is used to check that all the tasks are inside of the loss_function_dict
 
-    Notes
-    -----
-    For tasks where there is not a final layer activation required on the final layer
-    or where an accuracy score is not relevant `final_layer` and or `accuracy_pre_processing`
-    can be set to None. If 'accuracy_pre_processing' is set to None than accuracy will show as
-    `N/A`.
+    
     """
     loss_dict = loss_function_dict
     processed_loss_function_dict = {}
@@ -48,7 +44,10 @@ def _get_loss_functions(loss_function_dict, tasks):
 
         else:
 
-            raise Exception('found invalid loss functions, valid losses are categorical_cross_entropy '
-                            ' or bce_logits, check that all tasks are valid')
+            raise Exception(
+                            'Found invalid loss function: {}. '
+                            'Valid losses are categorical_cross_entropy '
+                            'or bce_logits. Check that all tasks loss names are valid.'.format(value)
+                        )
 
     return processed_loss_function_dict
