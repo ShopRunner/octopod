@@ -178,7 +178,7 @@ class MultiTaskLearner(object):
         accuracies: dict
             accuracy measures for individual tasks
         """
-        preds_dict = self._create_preds_dict()
+        preds_dict = {} #self._create_preds_dict()
 
         val_loss_dict = {task: 0.0 for task in self.tasks}
         accuracies = {task: {'accuracy': 0.0} for task in self.tasks}
@@ -196,7 +196,7 @@ class MultiTaskLearner(object):
                 x = self._return_input_on_device(x, device)
 
                 y = y.to(device)
-                #print(x)
+                
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type]['loss'](output[task_type], y)
@@ -213,8 +213,16 @@ class MultiTaskLearner(object):
 
                 num_rows = self._get_num_rows(x)
 
-                preds_dict[task_type]['y_true'][current_index: current_index + num_rows] = y_true
-                preds_dict[task_type]['y_pred'][current_index: current_index + num_rows, :] = y_pred
+                if task_type not in preds_dict:
+
+                    preds_dict[task_type] = {
+                    'y_true': y_true,
+                    'y_pred': y_pred
+                    }
+
+                else:
+                    preds_dict[task_type]['y_true'] = np.concatenate((preds_dict[task_type]['y_true'],y_true))
+                    preds_dict[task_type]['y_pred'] = np.concatenate((preds_dict[task_type]['y_pred'], y_pred))
 
                 index_dict[task_type] += num_rows
 
@@ -234,8 +242,14 @@ class MultiTaskLearner(object):
         and then do the preprocessing for thee accuracy calculation. return 2 values and use
         those as needed...
         '''
+        print(accuracies.keys())
         for task in accuracies.keys():
-            acc, y_preds = self.loss_function_dict[task_type]['acc_func'](preds_dict[task]['y_true'], preds_dict[task]['y_pred'])
+
+            y_true = preds_dict[task]['y_true']
+            y_raw_pred = preds_dict[task]['y_pred']
+            print(task,self.loss_function_dict[task]['acc_func'])#,y_true,y_raw_pred,type(y_raw_pred))
+
+            acc, y_preds = self.loss_function_dict[task]['acc_func'](y_true, y_raw_pred)
 
             '''
             print(preds_dict[task]['y_pred'])
@@ -266,8 +280,8 @@ class MultiTaskLearner(object):
             'y_true': numpy array of true labels, shape: (num_rows,)
             'y_pred': numpy of array of predicted probabilities: shape (num_rows, num_labels)
         """
-        preds_dict = self._create_preds_dict()
-
+        #preds_dict = self._create_preds_dict()
+        preds_dict = {}
         self.model = self.model.to(device)
         self.model.eval()
 
@@ -288,10 +302,18 @@ class MultiTaskLearner(object):
                 current_index = index_dict[task_type]
 
                 num_rows = self._get_num_rows(x)
+                if task_type not in preds_dict:
+                    print(task_type)
 
-                preds_dict[task_type]['y_true'][current_index: current_index + num_rows] = y_true
-                preds_dict[task_type]['y_pred'][current_index: current_index + num_rows, :] = y_pred
-
+                    preds_dict[task_type] = {
+                    'y_true': y_true,
+                    'y_pred': y_pred
+                    }
+                    #preds_dict[task_type]['y_true'] = y_true
+                    #preds_dict[task_type]['y_pred'] = y_pred
+                else:
+                    preds_dict[task_type]['y_true'] = np.concatenate((preds_dict[task_type]['y_true'],y_true))
+                    preds_dict[task_type]['y_pred'] = np.concatenate((preds_dict[task_type]['y_true'], y_true))
                 index_dict[task_type] += num_rows
 
         for task in  self.tasks:
@@ -309,14 +331,17 @@ class MultiTaskLearner(object):
     def _create_preds_dict(self):
         preds_dict = {}
         for task in self.tasks:
+            print('preds_dict',task)
             current_size = len(self.val_dataloader.loader_dict[task].dataset)
             #if self.loss_function_dict[task]['is_multi_class'] is True:
+            
             preds_dict[task] = {
                     'y_true': np.zeros([current_size]),
                     'y_pred': np.zeros([current_size, self.task_dict[task]])
                 }
-            '''else:
-                preds_dict[task] = {
+            '''
+            #else:
+            preds_dict[task] = {
                     'y_true': np.zeros([current_size, self.task_dict[task]]),
                     'y_pred': np.zeros([current_size, self.task_dict[task]])
                 }
