@@ -3,7 +3,6 @@ import time
 
 from fastprogress.fastprogress import format_time, master_bar, progress_bar
 import numpy as np
-from sklearn.metrics import accuracy_score
 import torch
 
 
@@ -197,7 +196,7 @@ class MultiTaskLearner(object):
                 x = self._return_input_on_device(x, device)
 
                 y = y.to(device)
-
+                #print(x)
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type]['loss'](output[task_type], y)
@@ -205,9 +204,9 @@ class MultiTaskLearner(object):
                 val_loss_dict[task_type] += current_loss
                 overall_val_loss += current_loss
 
-                y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
+                #y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
 
-                y_pred = y_pred.cpu().numpy()
+                y_pred = output[task_type].cpu().numpy()
                 y_true = y.cpu().numpy()
 
                 current_index = index_dict[task_type]
@@ -227,15 +226,29 @@ class MultiTaskLearner(object):
                 / len(self.val_dataloader.loader_dict[task].dataset)
             )
 
+        '''
+        we can unify how we store the data as arrrays in shape of the final layer...
+        softmax, sigmoid, custom all are jusr # nodes
+
+        Then in accuracy calculation we can apply the function to every row in the array
+        and then do the preprocessing for thee accuracy calculation. return 2 values and use
+        those as needed...
+        '''
         for task in accuracies.keys():
+            acc, y_preds = self.loss_function_dict[task_type]['acc_func'](preds_dict[task]['y_true'], preds_dict[task]['y_pred'])
+
+            '''
+            print(preds_dict[task]['y_pred'])
+            tensor_y_pred = torch.from_numpy(preds_dict[task]['y_pred'])
+            y_preds = self.loss_function_dict[task_type]['final_layer'](tensor_y_pred).numpy()
             task_preds = (
                 self.loss_function_dict[task]
-                ['accuracy_pre_processing'](preds_dict[task]['y_pred'])
+                ['accuracy_pre_processing'](y_preds)
             )
             acc = accuracy_score(preds_dict[task]['y_true'], task_preds)
-
+            '''
             accuracies[task]['accuracy'] = acc
-
+            
         return overall_val_loss, val_loss_dict, accuracies
 
     def get_val_preds(self, device='cuda:0'):
@@ -267,9 +280,9 @@ class MultiTaskLearner(object):
                 y = y.to(device)
 
                 output = self.model(x)
-                y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
+                #y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
 
-                y_pred = y_pred.cpu().numpy()
+                y_pred = output[task_type].cpu().numpy()
                 y_true = y.cpu().numpy()
 
                 current_index = index_dict[task_type]
@@ -280,6 +293,10 @@ class MultiTaskLearner(object):
                 preds_dict[task_type]['y_pred'][current_index: current_index + num_rows, :] = y_pred
 
                 index_dict[task_type] += num_rows
+
+        for task in  self.tasks:
+            acc, y_preds = self.loss_function_dict[task_type]['acc_func'](preds_dict[task]['y_true'], preds_dict[task]['y_pred'])
+            preds_dict[task_type]['y_pred'] = y_preds
 
         return preds_dict
 
@@ -293,16 +310,17 @@ class MultiTaskLearner(object):
         preds_dict = {}
         for task in self.tasks:
             current_size = len(self.val_dataloader.loader_dict[task].dataset)
-            if self.loss_function_dict[task]['is_multi_class'] is True:
-                preds_dict[task] = {
+            #if self.loss_function_dict[task]['is_multi_class'] is True:
+            preds_dict[task] = {
                     'y_true': np.zeros([current_size]),
                     'y_pred': np.zeros([current_size, self.task_dict[task]])
                 }
-            else:
+            '''else:
                 preds_dict[task] = {
                     'y_true': np.zeros([current_size, self.task_dict[task]]),
                     'y_pred': np.zeros([current_size, self.task_dict[task]])
                 }
+            '''
         return preds_dict
 
 

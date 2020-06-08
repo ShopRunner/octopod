@@ -2,6 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from sklearn.metrics import accuracy_score
 
 
 def _softmax_final_layer(x):
@@ -16,15 +17,31 @@ def _multi_label_accuracy_preprocess(x):
     return np.round(x, 0)
 
 
+def _multi_class_accuracy(y_true, preds):
+    tensor_y_pred = torch.from_numpy(preds)
+    y_preds = _softmax_final_layer((tensor_y_pred)).numpy()
+    task_preds = (
+                _multi_class_accuracy_preprocess(y_preds)
+            )
+    acc = accuracy_score(y_true, task_preds)
+    return acc, y_preds
+
+
+def _multi_label_accuracy(y_true, preds):
+    tensor_y_pred = torch.from_numpy(preds)
+    y_preds = torch.sigmoid(tensor_y_pred).numpy()
+    task_preds = (
+                _multi_label_accuracy_preprocess(y_preds)
+            )
+    acc = accuracy_score(y_true, task_preds)
+    return acc, y_preds
+
+
 DEFAULT_LOSSES_DICT = {
-    'categorical_cross_entropy': {'accuracy_pre_processing': _multi_class_accuracy_preprocess,
-                                  'final_layer': _softmax_final_layer,
-                                  'is_multi_class': True,
+    'categorical_cross_entropy': {'acc_func':_multi_class_accuracy,
                                   'loss': nn.CrossEntropyLoss(),
                                   },
-    'bce_logits': {'accuracy_pre_processing': _multi_label_accuracy_preprocess,
-                   'final_layer': torch.sigmoid,
-                   'is_multi_class': False,
+    'bce_logits': {'acc_func': _multi_class_accuracy,
                    'loss': nn.BCEWithLogitsLoss(),
                    }
 }
