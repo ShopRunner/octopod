@@ -1,6 +1,5 @@
 import pandas as pd
 import pytest
-import torch.nn as nn
 from torch.utils.data import DataLoader
 
 from tonks import MultiDatasetLoader
@@ -33,6 +32,34 @@ def test_invalid_loss_name():
                  'task2': 'categorical_cross_entropy'}
 
     return loss_dict
+
+
+@pytest.fixture()
+def test_no_acc_dict():
+    return None
+
+
+@pytest.fixture()
+def test_acc_dict_missing_task():
+    acc_dict = {'task1': 'multi_class_acc'}
+
+    return acc_dict
+
+
+@pytest.fixture()
+def test_acc_dict_all_tasks_diff_losses():
+    acc_dict = {'task1': 'multi_class_acc',
+                'task2': 'multi_label_acc'}
+
+    return acc_dict
+
+
+@pytest.fixture()
+def test_acc_dict_invalid_name():
+    acc_dict = {'task1': 'not_supported_acc_name',
+                'task2': 'multi_class_acc'}
+
+    return acc_dict
 
 
 @pytest.fixture()

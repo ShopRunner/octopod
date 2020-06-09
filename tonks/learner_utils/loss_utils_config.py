@@ -1,19 +1,12 @@
 import numpy as np
+from sklearn.metrics import accuracy_score
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from sklearn.metrics import accuracy_score
 
 
 def _softmax_final_layer(x):
-    try:
-        x = F.softmax(x, dim=1)
-    except:
-        print('comeon',x)
-        x = F.softmax(x, dim=0)
-        print('wut',x)
-    
-    return x
+    return F.softmax(x, dim=1)
 
 
 def _multi_class_accuracy_preprocess(x):
@@ -25,35 +18,71 @@ def _multi_label_accuracy_preprocess(x):
 
 
 def _multi_class_accuracy(y_true, preds):
+    """
+    Takes in raw outputs from Tonks task heads and outputs an accuracy metric
+    and the processed predictions after a softmax as been applied
+
+    Parameters
+    ----------
+    y_true: np.array
+        Target labels for a specific task for the predicted samples in `preds`
+    preds: np.array
+        predicted values for the validation set for a specific task
+
+    Returns
+    -------
+    acc: float
+        Output of a sklearn accuracy score function
+    y_preds: np.array
+        array of predicted values where a softmax has been applied
+
+    """
     tensor_y_pred = torch.from_numpy(preds)
-    #print(tensor_y_pred)
     y_preds = _softmax_final_layer(tensor_y_pred).numpy()
     task_preds = (
-                _multi_class_accuracy_preprocess(y_preds)
-            )
-    print('multi_class',task_preds,y_true)
+        _multi_class_accuracy_preprocess(y_preds)
+    )
     acc = accuracy_score(y_true, task_preds)
     return acc, y_preds
 
 
 def _multi_label_accuracy(y_true, preds):
+    """
+    Takes in raw outputs from Tonks task heads and outputs an accuracy metric
+    and the processed predictions after a sigmoid as been applied
+
+    Parameters
+    ----------
+    y_true: np.array
+        Target labels for a specific task for the predicted samples in `preds`
+    preds: np.array
+        predicted values for the validation set for a specific task
+
+    Returns
+    -------
+    acc: float
+        Output of a sklearn accuracy score function
+    y_preds: np.array
+        array of predicted values where a sigmoid has been applied
+    """
     tensor_y_pred = torch.from_numpy(preds)
     y_preds = torch.sigmoid(tensor_y_pred).numpy()
     task_preds = (
-                _multi_label_accuracy_preprocess(y_preds)
-            )
-    print('multi_label',task_preds,y_true)
+        _multi_label_accuracy_preprocess(y_preds)
+    )
     acc = accuracy_score(y_true, task_preds)
     return acc, y_preds
 
 
 DEFAULT_LOSSES_DICT = {
-    'categorical_cross_entropy': {'acc_func':_multi_class_accuracy,
-                                  'loss': nn.CrossEntropyLoss(),
-                                  },
-    'bce_logits': {'acc_func': _multi_label_accuracy,
-                   'loss': nn.BCEWithLogitsLoss(),
-                   }
+    'categorical_cross_entropy': {'loss': nn.CrossEntropyLoss()},
+    'bce_logits': {'loss': nn.BCEWithLogitsLoss()}
+}
+
+
+DEFAULT_ACC_DICT = {
+    'multi_class_acc': {'acc_func': _multi_class_accuracy},
+    'multi_label_acc': {'acc_func': _multi_label_accuracy}
 }
 
 VALID_LOSS_KEYS = DEFAULT_LOSSES_DICT['categorical_cross_entropy'].keys()

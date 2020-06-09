@@ -85,7 +85,6 @@ class TonksImageDatasetMultiLabel(TonksImageDataset):
         To use the built-in Tonks image transforms, use strings `train` or `val`
         To use custom transformations supply a list of PyTorch transforms
     """
-    
 
     def __getitem__(self, index):
         """Return tuple of images as PyTorch tensors and and tensor of labels"""
@@ -98,7 +97,6 @@ class TonksImageDatasetMultiLabel(TonksImageDataset):
         cropped_img = self.crop_transform(cropped_img)
 
         label = torch.FloatTensor(label)
-
 
         return {'full_img': full_img,
                 'crop_img': cropped_img}, label

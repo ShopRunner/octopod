@@ -6,7 +6,7 @@ import numpy as np
 import torch
 
 
-from tonks.learner_utils import _get_loss_functions
+from tonks.learner_utils import _get_acc_functions, _get_loss_functions
 
 
 class MultiTaskLearner(object):
@@ -28,13 +28,20 @@ class MultiTaskLearner(object):
         Currently supported losses are `categorical_cross_entropy` for multi-class tasks
         or `bce_logits` for multi-label tasks
     """
-    def __init__(self, model, train_dataloader, val_dataloader, task_dict, loss_function_dict=None):
+    def __init__(self,
+                 model,
+                 train_dataloader,
+                 val_dataloader,
+                 task_dict,
+                 loss_function_dict=None,
+                 acc_function_dict=None):
         self.model = model
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader
         self.task_dict = task_dict
         self.tasks = [*task_dict]
         self.loss_function_dict = _get_loss_functions(loss_function_dict, self.tasks)
+        self.acc_function_dict = _get_acc_functions(acc_function_dict, self.tasks)
 
     def fit(
         self,
@@ -178,7 +185,7 @@ class MultiTaskLearner(object):
         accuracies: dict
             accuracy measures for individual tasks
         """
-        preds_dict = {} #self._create_preds_dict()
+        preds_dict = {}
 
         val_loss_dict = {task: 0.0 for task in self.tasks}
         accuracies = {task: {'accuracy': 0.0} for task in self.tasks}
@@ -188,7 +195,6 @@ class MultiTaskLearner(object):
         self.model.eval()
 
         with torch.no_grad():
-            index_dict = {task: 0 for task in self.tasks}
             for step, batch in enumerate(
                 progress_bar(self.val_dataloader, parent=pbar, leave=(pbar is not None))
             ):
@@ -196,7 +202,7 @@ class MultiTaskLearner(object):
                 x = self._return_input_on_device(x, device)
 
                 y = y.to(device)
-                
+
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type]['loss'](output[task_type], y)
@@ -204,27 +210,24 @@ class MultiTaskLearner(object):
                 val_loss_dict[task_type] += current_loss
                 overall_val_loss += current_loss
 
-                #y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
-
                 y_pred = output[task_type].cpu().numpy()
                 y_true = y.cpu().numpy()
-
-                current_index = index_dict[task_type]
-
-                num_rows = self._get_num_rows(x)
 
                 if task_type not in preds_dict:
 
                     preds_dict[task_type] = {
-                    'y_true': y_true,
-                    'y_pred': y_pred
+                        'y_true': y_true,
+                        'y_pred': y_pred
                     }
 
                 else:
-                    preds_dict[task_type]['y_true'] = np.concatenate((preds_dict[task_type]['y_true'],y_true))
-                    preds_dict[task_type]['y_pred'] = np.concatenate((preds_dict[task_type]['y_pred'], y_pred))
+                    preds_dict[task_type]['y_true'] = (
+                        np.concatenate((preds_dict[task_type]['y_true'], y_true))
+                    )
 
-                index_dict[task_type] += num_rows
+                    preds_dict[task_type]['y_pred'] = (
+                        np.concatenate((preds_dict[task_type]['y_pred'], y_pred))
+                    )
 
         overall_val_loss = overall_val_loss/self.val_dataloader.total_samples
 
@@ -234,35 +237,15 @@ class MultiTaskLearner(object):
                 / len(self.val_dataloader.loader_dict[task].dataset)
             )
 
-        '''
-        we can unify how we store the data as arrrays in shape of the final layer...
-        softmax, sigmoid, custom all are jusr # nodes
-
-        Then in accuracy calculation we can apply the function to every row in the array
-        and then do the preprocessing for thee accuracy calculation. return 2 values and use
-        those as needed...
-        '''
-        print(accuracies.keys())
         for task in accuracies.keys():
 
             y_true = preds_dict[task]['y_true']
             y_raw_pred = preds_dict[task]['y_pred']
-            print(task,self.loss_function_dict[task]['acc_func'])#,y_true,y_raw_pred,type(y_raw_pred))
 
-            acc, y_preds = self.loss_function_dict[task]['acc_func'](y_true, y_raw_pred)
+            acc, y_preds = self.acc_function_dict[task]['acc_func'](y_true, y_raw_pred)
 
-            '''
-            print(preds_dict[task]['y_pred'])
-            tensor_y_pred = torch.from_numpy(preds_dict[task]['y_pred'])
-            y_preds = self.loss_function_dict[task_type]['final_layer'](tensor_y_pred).numpy()
-            task_preds = (
-                self.loss_function_dict[task]
-                ['accuracy_pre_processing'](y_preds)
-            )
-            acc = accuracy_score(preds_dict[task]['y_true'], task_preds)
-            '''
             accuracies[task]['accuracy'] = acc
-            
+
         return overall_val_loss, val_loss_dict, accuracies
 
     def get_val_preds(self, device='cuda:0'):
@@ -280,13 +263,11 @@ class MultiTaskLearner(object):
             'y_true': numpy array of true labels, shape: (num_rows,)
             'y_pred': numpy of array of predicted probabilities: shape (num_rows, num_labels)
         """
-        #preds_dict = self._create_preds_dict()
         preds_dict = {}
         self.model = self.model.to(device)
         self.model.eval()
 
         with torch.no_grad():
-            index_dict = {task: 0 for task in self.tasks}
             for step, batch in enumerate(progress_bar(self.val_dataloader, leave=False)):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
@@ -294,59 +275,36 @@ class MultiTaskLearner(object):
                 y = y.to(device)
 
                 output = self.model(x)
-                #y_pred = self.loss_function_dict[task_type]['final_layer'](output[task_type])
 
                 y_pred = output[task_type].cpu().numpy()
                 y_true = y.cpu().numpy()
 
-                current_index = index_dict[task_type]
-
-                num_rows = self._get_num_rows(x)
                 if task_type not in preds_dict:
-                    print(task_type)
-
                     preds_dict[task_type] = {
-                    'y_true': y_true,
-                    'y_pred': y_pred
+                        'y_true': y_true,
+                        'y_pred': y_pred
                     }
-                    #preds_dict[task_type]['y_true'] = y_true
-                    #preds_dict[task_type]['y_pred'] = y_pred
-                else:
-                    preds_dict[task_type]['y_true'] = np.concatenate((preds_dict[task_type]['y_true'],y_true))
-                    preds_dict[task_type]['y_pred'] = np.concatenate((preds_dict[task_type]['y_true'], y_true))
-                index_dict[task_type] += num_rows
 
-        for task in  self.tasks:
-            acc, y_preds = self.loss_function_dict[task_type]['acc_func'](preds_dict[task]['y_true'], preds_dict[task]['y_pred'])
+                else:
+                    preds_dict[task_type]['y_true'] = (
+                        np.concatenate((preds_dict[task_type]['y_true'], y_true))
+                    )
+
+                    preds_dict[task_type]['y_pred'] = (
+                        np.concatenate((preds_dict[task_type]['y_pred'], y_pred))
+                    )
+
+        for task in self.tasks:
+            acc, y_preds = (
+                self.acc_function_dict[task_type]['acc_func'](preds_dict[task]['y_true'],
+                                                              preds_dict[task]['y_pred'])
+            )
             preds_dict[task_type]['y_pred'] = y_preds
 
         return preds_dict
 
     def _return_input_on_device(self, x, device):
         return x.to(device)
-
-    def _get_num_rows(self, x):
-        return x.size(0)
-
-    def _create_preds_dict(self):
-        preds_dict = {}
-        for task in self.tasks:
-            print('preds_dict',task)
-            current_size = len(self.val_dataloader.loader_dict[task].dataset)
-            #if self.loss_function_dict[task]['is_multi_class'] is True:
-            
-            preds_dict[task] = {
-                    'y_true': np.zeros([current_size]),
-                    'y_pred': np.zeros([current_size, self.task_dict[task]])
-                }
-            '''
-            #else:
-            preds_dict[task] = {
-                    'y_true': np.zeros([current_size, self.task_dict[task]]),
-                    'y_pred': np.zeros([current_size, self.task_dict[task]])
-                }
-            '''
-        return preds_dict
 
 
 class MultiInputMultiTaskLearner(MultiTaskLearner):
