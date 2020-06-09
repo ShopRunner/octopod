@@ -55,9 +55,10 @@ def _get_loss_functions(loss_function_dict, tasks):
 
 def _get_acc_functions(acc_function_dict, tasks):
     """
-    Takes in dictionary of tasks and their loss configurations
-    if it is a supported loss, CrossEntropyLoss() or BCELogits()
-    then it auto configures other specifications
+    Takes in dictionary of tasks and a string cooresponding to an accuracy
+    function configuration. Current supported accuracy functions are multi_class_acc
+    for multi-class tasks and an accuracy score and multi_label_acc for multi-label
+    tasks with an accuracy score.
 
     Parameters
     ----------

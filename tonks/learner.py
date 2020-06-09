@@ -296,10 +296,10 @@ class MultiTaskLearner(object):
 
         for task in self.tasks:
             acc, y_preds = (
-                self.acc_function_dict[task_type]['acc_func'](preds_dict[task]['y_true'],
+                self.acc_function_dict[task]['acc_func'](preds_dict[task]['y_true'],
                                                               preds_dict[task]['y_pred'])
             )
-            preds_dict[task_type]['y_pred'] = y_preds
+            preds_dict[task]['y_pred'] = y_preds
 
         return preds_dict
 
