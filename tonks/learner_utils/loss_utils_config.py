@@ -75,14 +75,12 @@ def _multi_label_accuracy(y_true, preds):
 
 
 DEFAULT_LOSSES_DICT = {
-    'categorical_cross_entropy': {'loss': nn.CrossEntropyLoss()},
-    'bce_logits': {'loss': nn.BCEWithLogitsLoss()}
+    'categorical_cross_entropy': nn.CrossEntropyLoss(),
+    'bce_logits': nn.BCEWithLogitsLoss(),
 }
 
 
 DEFAULT_ACC_DICT = {
-    'multi_class_acc': {'acc_func': _multi_class_accuracy},
-    'multi_label_acc': {'acc_func': _multi_label_accuracy}
+    'multi_class_acc': _multi_class_accuracy,
+    'multi_label_acc': _multi_label_accuracy,
 }
-
-VALID_LOSS_KEYS = DEFAULT_LOSSES_DICT['categorical_cross_entropy'].keys()

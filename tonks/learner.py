@@ -24,9 +24,15 @@ class MultiTaskLearner(object):
     task_dict: dict
         dictionary with all of the tasks as keys and the number of unique labels as the values
     loss_function_dict: dict
-        dictionary where keys are task names and values are supported loss functions.
-        Currently supported losses are `categorical_cross_entropy` for multi-class tasks
-        or `bce_logits` for multi-label tasks
+        dictionary where keys are task names and values are loss functions. If the input
+        is a string matching a supported loss `categorical_cross_entropy` for multi-class tasks
+        or `bce_logits` for multi-label tasks the loss will be filled in. A user can also input
+        a custom loss function as a function for a given task key.
+    acc_function_dict: dict
+        dictionary where keys are task names and values are accuracy calculation functions. If the input
+        is a string matching a supported accuracy function `multi_class_acc` for multi-class tasks
+        or `multi_label_acc` for multi-label tasks the loss will be filled in. A user can also input
+        a custom accuracy function as a function for a given task key.
     """
     def __init__(self,
                  model,
@@ -105,7 +111,7 @@ class MultiTaskLearner(object):
 
                 output = self.model(x)
 
-                current_loss = self.loss_function_dict[task_type]['loss'](output[task_type], y)
+                current_loss = self.loss_function_dict[task_type](output[task_type], y)
 
                 scaled_loss = current_loss.item() * num_rows
 
@@ -205,7 +211,7 @@ class MultiTaskLearner(object):
 
                 output = self.model(x)
 
-                current_loss = self.loss_function_dict[task_type]['loss'](output[task_type], y)
+                current_loss = self.loss_function_dict[task_type](output[task_type], y)
 
                 val_loss_dict[task_type] += current_loss
                 overall_val_loss += current_loss
@@ -213,21 +219,7 @@ class MultiTaskLearner(object):
                 y_pred = output[task_type].cpu().numpy()
                 y_true = y.cpu().numpy()
 
-                if task_type not in preds_dict:
-
-                    preds_dict[task_type] = {
-                        'y_true': y_true,
-                        'y_pred': y_pred
-                    }
-
-                else:
-                    preds_dict[task_type]['y_true'] = (
-                        np.concatenate((preds_dict[task_type]['y_true'], y_true))
-                    )
-
-                    preds_dict[task_type]['y_pred'] = (
-                        np.concatenate((preds_dict[task_type]['y_pred'], y_pred))
-                    )
+                preds_dict = self._update_preds_dict(preds_dict, task_type, y_true, y_pred)
 
         overall_val_loss = overall_val_loss/self.val_dataloader.total_samples
 
@@ -242,7 +234,7 @@ class MultiTaskLearner(object):
             y_true = preds_dict[task]['y_true']
             y_raw_pred = preds_dict[task]['y_pred']
 
-            acc, y_preds = self.acc_function_dict[task]['acc_func'](y_true, y_raw_pred)
+            acc, y_preds = self.acc_function_dict[task](y_true, y_raw_pred)
 
             accuracies[task]['accuracy'] = acc
 
@@ -279,25 +271,12 @@ class MultiTaskLearner(object):
                 y_pred = output[task_type].cpu().numpy()
                 y_true = y.cpu().numpy()
 
-                if task_type not in preds_dict:
-                    preds_dict[task_type] = {
-                        'y_true': y_true,
-                        'y_pred': y_pred
-                    }
-
-                else:
-                    preds_dict[task_type]['y_true'] = (
-                        np.concatenate((preds_dict[task_type]['y_true'], y_true))
-                    )
-
-                    preds_dict[task_type]['y_pred'] = (
-                        np.concatenate((preds_dict[task_type]['y_pred'], y_pred))
-                    )
+                preds_dict = self._update_preds_dict(preds_dict, task_type, y_true, y_pred)
 
         for task in self.tasks:
             acc, y_preds = (
-                self.acc_function_dict[task]['acc_func'](preds_dict[task]['y_true'],
-                                                              preds_dict[task]['y_pred'])
+                self.acc_function_dict[task](preds_dict[task]['y_true'],
+                                             preds_dict[task]['y_pred'])
             )
             preds_dict[task]['y_pred'] = y_preds
 
@@ -305,6 +284,24 @@ class MultiTaskLearner(object):
 
     def _return_input_on_device(self, x, device):
         return x.to(device)
+
+    def _update_preds_dict(self, preds_dict, task_type, y_true, y_pred):
+
+        if task_type not in preds_dict:
+            preds_dict[task_type] = {
+                'y_true': y_true,
+                'y_pred': y_pred
+            }
+
+        else:
+            preds_dict[task_type]['y_true'] = (
+                np.concatenate((preds_dict[task_type]['y_true'], y_true))
+            )
+
+            preds_dict[task_type]['y_pred'] = (
+                np.concatenate((preds_dict[task_type]['y_pred'], y_pred))
+            )
+        return preds_dict
 
 
 class MultiInputMultiTaskLearner(MultiTaskLearner):
