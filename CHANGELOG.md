@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
+# [0.4.1] - 2020-6-16
+### Added
+ - Missing 's' in `extras_requires` in setup.py
+
 # [0.4.0] - 2020-6-12
 ### Added
  - warning about upcoming rename of library

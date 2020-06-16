@@ -31,7 +31,7 @@ setup(
         'torch==1.2.0',
         'torchvision==0.2.1',
     ],
-    extra_requires={
+    extras_requires={
         'dev': [
             'flake8',
             'flake8-docstrings',
