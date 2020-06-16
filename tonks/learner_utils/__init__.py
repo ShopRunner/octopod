@@ -1,1 +1,1 @@
-from tonks.learner_utils.loss_utils import _get_acc_functions, _get_loss_functions
+from tonks.learner_utils.loss_utils_config import DEFAULT_LOSSES_DICT, DEFAULT_METRIC_DICT

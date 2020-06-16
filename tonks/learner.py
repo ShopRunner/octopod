@@ -5,8 +5,9 @@ from fastprogress.fastprogress import format_time, master_bar, progress_bar
 import numpy as np
 import torch
 
-
-from tonks.learner_utils import _get_acc_functions, _get_loss_functions
+from tonks.learner_utils import (DEFAULT_LOSSES_DICT,
+                                 DEFAULT_METRIC_DICT,
+                                 )
 
 
 class MultiTaskLearner(object):
@@ -28,11 +29,11 @@ class MultiTaskLearner(object):
         is a string matching a supported loss `categorical_cross_entropy` for multi-class tasks
         or `bce_logits` for multi-label tasks the loss will be filled in. A user can also input
         a custom loss function as a function for a given task key.
-    acc_function_dict: dict
-        dictionary where keys are task names and values are accuracy calculation functions. If the input
-        is a string matching a supported accuracy function `multi_class_acc` for multi-class tasks
+    metric_function_dict: dict
+        dictionary where keys are task names and values are metric calculation functions. If the input
+        is a string matching a supported metric function `multi_class_acc` for multi-class tasks
         or `multi_label_acc` for multi-label tasks the loss will be filled in. A user can also input
-        a custom accuracy function as a function for a given task key.
+        a custom metric function as a function for a given task key.
     """
     def __init__(self,
                  model,
@@ -40,14 +41,14 @@ class MultiTaskLearner(object):
                  val_dataloader,
                  task_dict,
                  loss_function_dict=None,
-                 acc_function_dict=None):
+                 metric_function_dict=None):
         self.model = model
         self.train_dataloader = train_dataloader
         self.val_dataloader = val_dataloader
         self.task_dict = task_dict
         self.tasks = [*task_dict]
-        self.loss_function_dict = _get_loss_functions(loss_function_dict, self.tasks)
-        self.acc_function_dict = _get_acc_functions(acc_function_dict, self.tasks)
+        self.loss_function_dict = self._get_loss_functions(loss_function_dict)
+        self.metric_function_dict = self._get_metric_functions(metric_function_dict)
 
     def fit(
         self,
@@ -234,7 +235,7 @@ class MultiTaskLearner(object):
             y_true = preds_dict[task]['y_true']
             y_raw_pred = preds_dict[task]['y_pred']
 
-            acc, y_preds = self.acc_function_dict[task](y_true, y_raw_pred)
+            acc, y_preds = self.metric_function_dict[task](y_true, y_raw_pred)
 
             accuracies[task]['accuracy'] = acc
 
@@ -275,8 +276,8 @@ class MultiTaskLearner(object):
 
         for task in self.tasks:
             acc, y_preds = (
-                self.acc_function_dict[task](preds_dict[task]['y_true'],
-                                             preds_dict[task]['y_pred'])
+                self.metric_function_dict[task](preds_dict[task]['y_true'],
+                                                preds_dict[task]['y_pred'])
             )
             preds_dict[task]['y_pred'] = y_preds
 
@@ -302,6 +303,76 @@ class MultiTaskLearner(object):
                 np.concatenate((preds_dict[task_type]['y_pred'], y_pred))
             )
         return preds_dict
+
+    def _get_loss_functions(self, loss_function_dict):
+        """
+        Uses dictionaries of tasks and their loss configurations to construct
+        a dictionary of loss functions.
+        """
+        processed_loss_function_dict = {}
+
+        if loss_function_dict is None:
+            loss_function_dict = {task: 'categorical_cross_entropy' for task in self.tasks}
+
+        self._check_for_all_tasks(loss_function_dict, self.tasks, 'loss')
+
+        for key, value in loss_function_dict.items():
+
+            if isinstance(value, str):
+                try:
+                    processed_loss_function_dict[key] = DEFAULT_LOSSES_DICT[value]
+                except Exception:
+
+                    raise Exception('Found invalid loss function: {}. '
+                                    'Valid losses are categorical_cross_entropy '
+                                    'or bce_logits. Check that all tasks loss names are '
+                                    'valid.'.format(value))
+            else:
+                processed_loss_function_dict[key] = value
+
+        return processed_loss_function_dict
+
+    def _get_metric_functions(self, metric_function_dict):
+        """
+        Uses dictionaries of tasks and a string cooresponding to a metric
+        function configuration or custom accuracy function.
+
+        Parameters
+        ----------
+        metric_function_dict: dictionary
+            keys are tasks and values are associated metric strings or custom metric functions.
+            Current supported accuracy functions are `multi_class_acc`
+            for multi-class tasks and an accuracy score and `multi_label_acc` for multi-label
+            tasks with an accuracy score, or custom functions.
+        """
+        processed_metric_function_dict = {}
+
+        if metric_function_dict is None:
+            metric_function_dict = {task: 'multi_class_acc' for task in self.tasks}
+
+        self._check_for_all_tasks(metric_function_dict, self.tasks, 'accuracy')
+
+        for key, value in metric_function_dict.items():
+            if isinstance(value, str):
+                try:
+                    processed_metric_function_dict[key] = DEFAULT_METRIC_DICT[value]
+
+                except Exception:
+                    raise Exception('Found invalid metric function: {}. '
+                                    'Valid metric functions are multi_class_acc '
+                                    'or multi_label_acc. Check that all tasks metric '
+                                    'functions names are valid.'.format(value))
+            else:
+                processed_metric_function_dict[key] = value
+
+        return processed_metric_function_dict
+
+    def _check_for_all_tasks(self, input_dict, tasks, input_str):
+        if not all(task in input_dict for task in tasks):
+            missing_tasks = set(tasks)-input_dict.keys()
+
+            raise Exception(f'make sure all tasks are contained in the {input_str} dictionary '
+                            f'missing tasks are {missing_tasks}')
 
 
 class MultiInputMultiTaskLearner(MultiTaskLearner):

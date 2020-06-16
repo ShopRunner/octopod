@@ -17,7 +17,7 @@ def _multi_label_accuracy_preprocess(x):
     return np.round(x, 0)
 
 
-def _multi_class_accuracy(y_true, preds):
+def multi_class_accuracy(y_true, y_raw_preds):
     """
     Takes in raw outputs from Tonks task heads and outputs an accuracy metric
     and the processed predictions after a softmax as been applied
@@ -25,8 +25,8 @@ def _multi_class_accuracy(y_true, preds):
     Parameters
     ----------
     y_true: np.array
-        Target labels for a specific task for the predicted samples in `preds`
-    preds: np.array
+        Target labels for a specific task for the predicted samples in `y_raw_preds`
+    y_raw_preds: np.array
         predicted values for the validation set for a specific task
 
     Returns
@@ -37,7 +37,7 @@ def _multi_class_accuracy(y_true, preds):
         array of predicted values where a softmax has been applied
 
     """
-    tensor_y_pred = torch.from_numpy(preds)
+    tensor_y_pred = torch.from_numpy(y_raw_preds)
     y_preds = _softmax_final_layer(tensor_y_pred).numpy()
     task_preds = (
         _multi_class_accuracy_preprocess(y_preds)
@@ -46,7 +46,7 @@ def _multi_class_accuracy(y_true, preds):
     return acc, y_preds
 
 
-def _multi_label_accuracy(y_true, preds):
+def multi_label_accuracy(y_true, y_raw_preds):
     """
     Takes in raw outputs from Tonks task heads and outputs an accuracy metric
     and the processed predictions after a sigmoid as been applied
@@ -54,8 +54,8 @@ def _multi_label_accuracy(y_true, preds):
     Parameters
     ----------
     y_true: np.array
-        Target labels for a specific task for the predicted samples in `preds`
-    preds: np.array
+        Target labels for a specific task for the predicted samples in `y_raw_preds`
+    y_raw_preds: np.array
         predicted values for the validation set for a specific task
 
     Returns
@@ -65,7 +65,7 @@ def _multi_label_accuracy(y_true, preds):
     y_preds: np.array
         array of predicted values where a sigmoid has been applied
     """
-    tensor_y_pred = torch.from_numpy(preds)
+    tensor_y_pred = torch.from_numpy(y_raw_preds)
     y_preds = torch.sigmoid(tensor_y_pred).numpy()
     task_preds = (
         _multi_label_accuracy_preprocess(y_preds)
@@ -80,7 +80,7 @@ DEFAULT_LOSSES_DICT = {
 }
 
 
-DEFAULT_ACC_DICT = {
-    'multi_class_acc': _multi_class_accuracy,
-    'multi_label_acc': _multi_label_accuracy,
+DEFAULT_METRIC_DICT = {
+    'multi_class_acc': multi_class_accuracy,
+    'multi_label_acc': multi_label_accuracy,
 }
