@@ -25,22 +25,16 @@ def _get_loss_functions(loss_function_dict, tasks):
     processed_loss_function_dict = {}
 
     if loss_dict is None:
-        loss_dict = {}
-        for task in tasks:
-            loss_dict[task] = 'categorical_cross_entropy'
+loss_dict = {task: 'categorical_cross_entropy' for task in tasks}
 
     _check_for_all_tasks(loss_dict, tasks, 'loss')
 
     for key, value in loss_dict.items():
 
-        if isinstance(value, str) is True:
-            if value == 'categorical_cross_entropy':
-                processed_loss_function_dict[key] = DEFAULT_LOSSES_DICT['categorical_cross_entropy']
-
-            elif value == 'bce_logits':
-                processed_loss_function_dict[key] = DEFAULT_LOSSES_DICT['bce_logits']
-
-            else:
+        if isinstance(value, str):
+            try:
+                processed_loss_function_dict[key] = DEFAULT_LOSSES_DICT[val]
+            except:
 
                 raise Exception('Found invalid loss function: {}. '
                                 'Valid losses are categorical_cross_entropy '

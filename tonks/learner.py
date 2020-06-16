@@ -221,7 +221,7 @@ class MultiTaskLearner(object):
 
                 preds_dict = self._update_preds_dict(preds_dict, task_type, y_true, y_pred)
 
-        overall_val_loss = overall_val_loss/self.val_dataloader.total_samples
+        overall_val_loss /= self.val_dataloader.total_samples
 
         for task in self.tasks:
             val_loss_dict[task] = (
