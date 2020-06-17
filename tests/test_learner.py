@@ -84,10 +84,10 @@ def test_learner_with_none_acc_dict(test_no_acc_dict, test_train_val_loaders):
                                        test_train_val_loaders,
                                        test_train_val_loaders,
                                        task_dict,
-                                       acc_function_dict=acc_function_dict)
+                                       metric_function_dict=acc_function_dict)
 
-    assert '_multi_class_accuracy' in str(learn.acc_function_dict['task1'])
-    assert '_multi_class_accuracy' in str(learn.acc_function_dict['task2'])
+    assert 'multi_class_accuracy' in str(learn.metric_function_dict['task1'])
+    assert 'multi_class_accuracy' in str(learn.metric_function_dict['task2'])
 
 
 def test_learner_with_missing_acc(test_acc_dict_missing_task,
@@ -103,7 +103,7 @@ def test_learner_with_missing_acc(test_acc_dict_missing_task,
                                    test_train_val_loaders,
                                    test_train_val_loaders,
                                    task_dict,
-                                   acc_function_dict=acc_function_dict)
+                                   metric_function_dict=acc_function_dict)
     assert ('make sure all tasks are contained in the' in str(e.value)) is True
 
 
@@ -120,8 +120,8 @@ def test_learner_with_invalid_acc_name(test_acc_dict_invalid_name,
                                    test_train_val_loaders,
                                    test_train_val_loaders,
                                    task_dict,
-                                   acc_function_dict=acc_function_dict)
-    assert ('Found invalid accuracy function:' in str(e.value)) is True
+                                   metric_function_dict=acc_function_dict)
+    assert ('Found invalid metric function:' in str(e.value)) is True
 
 
 def test_learner_with_multi_class_and_label_acc(test_acc_dict_all_tasks_diff_losses,
@@ -136,7 +136,7 @@ def test_learner_with_multi_class_and_label_acc(test_acc_dict_all_tasks_diff_los
                                        test_train_val_loaders,
                                        test_train_val_loaders,
                                        task_dict,
-                                       acc_function_dict=acc_function_dict)
+                                       metric_function_dict=acc_function_dict)
 
-    assert '_multi_class_accuracy' in str(learn.acc_function_dict['task1'])
-    assert '_multi_label_accuracy' in str(learn.acc_function_dict['task2'])
+    assert 'multi_class_accuracy' in str(learn.metric_function_dict['task1'])
+    assert 'multi_label_accuracy' in str(learn.metric_function_dict['task2'])
