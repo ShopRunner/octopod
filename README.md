@@ -1,6 +1,7 @@
-![tonks](https://net-shoprunner-scratch-data-science.s3.amazonaws.com/tonks/tonks_v2_hex_transparent.png)
-
 # Tonks
+
+Note 6/12/20: Our team previously had a tradition of naming projects with terms or characters from the Harry Potter series, but we are disappointed by J.K. Rowling’s persistent transphobic comments. In response, we will be renaming this repository, and are working to develop an inclusive solution that minimizes disruption to our users.
+
 Tonks is a general purpose deep learning library developed by the ShopRunner Data Science team to train multi-task image, text, or ensemble (image + text) models.
 
 What differentiates our library is that you can train a multi-task model with different datasets for each of your tasks. For example, you could train one model to label dress length for dresses and pants length for pants.
@@ -22,6 +23,8 @@ To quickly get started, check out one of our tutorials in the `notebooks` folder
 ```
 pip install tonks
 ```
+
+You may get an error from the `tokenizer` package if you do not have a Rust compiler installed; see https://github.com/huggingface/transformers/issues/2831#issuecomment-592724471.
 
 ## Notes
 Currently, this library supports ResNet50 and BERT models.
