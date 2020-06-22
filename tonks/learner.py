@@ -29,11 +29,20 @@ class MultiTaskLearner(object):
         is a string matching a supported loss `categorical_cross_entropy` for multi-class tasks
         or `bce_logits` for multi-label tasks the loss will be filled in. A user can also input
         a custom loss function as a function for a given task key.
+
+        Loss functions need to apply a final layer activation function if needed and then a loss function
+        in order to function properly in this pipeline.
+
     metric_function_dict: dict
         dictionary where keys are task names and values are metric calculation functions. If the input
         is a string matching a supported metric function `multi_class_acc` for multi-class tasks
         or `multi_label_acc` for multi-label tasks the loss will be filled in. A user can also input
         a custom metric function as a function for a given task key.
+
+        custom metric functions must take in a `y_true` and `raw_y_pred` and output some `score` and `y_preds`.
+        `y_preds` are the `raw_y_pred` values after an activation function has been applied and `score` is the
+        output of whatever custom metrics the user wants to calculate for that task.
+        See `learner_utils.loss_utils_config` for examples.
     """
     def __init__(self,
                  model,
@@ -91,7 +100,7 @@ class MultiTaskLearner(object):
         for task in self.tasks:
             headers.append(f'{task}_train_loss')
             headers.append(f'{task}_val_loss')
-            headers.append(f'{task}_acc')
+            headers.append(f'{task}'+'_'+self.metric_function_dict[task].__name__)
         headers.append('time')
         pbar.write(headers, table=True)
 
@@ -137,7 +146,7 @@ class MultiTaskLearner(object):
                     / len(self.train_dataloader.loader_dict[task].dataset)
                 )
 
-            overall_val_loss, val_loss_dict, accuracies = self.validate(
+            overall_val_loss, val_loss_dict, metrics_scores = self.validate(
                 device,
                 pbar
             )
@@ -153,9 +162,13 @@ class MultiTaskLearner(object):
                 str_stats.append(f'{training_loss_dict[task]:.6f}')
                 str_stats.append(f'{val_loss_dict[task]:.6f}')
                 try:
-                    str_stats.append(f"{accuracies[task]['accuracy']:.6f}")
+                    str_stats.append(
+                        f"{metrics_scores[task][self.metric_function_dict[task].__name__]:.6f}"
+                    )
                 except ValueError:
-                    str_stats.append(f"{accuracies[task]['accuracy']}")
+                    str_stats.append(
+                        f"{metrics_scores[task][self.metric_function_dict[task].__name__]}"
+                    )
 
             str_stats.append(format_time(time.time() - start_time))
 
@@ -189,13 +202,13 @@ class MultiTaskLearner(object):
             overall validation loss for all tasks
         val_loss_dict: dict
             dictionary of validation losses for individual tasks
-        accuracies: dict
-            accuracy measures for individual tasks
+        metrics_scores: dict
+            scores for individual tasks
         """
         preds_dict = {}
 
         val_loss_dict = {task: 0.0 for task in self.tasks}
-        accuracies = {task: {'accuracy': 0.0} for task in self.tasks}
+        metrics_scores = {task: {self.metric_function_dict[task].__name__: 0.0} for task in self.tasks}
 
         overall_val_loss = 0.0
 
@@ -230,16 +243,16 @@ class MultiTaskLearner(object):
                 / len(self.val_dataloader.loader_dict[task].dataset)
             )
 
-        for task in accuracies.keys():
+        for task in metrics_scores.keys():
 
             y_true = preds_dict[task]['y_true']
             y_raw_pred = preds_dict[task]['y_pred']
 
-            acc, y_preds = self.metric_function_dict[task](y_true, y_raw_pred)
+            metric_score, y_preds = self.metric_function_dict[task](y_true, y_raw_pred)
 
-            accuracies[task]['accuracy'] = acc
+            metrics_scores[task][self.metric_function_dict[task].__name__] = metric_score
 
-        return overall_val_loss, val_loss_dict, accuracies
+        return overall_val_loss, val_loss_dict, metrics_scores
 
     def get_val_preds(self, device='cuda:0'):
         """
@@ -275,7 +288,7 @@ class MultiTaskLearner(object):
                 preds_dict = self._update_preds_dict(preds_dict, task_type, y_true, y_pred)
 
         for task in self.tasks:
-            acc, y_preds = (
+            metrics_scores, y_preds = (
                 self.metric_function_dict[task](preds_dict[task]['y_true'],
                                                 preds_dict[task]['y_pred'])
             )
@@ -335,13 +348,13 @@ class MultiTaskLearner(object):
     def _get_metric_functions(self, metric_function_dict):
         """
         Uses dictionaries of tasks and a string cooresponding to a metric
-        function configuration or custom accuracy function.
+        function configuration or custom metric function.
 
         Parameters
         ----------
         metric_function_dict: dictionary
             keys are tasks and values are associated metric strings or custom metric functions.
-            Current supported accuracy functions are `multi_class_acc`
+            Current supported metric functions are `multi_class_acc`
             for multi-class tasks and an accuracy score and `multi_label_acc` for multi-label
             tasks with an accuracy score, or custom functions.
         """
