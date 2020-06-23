@@ -217,7 +217,9 @@ class MultiTaskLearner(object):
         preds_dict = {}
 
         val_loss_dict = {task: 0.0 for task in self.tasks}
-        metrics_scores = {task: {self.metric_function_dict[task].__name__: 0.0} for task in self.tasks}
+        metrics_scores = (
+            {task: {self.metric_function_dict[task].__name__: 0.0} for task in self.tasks}
+        )
 
         overall_val_loss = 0.0
 
