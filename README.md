@@ -32,3 +32,18 @@ Currently, this library supports ResNet50 and BERT models.
 In some of our documentation the terms `pretrained` and `vanilla` appear. `pretrained` is our shorthand for Tonks models that have been trained at least once already so their weights have been tuned for a specific use case. `vanilla` is our shorthand for base weights coming from `transformers` or `PyTorch` for the out-of-the-box BERT and ResNet50 models.
 
 For our examples using text models, we use the [transformers](https://github.com/huggingface/transformers) repository managed by huggingface. The most recent version is called `transformers`. The huggingface repo is the appropriate place to check on BERT documentation and procedures.
+
+## Development
+
+Want to add to or fix issues in Tonks? We welcome outside input and have tried to make it easier to test. You can run everything inside a docker container with the following:
+
+```bash
+# nvidia-docker-compose : basic startup with nvidia docker to access gpu
+# NOTE: this may take a while
+# --rm : deletes container when closed
+# --service-ports : makes sure the correct ports are open and ported see docker-compose.yaml
+# bash : opens bash in the container once it starts
+# "pip install jupyter && bash" : install requirements-dev and bash
+nvidia-docker-compose run --rm --service-ports tonks bash -c "pip install jupyter && bash"
+jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
+```
