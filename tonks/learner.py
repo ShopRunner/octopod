@@ -25,23 +25,32 @@ class MultiTaskLearner(object):
     task_dict: dict
         dictionary with all of the tasks as keys and the number of unique labels as the values
     loss_function_dict: dict
-        dictionary where keys are task names and values are loss functions. If the input
-        is a string matching a supported loss `categorical_cross_entropy` for multi-class tasks
-        or `bce_logits` for multi-label tasks the loss will be filled in. A user can also input
-        a custom loss function as a function for a given task key.
+        dictionary where keys are task names (str) and values specify loss functions.
+        A loss function can be specified using the special string value 'categorical_cross_entropy'
+        for a multi-class task or 'bce_logits' for a multi-label task. Alternatively,
+        it can be specified using a Callable that takes the predicted values and the target values
+        as positional PyTorch tensor arguments and returns a float.
 
-        Loss functions need to apply a final layer activation function if needed and then a loss function
-        in order to function properly in this pipeline.
+        Take care to ensure that the loss function includes a final activation function if needed --
+        for instance, if your model is being used for classification but does not include a softmax
+        layer then calculating cross-entropy properly requires performing the softmax classification
+        within the loss function (this is handled by `nn.CrossEntropyLoss()` loss function).
+        For our exisiting model architecture examples we do not apply final layer activation
+        functions. Instead the desired activation functions are applied when needed.
+        So we use 'categorical_cross_entropy' and 'bce_logits' loss functions which apply
+        softmax and sigmoid activations to their inputs before calculating the loss.
 
     metric_function_dict: dict
-        dictionary where keys are task names and values are metric calculation functions. If the input
-        is a string matching a supported metric function `multi_class_acc` for multi-class tasks
-        or `multi_label_acc` for multi-label tasks the loss will be filled in. A user can also input
-        a custom metric function as a function for a given task key.
+        dictionary where keys are task names and values are metric calculation functions.
+        If the input is a string matching a supported metric function `multi_class_acc`
+        for multi-class tasks or `multi_label_acc` for multi-label tasks the loss will be filled in.
+        A user can also input a custom metric function as a function for a given task key.
 
-        custom metric functions must take in a `y_true` and `raw_y_pred` and output some `score` and `y_preds`.
-        `y_preds` are the `raw_y_pred` values after an activation function has been applied and `score` is the
-        output of whatever custom metrics the user wants to calculate for that task.
+        custom metric functions must take in a `y_true` and `raw_y_pred` and output some `score` and
+        `y_preds`. `y_preds` are the `raw_y_pred` values after an activation function has been
+        applied and `score` is the output of whatever custom metrics the user wants to calculate
+        for that task.
+
         See `learner_utils.loss_utils_config` for examples.
     """
     def __init__(self,
