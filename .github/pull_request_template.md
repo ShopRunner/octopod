@@ -5,3 +5,4 @@ Pull Request Checklist
  - [ ] CHANGELOG has been updated
  - [ ] Version in `_version.py` has been updated
  - [ ] README has been updated (if applicable)
+ - [ ] PR made from branch into WIP or WIP into Master

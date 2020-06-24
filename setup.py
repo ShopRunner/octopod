@@ -27,6 +27,7 @@ setup(
         'numpy',
         'Pillow<7.0.0',
         'transformers>=2.3.0',
+        'sentencepiece!=0.1.92',
         'scikit-learn',
         'torch==1.2.0',
         'torchvision==0.2.1',
