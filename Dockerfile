@@ -14,4 +14,6 @@ RUN pip list > /python_environment.txt
 
 COPY . /tonks
 
+EXPOSE 8888
+
 CMD /bin/bash

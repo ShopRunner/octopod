@@ -38,12 +38,21 @@ For our examples using text models, we use the [transformers](https://github.com
 Want to add to or fix issues in Tonks? We welcome outside input and have tried to make it easier to test. You can run everything inside a docker container with the following:
 
 ```bash
-# nvidia-docker-compose : basic startup with nvidia docker to access gpu
+# to build the container
 # NOTE: this may take a while
+nvidia-docker build -t tonks .
+# nvidia-docker run : basic startup with nvidia docker to access gpu
 # --rm : deletes container when closed
-# --service-ports : makes sure the correct ports are open and ported see docker-compose.yaml
+# -p : exposes ports (ex: for jupyter notebook to work)
 # bash : opens bash in the container once it starts
 # "pip install jupyter && bash" : install requirements-dev and bash
-nvidia-docker-compose run --rm --service-ports tonks bash -c "pip install jupyter && bash"
+nvidia-docker run \
+    -it \
+    --rm \
+    -v "${PWD}:/tonks" \
+    -p 8888:8888 \
+    -p 8000:8000 \
+    tonks /bin/bash -c "pip install jupyter && bash"
+# run jupyter notebook
 jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
 ```
