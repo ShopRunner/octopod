@@ -310,6 +310,9 @@ class MultiTaskLearner(object):
     def _return_input_on_device(self, x, device):
         return x.to(device)
 
+    def _get_num_rows(self, x):
+        return x.size(0)
+
     def _update_preds_dict(self, preds_dict, task_type, y_true, y_pred):
 
         if task_type not in preds_dict:
