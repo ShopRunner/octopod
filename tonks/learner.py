@@ -235,11 +235,14 @@ class MultiTaskLearner(object):
                 y = y.to(device)
 
                 output = self.model(x)
+                num_rows = self._get_num_rows(x)
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)
 
-                val_loss_dict[task_type] += current_loss
-                overall_val_loss += current_loss
+                scaled_loss = current_loss.item() * num_rows
+
+                val_loss_dict[task_type] += scaled_loss
+                overall_val_loss += scaled_loss
 
                 y_pred = output[task_type].cpu().numpy()
                 y_true = y.cpu().numpy()
