@@ -6,6 +6,7 @@
 
    tonks_core
    tonks_ensemble
+   tonks_learner_utils
    tonks_text
    tonks_vision
    contribution_guidelines
