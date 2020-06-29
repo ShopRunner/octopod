@@ -89,6 +89,3 @@ class TonksTextDatasetMultiLabel(TonksTextDataset):
         y_output = torch.FloatTensor(self.y[index])
 
         return x_input, y_output
-
-    def __len__(self):
-        return len(self.x)
