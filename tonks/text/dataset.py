@@ -52,7 +52,7 @@ class TonksTextDataset(Dataset):
 
 class TonksTextDatasetMultiLabel(TonksTextDataset):
     """
-    Load data for use with a BERT model
+    Multi label subclass of TonksTextDataset
 
     Parameters
     ----------

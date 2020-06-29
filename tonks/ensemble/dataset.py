@@ -95,7 +95,7 @@ class TonksEnsembleDataset(Dataset):
 
 class TonksEnsembleDatasetMultiLabel(Dataset):
     """
-    Load image and text data specifically for an ensemble model
+    Multi label subclass of TonksEnsembleDataset
 
     Parameters
     ----------
