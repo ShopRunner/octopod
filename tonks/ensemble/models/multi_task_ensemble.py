@@ -417,14 +417,18 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
 
             for key, model_id in resnet_model_id_dict.items():
                 self.image_resnets[key].load_state_dict(
-                    torch.load(folder / f'resnet_dict_{model_id}.pth'),
-                    map_location=lambda storage,
-                    loc: storage
+                    torch.load(
+                        folder / f'resnet_dict_{model_id}.pth',
+                        map_location=lambda storage,
+                        loc: storage
+                    )
                 )
                 self.image_dense_layers[key].load_state_dict(
-                    torch.load(folder / f'dense_layers_dict_{model_id}.pth'),
-                    map_location=lambda storage,
-                    loc: storage
+                    torch.load(
+                        folder / f'dense_layers_dict_{model_id}.pth',
+                        map_location=lambda storage,
+                        loc: storage
+                    )
                 )
 
     def export(self, folder, model_id, model_name=None):
