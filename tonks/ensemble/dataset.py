@@ -93,7 +93,7 @@ class TonksEnsembleDataset(Dataset):
         return len(self.text_inputs)
 
 
-class TonksEnsembleDatasetMultiLabel(Dataset):
+class TonksEnsembleDatasetMultiLabel(TonksEnsembleDataset):
     """
     Multi label subclass of TonksEnsembleDataset
 
