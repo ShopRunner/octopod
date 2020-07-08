@@ -1,13 +1,11 @@
 import copy
 from pathlib import Path
-import warnings
 
 import torch
 import torch.nn as nn
 from torchvision import models as torch_models
 
-from tonks.config import rename_message
-from tonks.vision.helpers import _dense_block, _Identity
+from octopod.vision.helpers import _dense_block, _Identity
 
 
 class ResnetForMultiTaskClassification(nn.Module):
@@ -51,8 +49,6 @@ class ResnetForMultiTaskClassification(nn.Module):
         flag for whether or not to load in pretrained weights for ResNet50.
         useful for the first round of training before there are fine tuned weights
     """
-    warnings.warn(rename_message)
-
     def __init__(self, pretrained_task_dict=None, new_task_dict=None, load_pretrained_resnet=False):
         super(ResnetForMultiTaskClassification, self).__init__()
 

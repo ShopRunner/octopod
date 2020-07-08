@@ -5,13 +5,13 @@ USER root
 RUN apt-get update \
     && apt-get clean
 
-COPY requirements.txt /tonks/
-WORKDIR /tonks
+COPY requirements.txt /octopod/
+WORKDIR /octopod
 
 RUN python -m pip install -U --no-cache-dir pip
 RUN pip install -r requirements.txt
 RUN pip list > /python_environment.txt
 
-COPY . /tonks
+COPY . /octopod
 
 CMD /bin/bash

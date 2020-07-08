@@ -1,6 +1,6 @@
 # Synthetic Data tutorial
 
-This tutorial demonstrates training Tonks models on a set of generated color swatches. This is meant to be an easy fast demo of the library's capabilities that can be run on a CPU.
+This tutorial demonstrates training Octopod models on a set of generated color swatches. This is meant to be an easy fast demo of the library's capabilities that can be run on a CPU.
 
 ## Dataset
 For this tutorial, we develop synthetic image and text data for two tasks:

@@ -17,7 +17,7 @@ from pathlib import Path
 import sys
 
 base_dir_loc = Path(__file__).parents[2]
-version_loc = base_dir_loc / 'tonks/_version.py'
+version_loc = base_dir_loc / 'octopod/_version.py'
 with open(version_loc) as version_file:
     exec(version_file.read())
 
@@ -25,7 +25,7 @@ sys.path.insert(0, str(base_dir_loc))
 
 # -- Project information -----------------------------------------------------
 
-project = 'tonks'
+project = 'octopod'
 copyright = '2020, ShopRunner data science team'
 author = 'ShopRunner data science team'
 
@@ -106,7 +106,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'tonksdoc'
+htmlhelp_basename = 'octopoddoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -133,7 +133,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'tonks.tex', 'tonks Documentation',
+    (master_doc, 'octopod.tex', 'octopod Documentation',
      'ShopRunner data science team', 'manual'),
 ]
 
@@ -143,7 +143,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'tonks', 'tonks Documentation',
+    (master_doc, 'octopod', 'octopod Documentation',
      [author], 1)
 ]
 
@@ -154,8 +154,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'tonks', 'tonks Documentation',
-     author, 'tonks', 'One line description of project.',
+    (master_doc, 'octopod', 'octopod Documentation',
+     author, 'octopod', 'One line description of project.',
      'Miscellaneous'),
 ]
 

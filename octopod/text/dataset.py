@@ -7,7 +7,7 @@ from torch.utils.data import Dataset
 from tonks.config import rename_message
 
 
-class TonksTextDataset(Dataset):
+class OctopodTextDataset(Dataset):
     """
     Load data for use with a BERT model
 
