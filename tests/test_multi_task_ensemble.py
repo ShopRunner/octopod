@@ -5,7 +5,7 @@ import tempfile
 
 import torch
 
-from tonks.ensemble.models import BertResnetEnsembleForMultiTaskClassification
+from octopod.ensemble.models import BertResnetEnsembleForMultiTaskClassification
 
 
 def test_exporting_and_loading_works_correctly():

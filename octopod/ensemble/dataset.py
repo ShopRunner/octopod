@@ -3,11 +3,11 @@ from PIL import Image
 import torch
 from torch.utils.data import Dataset
 
-from tonks.vision.config import cropped_transforms, full_img_transforms
-from tonks.vision.helpers import center_crop_pil_image
+from octopod.vision.config import cropped_transforms, full_img_transforms
+from octopod.vision.helpers import center_crop_pil_image
 
 
-class TonksEnsembleDataset(Dataset):
+class OctopodEnsembleDataset(Dataset):
     """
     Load image and text data specifically for an ensemble model
 
@@ -24,12 +24,12 @@ class TonksEnsembleDataset(Dataset):
     max_seq_length: int (defaults to 128)
         Maximum number of tokens to allow
     transform: str or list of PyTorch transforms
-        specifies how to preprocess the full image for a Tonks image model
-        To use the built-in Tonks image transforms, use the strings: `train` or `val`
+        specifies how to preprocess the full image for a Octopod image model
+        To use the built-in Octopod image transforms, use the strings: `train` or `val`
         To use custom transformations supply a list of PyTorch transforms.
     crop_transform: str or list of PyTorch transforms
-        specifies how to preprocess the center cropped image for a Tonks image model
-        To use the built-in Tonks image transforms, use strings `train` or `val`
+        specifies how to preprocess the center cropped image for a Octopod image model
+        To use the built-in Octopod image transforms, use strings `train` or `val`
         To use custom transformations supply a list of PyTorch transforms.
     """
     def __init__(self,

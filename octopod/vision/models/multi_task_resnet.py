@@ -5,7 +5,7 @@ import torch
 import torch.nn as nn
 from torchvision import models as torch_models
 
-from tonks.vision.helpers import _dense_block, _Identity
+from octopod.vision.helpers import _dense_block, _Identity
 
 
 class ResnetForMultiTaskClassification(nn.Module):
