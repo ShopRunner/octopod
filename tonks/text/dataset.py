@@ -1,6 +1,10 @@
+import warnings
+
 import numpy as np
 import torch
 from torch.utils.data import Dataset
+
+from tonks.config import rename_message
 
 
 class TonksTextDataset(Dataset):
@@ -18,6 +22,8 @@ class TonksTextDataset(Dataset):
     max_seq_length: int (defaults to 128)
         Maximum number of tokens to allow
     """
+    warnings.warn(rename_message)
+
     def __init__(self, x, y, tokenizer, max_seq_length=128):
         self.x = x
         self.y = y

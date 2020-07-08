@@ -1,4 +1,5 @@
 from pathlib import Path
+import warnings
 
 import joblib
 import torch
@@ -6,6 +7,7 @@ import torch.nn as nn
 from torchvision import models as torch_models
 from transformers.modeling_bert import BertConfig, BertModel
 
+from tonks.config import rename_message
 from tonks.exc import TonksError
 from tonks.vision.helpers import _dense_block, _Identity
 
@@ -77,6 +79,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
     dropout: float
         dropout percentage for Dropout layer
     """
+    warnings.warn(rename_message)
 
     def __init__(
         self,
