@@ -1,1 +1,1 @@
-from tonks.text.models.multi_task_bert import BertForMultiTaskClassification
+from octopod.text.models.multi_task_bert import BertForMultiTaskClassification

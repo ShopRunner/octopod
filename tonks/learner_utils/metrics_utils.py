@@ -18,7 +18,7 @@ def _multi_label_accuracy_preprocess(x):
 
 def multi_class_accuracy(y_true, y_raw_preds):
     """
-    Takes in raw outputs from Tonks task heads and outputs an accuracy metric
+    Takes in raw outputs from Octopod task heads and outputs an accuracy metric
     and the processed predictions after a softmax as been applied
 
     Parameters
@@ -47,7 +47,7 @@ def multi_class_accuracy(y_true, y_raw_preds):
 
 def multi_label_accuracy(y_true, y_raw_preds):
     """
-    Takes in raw outputs from Tonks task heads and outputs an accuracy metric
+    Takes in raw outputs from Octopod task heads and outputs an accuracy metric
     and the processed predictions after a sigmoid as been applied
 
     Parameters

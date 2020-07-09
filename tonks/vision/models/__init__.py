@@ -1,1 +1,1 @@
-from tonks.vision.models.multi_task_resnet import ResnetForMultiTaskClassification
+from octopod.vision.models.multi_task_resnet import ResnetForMultiTaskClassification

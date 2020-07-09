@@ -1,3 +1,3 @@
-class TonksError(Exception):
-    """Custom Tonks error"""
+class OctopodError(Exception):
+    """Custom Octopod error"""
     pass

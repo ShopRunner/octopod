@@ -1,1 +1,1 @@
-from tonks.ensemble.models.multi_task_ensemble import BertResnetEnsembleForMultiTaskClassification
+from octopod.ensemble.models.multi_task_ensemble import BertResnetEnsembleForMultiTaskClassification
