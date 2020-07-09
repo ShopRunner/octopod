@@ -1,12 +1,9 @@
 import copy
 from pathlib import Path
-import warnings
 
 import torch
 import torch.nn as nn
 from transformers.modeling_bert import BertModel, BertPreTrainedModel
-
-from tonks.config import rename_message
 
 
 class BertForMultiTaskClassification(BertPreTrainedModel):
@@ -55,8 +52,6 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
     dropout: float
         dropout percentage for Dropout layer
     """
-    warnings.warn(rename_message)
-
     def __init__(self, config, pretrained_task_dict=None, new_task_dict=None, dropout=1e-1):
         super(BertForMultiTaskClassification, self).__init__(config)
         self.bert = BertModel(config)
