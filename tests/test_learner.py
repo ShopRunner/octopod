@@ -1,7 +1,7 @@
 import pytest
 
-from tonks import MultiInputMultiTaskLearner
-from tonks.vision.models import ResnetForMultiTaskClassification
+from octopod import MultiInputMultiTaskLearner
+from octopod.vision.models import ResnetForMultiTaskClassification
 
 
 def test_learner_with_none_loss_dict(test_no_loss_dict, test_train_val_loaders):

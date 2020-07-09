@@ -1,2 +1,2 @@
-from tonks.text.dataset import TonksTextDataset, TonksTextDatasetMultiLabel
-from tonks.text.models import BertForMultiTaskClassification
+from octopod.text.dataset import TonksTextDataset, TonksTextDatasetMultiLabel
+from octopod.text.models import BertForMultiTaskClassification

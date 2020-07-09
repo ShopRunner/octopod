@@ -5,7 +5,7 @@ from fastprogress.fastprogress import format_time, master_bar, progress_bar
 import numpy as np
 import torch
 
-from tonks.learner_utils import (DEFAULT_LOSSES_DICT,
+from octopod.learner_utils import (DEFAULT_LOSSES_DICT,
                                  DEFAULT_METRIC_DICT,
                                  )
 

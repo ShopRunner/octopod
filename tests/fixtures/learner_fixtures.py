@@ -2,8 +2,8 @@ import pandas as pd
 import pytest
 from torch.utils.data import DataLoader
 
-from tonks import MultiDatasetLoader
-from tonks.vision.dataset import TonksImageDataset
+from octopod import MultiDatasetLoader
+from octopod.vision.dataset import TonksImageDataset
 
 
 @pytest.fixture()

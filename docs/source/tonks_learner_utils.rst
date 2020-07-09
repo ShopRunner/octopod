@@ -5,5 +5,5 @@ This section contains helper code for the Tonks learner pipelines for supporting
 
 Metric Utils
 ------------
-.. automodule:: tonks.learner_utils.metrics_utils
+.. automodule:: octopod.learner_utils.metrics_utils
     :members: 
