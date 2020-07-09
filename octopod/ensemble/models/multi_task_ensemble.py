@@ -1,5 +1,4 @@
 from pathlib import Path
-import warnings
 
 import joblib
 import torch
@@ -7,9 +6,8 @@ import torch.nn as nn
 from torchvision import models as torch_models
 from transformers.modeling_bert import BertConfig, BertModel
 
-from tonks.config import rename_message
-from tonks.exc import TonksError
-from tonks.vision.helpers import _dense_block, _Identity
+from octopod.exc import OctopodError
+from octopod.vision.helpers import _dense_block, _Identity
 
 
 class BertResnetEnsembleForMultiTaskClassification(nn.Module):
@@ -26,7 +24,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
 
     Note: For explicitness, `vanilla` refers to the
     `transformers` BERT or `PyTorch` ResNet50 weights while
-    `pretrained` refers to previously trained Tonks weights.
+    `pretrained` refers to previously trained Octopod weights.
 
     Examples
     --------
@@ -79,8 +77,6 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
     dropout: float
         dropout percentage for Dropout layer
     """
-    warnings.warn(rename_message)
-
     def __init__(
         self,
         image_task_dict=None,
@@ -363,7 +359,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
 
     def load_core_models(self, folder, bert_model_id, resnet_model_id_dict):
         """
-        Loads the weights from pretrained BERT and ResNet50 Tonks models
+        Loads the weights from pretrained BERT and ResNet50 Octopod models
 
         Does not load weights from the final ensemble and classifier layers.
         use case is for loading SR_pretrained component BERT and image model
@@ -474,7 +470,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
         for joint_task in image_task_dict.keys():
             for task, task_size in image_task_dict[joint_task].items():
                 if task in text_task_dict.keys():
-                    raise TonksError(
+                    raise OctopodError(
                         'Task {} is in multiple models. Each task can only be in one image model.'
                         .format(task)
                     )

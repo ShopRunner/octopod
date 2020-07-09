@@ -1,7 +1,4 @@
 import random
-import warnings
-
-from tonks.config import rename_message
 
 
 class MultiDatasetLoader(object):
@@ -15,8 +12,6 @@ class MultiDatasetLoader(object):
     shuffle: Boolean (defaults to True)
         Flag for whether or not to shuffle the data
     """
-    warnings.warn(rename_message)
-
     def __init__(self, loader_dict, shuffle=True):
         self.loader_dict = loader_dict
         self.shuffle = shuffle

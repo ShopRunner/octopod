@@ -2,21 +2,21 @@
 
 # Fashion Data Tutorial
 
-This tutorial demonstrates training Tonks models on an open source fashion dataset consisting of images and text descriptions.
+This tutorial demonstrates training Octopod models on an open source fashion dataset consisting of images and text descriptions.
 
 This set of notebooks was run on an AWS `p3.2xlarge` machine. 
 
 ## Dataset
 For this tutorial, we use a Kaggle dataset of fashion images. The dataset can be found here:  https://www.kaggle.com/paramaggarwal/fashion-product-images-small.
 
-This tutorial is much closer to how we actually use Tonks at ShopRunner.
+This tutorial is much closer to how we actually use Octopod at ShopRunner.
 
 The dataset consists of product images and names as well as a number of attributes for each product.
 
 For this tutorial, we used the `gender` and `season` attributes as our two tasks. To simulate having two different datasets, we sub-sampled the data once for each of the attributes.
 
 ## Main Notebooks
-- Step1_format_data: In this notebook, we format the data so that it is ready for Tonks.
+- Step1_format_data: In this notebook, we format the data so that it is ready for Octopod.
 - Step2_train_image_model: In this notebook, we train an image model that can perform both tasks at the same time.
 - Step3_train_text_model: In this notebook, we train a text model that can perform both tasks at the same time. 
 - Step4_train_ensemble_model: In this notebook, we train an ensemble model by combining our previously trained image and text models.
