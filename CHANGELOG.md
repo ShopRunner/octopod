@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
 
+# [1.0.0] - 2020-7-09
+### Changed
+ - Tonks is now called Ocotopod
+
+==== Below is Tonks development ==== 
+
+# [1.0.0] - 2020-7-08
+### Added
+ - Warnings to switch to new name
+
 # [0.4.4] - 2020-7-5
 ### Fixed
  - A few paren locations in multi_task_ensemble.py

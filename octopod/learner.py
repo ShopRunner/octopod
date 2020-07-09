@@ -295,9 +295,8 @@ class MultiInputMultiTaskLearner(MultiTaskLearner):
     -----
     Multi-input datasets should return x's as a tuple/list so that each element
     can be sent to the appropriate device before being sent to the model
-    see tonks.vision.dataset's TonksImageDataset class for an example
+    see octopod.vision.dataset's OctopodImageDataset class for an example
     """
-
     def _return_input_on_device(self, x, device):
         """
         Send all model inputs to the appropriate device (GPU or CPU)
