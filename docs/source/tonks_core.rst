@@ -1,13 +1,13 @@
-Core Tonks
+Core Octopod
 ==========
-Core Tonks is made up of a learner and dataloader class designed for multi-task multi-dataset learning.
+Core Octopod is made up of a learner and dataloader class designed for multi-task multi-dataset learning.
 
 Multitask Learner
 -----------------
-.. automodule:: tonks.learner
+.. automodule:: octopod.learner
     :members:
 
 Multitask Dataloader
 --------------------
-.. automodule:: tonks.dataloader
+.. automodule:: octopod.dataloader
     :members:

@@ -3,7 +3,7 @@ import torch
 from torch.utils.data import Dataset
 
 
-class TonksTextDataset(Dataset):
+class OctopodTextDataset(Dataset):
     """
     Load data for use with a BERT model
 

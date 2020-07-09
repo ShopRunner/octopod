@@ -52,7 +52,6 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
     dropout: float
         dropout percentage for Dropout layer
     """
-
     def __init__(self, config, pretrained_task_dict=None, new_task_dict=None, dropout=1e-1):
         super(BertForMultiTaskClassification, self).__init__(config)
         self.bert = BertModel(config)
