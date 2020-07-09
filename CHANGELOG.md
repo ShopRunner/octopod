@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ==== Below is Tonks development ==== 
 
+# [1.0.0] - 2020-7-08
 ### Added
  - Warnings to switch to new name
 
