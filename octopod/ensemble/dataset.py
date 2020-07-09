@@ -93,9 +93,9 @@ class OctopodEnsembleDataset(Dataset):
         return len(self.text_inputs)
 
 
-class TonksEnsembleDatasetMultiLabel(TonksEnsembleDataset):
+class OctopodEnsembleDatasetMultiLabel(OctopodEnsembleDataset):
     """
-    Multi label subclass of TonksEnsembleDataset
+    Multi label subclass of OctopodEnsembleDataset
 
     Parameters
     ----------
@@ -112,12 +112,12 @@ class TonksEnsembleDatasetMultiLabel(TonksEnsembleDataset):
     max_seq_length: int (defaults to 128)
         Maximum number of tokens to allow
     transform: str or list of PyTorch transforms
-        specifies how to preprocess the full image for a Tonks image model
-        To use the built-in Tonks image transforms, use the strings: `train` or `val`
+        specifies how to preprocess the full image for a Octopod image model
+        To use the built-in Octopod image transforms, use the strings: `train` or `val`
         To use custom transformations supply a list of PyTorch transforms.
     crop_transform: str or list of PyTorch transforms
-        specifies how to preprocess the center cropped image for a Tonks image model
-        To use the built-in Tonks image transforms, use strings `train` or `val`
+        specifies how to preprocess the center cropped image for a Octopod image model
+        To use the built-in Octopod image transforms, use strings `train` or `val`
         To use custom transformations supply a list of PyTorch transforms.
     """
     def __getitem__(self, index):

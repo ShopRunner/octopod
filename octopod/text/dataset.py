@@ -50,9 +50,9 @@ class OctopodTextDataset(Dataset):
         return len(self.x)
 
 
-class TonksTextDatasetMultiLabel(TonksTextDataset):
+class OctopodTextDatasetMultiLabel(OctopodTextDataset):
     """
-    Multi label subclass of TonksTextDataset
+    Multi label subclass of OctopodTextDataset
 
     Parameters
     ----------

@@ -5,13 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 # [2.0.0] - 2020-7-10
 ### Added
- - Tonks learners can now use multiple loss functions and do multi-label in addition to multi-class tasks
+ - Octopod learners can now use multiple loss functions and do multi-label in addition to multi-class tasks
 ### Changed
  - loss functions and metrics are specified via a dictionary of tasks and corresponding loss functions 
 
 # [1.0.0] - 2020-7-09
 ### Changed
- - Tonks is now called Ocotopod
+ - Octopod is now called Ocotopod
 
 ==== Below is Tonks development ==== 
 
