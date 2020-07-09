@@ -1,7 +1,11 @@
+import warnings
+
 from creevey.ops.image import centercrop
 import numpy as np
 from PIL import Image
 import torch.nn as nn
+
+from tonks.config import rename_message
 
 
 def center_crop_pil_image(img):
@@ -19,6 +23,8 @@ def center_crop_pil_image(img):
     -------
     PIL.Image: Slice of input image corresponding to a cropped area around the center
     """
+    warnings.warn(rename_message)
+
     img = np.array(img)
     cropped_img = centercrop(img, reduction_factor=.4)
     return Image.fromarray(cropped_img)
@@ -32,6 +38,8 @@ class _Identity(nn.Module):
     are likely more informative than the 1000 way softmax that was used
     in the multi_output_model_v2.
     """
+    warnings.warn(rename_message)
+
     def __init__(self):
         super().__init__()
 
@@ -40,6 +48,8 @@ class _Identity(nn.Module):
 
 
 def _dense_block(in_f, out_f, reg):
+    warnings.warn(rename_message)
+
     return nn.Sequential(nn.Linear(in_f, out_f),
                          nn.BatchNorm1d(out_f, eps=reg),
                          nn.ReLU()

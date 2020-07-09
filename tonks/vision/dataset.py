@@ -1,8 +1,11 @@
+import warnings
+
 import numpy as np
 from PIL import Image
 import torch
 from torch.utils.data import Dataset
 
+from tonks.config import rename_message
 from tonks.vision.config import cropped_transforms, full_img_transforms
 from tonks.vision.helpers import center_crop_pil_image
 
@@ -27,6 +30,8 @@ class TonksImageDataset(Dataset):
         To use the built-in Tonks image transforms, use strings `train` or `val`
         To use custom transformations supply a list of PyTorch transforms
     """
+    warnings.warn(rename_message)
+
     def __init__(self,
                  x,
                  y,
