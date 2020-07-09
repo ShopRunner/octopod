@@ -1,8 +1,8 @@
 from ._version import __version__
 
-from octopod.dataloader import MultiDatasetLoader
-from octopod.ensemble import *
-from octopod.learner import MultiTaskLearner, MultiInputMultiTaskLearner
-from octopod.learner_utils import *
-from octopod.text import *
-from octopod.vision import *
+from tonks.dataloader import MultiDatasetLoader
+from tonks.ensemble import *
+from tonks.learner import MultiTaskLearner, MultiInputMultiTaskLearner
+from tonks.learner_utils import *
+from tonks.text import *
+from tonks.vision import *

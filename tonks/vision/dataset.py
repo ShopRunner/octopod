@@ -3,11 +3,11 @@ from PIL import Image
 import torch
 from torch.utils.data import Dataset
 
-from octopod.vision.config import cropped_transforms, full_img_transforms
-from octopod.vision.helpers import center_crop_pil_image
+from tonks.vision.config import cropped_transforms, full_img_transforms
+from tonks.vision.helpers import center_crop_pil_image
 
 
-class OctopodImageDataset(Dataset):
+class TonksImageDataset(Dataset):
     """
     Load data specifically for use with a image models
 
@@ -19,12 +19,12 @@ class OctopodImageDataset(Dataset):
         A list of dummy-encoded categories
         For instance, y might be [0,1,2,0] for a 3 class problem with 4 samples
     transform: str or list of PyTorch transforms
-        specifies how to preprocess the full image for a Octopod image model
-        To use the built-in Octopod image transforms, use the strings: `train` or `val`
+        specifies how to preprocess the full image for a Tonks image model
+        To use the built-in Tonks image transforms, use the strings: `train` or `val`
         To use custom transformations supply a list of PyTorch transforms
     crop_transform: str or list of PyTorch transforms
-        specifies how to preprocess the center cropped image for a Octopod image model
-        To use the built-in Octopod image transforms, use strings `train` or `val`
+        specifies how to preprocess the center cropped image for a Tonks image model
+        To use the built-in Tonks image transforms, use strings `train` or `val`
         To use custom transformations supply a list of PyTorch transforms
     """
     def __init__(self,
@@ -64,9 +64,9 @@ class OctopodImageDataset(Dataset):
         return len(self.x)
 
 
-class OctopodImageDatasetMultiLabel(OctopodImageDataset):
+class TonksImageDatasetMultiLabel(TonksImageDataset):
     """
-    Subclass of OctopodImageDataset used for multi-label tasks
+    Subclass of TonksImageDataset used for multi-label tasks
 
     Parameters
     ----------
@@ -77,12 +77,12 @@ class OctopodImageDatasetMultiLabel(OctopodImageDataset):
         classes in the multi-label task. For a 4 class multi-label task
         a sample list would be [1,0,0,1]
     transform: str or list of PyTorch transforms
-        specifies how to preprocess the full image for a Octopod image model
-        To use the built-in Octopod image transforms, use the strings: `train` or `val`
+        specifies how to preprocess the full image for a Tonks image model
+        To use the built-in Tonks image transforms, use the strings: `train` or `val`
         To use custom transformations supply a list of PyTorch transforms
     crop_transform: str or list of PyTorch transforms
-        specifies how to preprocess the center cropped image for a Octopod image model
-        To use the built-in Octopod image transforms, use strings `train` or `val`
+        specifies how to preprocess the center cropped image for a Tonks image model
+        To use the built-in Tonks image transforms, use strings `train` or `val`
         To use custom transformations supply a list of PyTorch transforms
     """
 

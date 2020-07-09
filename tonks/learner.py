@@ -5,9 +5,9 @@ from fastprogress.fastprogress import format_time, master_bar, progress_bar
 import numpy as np
 import torch
 
-from octopod.learner_utils import (DEFAULT_LOSSES_DICT,
-                                  DEFAULT_METRIC_DICT,
-                                  )
+from tonks.learner_utils import (DEFAULT_LOSSES_DICT,
+                                 DEFAULT_METRIC_DICT,
+                                 )
 
 
 class MultiTaskLearner(object):
@@ -427,7 +427,7 @@ class MultiInputMultiTaskLearner(MultiTaskLearner):
     -----
     Multi-input datasets should return x's as a tuple/list so that each element
     can be sent to the appropriate device before being sent to the model
-    see octopod.vision.dataset's OctopodImageDataset class for an example
+    see tonks.vision.dataset's TonksImageDataset class for an example
     """
 
     def _return_input_on_device(self, x, device):

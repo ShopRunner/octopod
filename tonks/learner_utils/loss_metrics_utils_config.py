@@ -1,6 +1,6 @@
 import torch.nn as nn
 
-from octopod.learner_utils.metrics_utils import multi_class_accuracy, multi_label_accuracy
+from tonks.learner_utils.metrics_utils import multi_class_accuracy, multi_label_accuracy
 
 DEFAULT_LOSSES_DICT = {
     'categorical_cross_entropy': nn.CrossEntropyLoss(),

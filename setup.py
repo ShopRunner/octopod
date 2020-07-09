@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-with open('octopod/_version.py') as version_file:
+with open('tonks/_version.py') as version_file:
     exec(version_file.read())
 
 with open('README.md') as r:
@@ -10,13 +10,13 @@ with open('LICENSE.txt') as l:
     license = l.read()
 
 setup(
-    name='octopod',
+    name='tonks',
     version=__version__,
     description='General purpose multi-task classification library',
     long_description=readme+'\n\n\nLicense\n-------\n'+license,
     long_description_content_type='text/markdown',
     author='Nicole Carlson, Michael Sugimura',
-    url='https://github.com/shoprunner/octopod',
+    url='https://github.com/shoprunner/tonks',
     license='BSD-3-Clause',
     data_files=[('', ['LICENSE.txt'])],
     packages=find_packages(exclude=('tests', 'docs')),

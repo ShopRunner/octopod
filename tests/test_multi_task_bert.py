@@ -5,7 +5,7 @@ import tempfile
 
 import torch
 
-from octopod.text.models import BertForMultiTaskClassification
+from tonks.text.models import BertForMultiTaskClassification
 
 
 def test_exporting_and_loading_works_correctly():

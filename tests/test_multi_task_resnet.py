@@ -5,7 +5,7 @@ import tempfile
 
 import torch
 
-from octopod.vision.models import ResnetForMultiTaskClassification
+from tonks.vision.models import ResnetForMultiTaskClassification
 
 
 def test_exporting_and_loading_works_correctly():

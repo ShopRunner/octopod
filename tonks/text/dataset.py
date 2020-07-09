@@ -3,7 +3,7 @@ import torch
 from torch.utils.data import Dataset
 
 
-class OctopodTextDataset(Dataset):
+class TonksTextDataset(Dataset):
     """
     Load data for use with a BERT model
 
@@ -50,9 +50,9 @@ class OctopodTextDataset(Dataset):
         return len(self.x)
 
 
-class OctopodTextDatasetMultiLabel(OctopodTextDataset):
+class TonksTextDatasetMultiLabel(TonksTextDataset):
     """
-    Multi label subclass of OctopodTextDataset
+    Multi label subclass of TonksTextDataset
 
     Parameters
     ----------

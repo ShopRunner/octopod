@@ -4,11 +4,11 @@
 .. toctree::
    :maxdepth: 2
 
-   octopod_core
-   octopod_ensemble
-   octopod_learner_utils
-   octopod_text
-   octopod_vision
+   tonks_core
+   tonks_ensemble
+   tonks_learner_utils
+   tonks_text
+   tonks_vision
    contribution_guidelines
    code_of_conduct
 

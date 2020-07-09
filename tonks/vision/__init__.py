@@ -1,2 +1,2 @@
-from octopod.vision.dataset import OctopodImageDataset, OctopodImageDatasetMultiLabel
-from octopod.vision.models import ResnetForMultiTaskClassification
+from tonks.vision.dataset import TonksImageDataset, TonksImageDatasetMultiLabel
+from tonks.vision.models import ResnetForMultiTaskClassification

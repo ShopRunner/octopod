@@ -2,8 +2,8 @@ import pandas as pd
 import pytest
 from torch.utils.data import DataLoader
 
-from octopod import MultiDatasetLoader
-from octopod.vision.dataset import OctopodImageDataset
+from tonks import MultiDatasetLoader
+from tonks.vision.dataset import TonksImageDataset
 
 
 @pytest.fixture()
@@ -67,14 +67,14 @@ def test_train_val_loaders():
     df = pd.DataFrame({'image_loc': ['sample_data/tonks.jpeg'],
                        'category': [1]})
 
-    task1_dataset = OctopodImageDataset(
+    task1_dataset = TonksImageDataset(
         x=df['image_loc'],
         y=df['category'],
         transform='train',
         crop_transform='train'
     )
 
-    task2_datset = OctopodImageDataset(
+    task2_datset = TonksImageDataset(
         x=df['image_loc'],
         y=df['category'],
         transform='train',

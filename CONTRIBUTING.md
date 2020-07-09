@@ -6,7 +6,7 @@ We welcome contributions in the form of issues or pull requests!
 
 We want this to be a place where all are welcome to discuss and contribute, so please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms. Find the Code of Conduct in the ``CONDUCT.md`` file on GitHub or in the Code of Conduct section of read the docs.
 
-If you have a problem using Octopod or see a possible improvement, open an issue in the GitHub issue tracker. Please be as specific as you can.
+If you have a problem using Tonks or see a possible improvement, open an issue in the GitHub issue tracker. Please be as specific as you can.
 
 If you see an open issue you'd like to be fixed, take a stab at it and open a PR!
 
@@ -47,7 +47,7 @@ PR Checklist
 
 ```
     source venv/bin/activate
-    flake8 octopod tests
+    flake8 tonks tests
 ```
 - Make sure you have written unittests where appropriate
 - Make sure the unittests pass

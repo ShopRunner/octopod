@@ -1,18 +1,18 @@
-Octopod Vision
+Tonks Vision
 ============
-The computer vision aspects of Octopod are housed here. This includes sample model architectures, dataset class, and helper functions.
+The computer vision aspects of Tonks are housed here. This includes sample model architectures, dataset class, and helper functions.
 
 Model Architectures
 -------------------
-.. automodule:: octopod.vision.models.multi_task_resnet
+.. automodule:: tonks.vision.models.multi_task_resnet
     :members:
 
 Dataset
 -------
-.. automodule:: octopod.vision.dataset
+.. automodule:: tonks.vision.dataset
     :members:
 
 Helper Functions
 ----------------
-.. automodule:: octopod.vision.helpers
+.. automodule:: tonks.vision.helpers
     :members:
