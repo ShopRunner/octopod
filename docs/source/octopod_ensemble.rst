@@ -1,5 +1,5 @@
 Octopod Ensemble
-==============
+================
 The ensemble aspects of Octopod are housed here. This includes sample model architectures, dataset class, and helper functions.
 
 Model Architectures

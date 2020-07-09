@@ -1,5 +1,5 @@
 Octopod Text
-==========
+============
 The text aspects of Octopod are housed here. This includes sample model architectures and a dataset class.
 
 Model Architectures

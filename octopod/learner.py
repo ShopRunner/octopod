@@ -6,8 +6,8 @@ import numpy as np
 import torch
 
 from octopod.learner_utils import (DEFAULT_LOSSES_DICT,
-                                 DEFAULT_METRIC_DICT,
-                                 )
+                                   DEFAULT_METRIC_DICT,
+                                   )
 
 
 class MultiTaskLearner(object):
@@ -403,9 +403,6 @@ class MultiTaskLearner(object):
 
             raise Exception(f'make sure all tasks are contained in the {input_str} dictionary '
                             f'missing tasks are {missing_tasks}')
-
-    def _get_num_rows(self, x):
-        return x.size(0)
 
 
 class MultiInputMultiTaskLearner(MultiTaskLearner):

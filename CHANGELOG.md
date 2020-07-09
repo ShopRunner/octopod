@@ -11,7 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 # [1.0.0] - 2020-7-09
 ### Changed
- - Octopod is now called Ocotopod
+ - Tonks is now called Ocotopod
 
 ==== Below is Tonks development ==== 
 
