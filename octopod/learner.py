@@ -170,14 +170,9 @@ class MultiTaskLearner(object):
             for task in self.tasks:
                 str_stats.append(f'{training_loss_dict[task]:.6f}')
                 str_stats.append(f'{val_loss_dict[task]:.6f}')
-                try:
-                    str_stats.append(
-                        f"{metrics_scores[task][self.metric_function_dict[task].__name__]:.6f}"
-                    )
-                except ValueError:
-                    str_stats.append(
-                        f"{metrics_scores[task][self.metric_function_dict[task].__name__]}"
-                    )
+                str_stats.append(
+                    f"{metrics_scores[task][self.metric_function_dict[task].__name__]:.6f}"
+                )
 
             str_stats.append(format_time(time.time() - start_time))
 
@@ -317,6 +312,10 @@ class MultiTaskLearner(object):
         return x.size(0)
 
     def _update_preds_dict(self, preds_dict, task_type, y_true, y_pred):
+        """
+        Updates prediction dictionary for a specific task with both true labels
+        and predicted labels for a given batch
+        """
 
         if task_type not in preds_dict:
             preds_dict[task_type] = {

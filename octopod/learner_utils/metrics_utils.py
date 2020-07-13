@@ -4,10 +4,6 @@ import torch
 import torch.nn.functional as F
 
 
-def _softmax_final_layer(x):
-    return F.softmax(x, dim=1)
-
-
 def _multi_class_accuracy_preprocess(x):
     return torch.max(torch.tensor(x), 1)[1].numpy()
 
@@ -37,7 +33,7 @@ def multi_class_accuracy(y_true, y_raw_preds):
 
     """
     tensor_y_pred = torch.from_numpy(y_raw_preds)
-    y_preds = _softmax_final_layer(tensor_y_pred).numpy()
+    y_preds = F.softmax(tensor_y_pred, dim=1).numpy()
     task_preds = (
         _multi_class_accuracy_preprocess(y_preds)
     )
