@@ -1,3 +1,5 @@
+![octopod logo](https://net-shoprunner-scratch-data-science.s3.amazonaws.com/msugimura/octopod/octopod_small.jpg)
+
 # Octopod
 
 Octopod is a general purpose deep learning library developed by the ShopRunner Data Science team to train multi-task image, text, or ensemble (image + text) models.
