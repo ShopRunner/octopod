@@ -1,5 +1,5 @@
 Core Octopod
-==========
+============
 Core Octopod is made up of a learner and dataloader class designed for multi-task multi-dataset learning.
 
 Multitask Learner
