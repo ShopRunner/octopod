@@ -23,7 +23,7 @@ Note 6/12/20: Our team previously had a tradition of naming projects with terms 
     - `text`: code for text models with a BERT architecture
     - `vision`: code for vision models with ResNet50 architectures
 
-## Installation 
+## Installation
 ```
 pip install octopod
 ```
@@ -55,7 +55,6 @@ nvidia-docker run \
     --rm \
     -v "${PWD}:/octopod" \
     -p 8888:8888 \
-    -p 8000:8000 \
     octopod /bin/bash -c "pip install jupyter && bash"
 # run jupyter notebook
 jupyter notebook --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''
