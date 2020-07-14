@@ -90,7 +90,11 @@ class ResnetForMultiTaskClassification(nn.Module):
         full_img = self.resnet(x['full_img']).squeeze()
         crop_img = self.resnet(x['crop_img']).squeeze()
 
-        full_crop_combined = torch.cat((full_img, crop_img), 1)
+        if x[next(iter(x))].shape[0] == 1:
+            # if batch size is 1, or a single image, during inference
+            full_crop_combined = torch.cat((full_img, crop_img), 0).unsqueeze(0)
+        else:
+            full_crop_combined = torch.cat((full_img, crop_img), 1)
 
         dense_layer_output = self.dense_layers(full_crop_combined)
 
