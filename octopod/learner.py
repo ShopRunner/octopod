@@ -90,6 +90,10 @@ class MultiTaskLearner(object):
                 y = y.to(device)
                 num_rows = self._get_num_rows(x)
 
+                if x[next(iter(x))].shape[0] == 1:
+                    # skipping batch size of 1
+                    continue
+
                 output = self.model(x)
 
                 current_loss = loss_function(output[task_type], y)
@@ -106,9 +110,6 @@ class MultiTaskLearner(object):
                 if step_scheduler_on_batch:
                     scheduler.step()
 
-            if not step_scheduler_on_batch:
-                scheduler.step()
-
             overall_training_loss = overall_training_loss/self.train_dataloader.total_samples
 
             for task in self.tasks:
@@ -122,6 +123,12 @@ class MultiTaskLearner(object):
                 device,
                 pbar
             )
+
+            if not step_scheduler_on_batch:
+                if isinstance(scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
+                    scheduler.step(overall_val_loss)
+                else:
+                    scheduler.step()
 
             str_stats = []
             stats = [overall_training_loss, overall_val_loss]

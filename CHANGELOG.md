@@ -4,11 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
 
+# [1.0.1] - 2020-7-14
+### Fixed
+ - Support for `torch.optim.lr_scheduler.ReduceLROnPlateau` for `scheduler` argument in `MultiTaskLearner.fit`
+ - Learner object skips and `ResnetForMultiTaskClassification` `forward` method automatically handles batches of size 1 to avoid `ValueError` with `nn.BatchNorm1d` failing on batches of size 1
+
 # [1.0.0] - 2020-7-09
 ### Changed
  - Tonks is now called Ocotopod
 
-==== Below is Tonks development ==== 
+==== Below is Tonks development ====
 
 # [1.0.0] - 2020-7-08
 ### Added
