@@ -8,5 +8,5 @@ scikit-learn
 sentencepiece!=0.1.92  # Version 0.1.92 was yanked from PyPI
 sphinx-rtd-theme==0.4.3
 transformers==2.3.0
-torch==1.2.0
+torch
 torchvision==0.2.1

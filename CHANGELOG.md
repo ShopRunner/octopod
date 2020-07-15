@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
+# [2.1.0] - 2020-7-15
+### Changed
+ - Torch is no longer pinned to version 1.2. This allows user to use Octopod with python 3.8.
+
 # [2.0.2] - 2020-7-14
 ### Fixed
  - Support for `torch.optim.lr_scheduler.ReduceLROnPlateau` for `scheduler` argument in `MultiTaskLearner.fit`
