@@ -1,4 +1,4 @@
-from creevey.ops.image import centercrop
+from wildebeest.ops.image import centercrop
 import numpy as np
 from PIL import Image
 import torch.nn as nn
