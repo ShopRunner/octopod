@@ -8,7 +8,7 @@ def center_crop_pil_image(img):
     """
     Helper function to crop the center out of images.
 
-    Utilizes the centercrop function from `creevey`
+    Utilizes the centercrop function from `wildebeest`
 
     Parameters
     ----------
