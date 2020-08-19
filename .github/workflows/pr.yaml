@@ -25,7 +25,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -r requirements-dev.txt
         python -m pip install -r requirements.txt
-  - name: Lint with flake8
+    - name: Lint with flake8
       run: |
         flake8 octopod tests
     - name: Test with pytest
