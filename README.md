@@ -44,7 +44,7 @@ Want to add to or fix issues in Octopod? We welcome outside input and have tried
 ```bash
 # to build the container
 # NOTE: this may take a while
-nvidia-docker build -t octopod .
+docker build -t octopod .
 # nvidia-docker run : basic startup with nvidia docker to access gpu
 # --rm : deletes container when closed
 # -p : exposes ports (ex: for jupyter notebook to work)
