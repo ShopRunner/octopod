@@ -128,7 +128,7 @@ class MultiTaskLearner(object):
 
                 num_rows = self._get_num_rows(x)
 
-                if isinstance(x, dict) and x[next(iter(x))].shape[0] == 1:
+                if num_rows == 1:
                     # skip batches of size 1
                     continue
 
