@@ -1,7 +1,7 @@
-from wildebeest.ops.image import centercrop
 import numpy as np
 from PIL import Image
 import torch.nn as nn
+from wildebeest.ops.image import centercrop
 
 
 def center_crop_pil_image(img):
