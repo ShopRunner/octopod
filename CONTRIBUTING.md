@@ -37,7 +37,7 @@ Steps
 ```
 5. Develop your feature
    
-6. Submit a PR! Please submit your PR against the WIP branch - someone will review your code, then when it is ready merge it into WIP. Once there tests and linting will be run automatically, and once that is verified we will merge WIP into master.
+6. Submit a PR to master! Someone will review your code and merge your code into master when it is approved. 
    
 PR Checklist
 +++++++++++++
