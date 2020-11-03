@@ -1,4 +1,4 @@
-from creevey.ops.image import centercrop
+from wildebeest.ops.image import centercrop
 import numpy as np
 from PIL import Image
 import torch.nn as nn
@@ -8,7 +8,7 @@ def center_crop_pil_image(img):
     """
     Helper function to crop the center out of images.
 
-    Utilizes the centercrop function from `creevey`
+    Utilizes the centercrop function from `wildebeest`
 
     Parameters
     ----------

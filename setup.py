@@ -21,7 +21,6 @@ setup(
     data_files=[('', ['LICENSE.txt'])],
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[
-        'creevey',
         'fastprogress',
         'joblib',
         'numpy',
@@ -31,6 +30,7 @@ setup(
         'scikit-learn',
         'torch',
         'torchvision==0.2.1',
+        'wildebeest',
     ],
     extras_requires={
         'dev': [
