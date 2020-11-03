@@ -16,10 +16,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
  - included `Dockerfile` now installs `libgl1-mesa-glx` to avoid `ImportError: libGL.so.1: cannot open shared object file: No such file or directory` when importing `octopod`
  - batch sizes of size 1 are skipped correctly for all models
 
-# [2.2.1] - 2020-10-29
- ### Fixed
-  - Update creevey to new name wildebeest
-
 # [2.2.0] - 2020-8-20
 ### Changed
  - Switched to using Github Actions for CI/CD
