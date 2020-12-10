@@ -39,6 +39,7 @@ setup(
             'flake8-docstrings',
             'flake8-import-order',
             'm2r',
+            'pandas',
             'pydocstyle<4.0.0',
             'pytest',
             'pytest-cov',
