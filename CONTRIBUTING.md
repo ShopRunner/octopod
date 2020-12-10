@@ -59,8 +59,9 @@ PR Checklist
 - Update the docs where appropriate. You can rebuild them with the commands below.
 
 ```
-    cd /docs
-    make html
+     cd docs/
+     make html
+     open build/html/index.html
 ```
 - Update the CHANGELOG
 
