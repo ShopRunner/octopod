@@ -148,13 +148,14 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
             - folder / f'dropout_dict_{model_id}.pth'
             - folder / f'pretrained_classifiers_dict_{model_id}.pth'
         """
-        if not hasattr(self, 'pretrained_classifiers'):
-            classifiers_to_save = copy.deepcopy(self.new_classifiers)
-        else:
+        if hasattr(self, 'pretrained_classifiers'):
             # PyTorch's update method isn't working because it doesn't think ModuleDict is a Mapping
             classifiers_to_save = copy.deepcopy(self.pretrained_classifiers)
-            for key, module in self.new_classifiers.items():
-                classifiers_to_save[key] = module
+            if hasattr(self, 'new_classifiers'):
+                for key, module in self.new_classifiers.items():
+                    classifiers_to_save[key] = module
+        else:
+            classifiers_to_save = copy.deepcopy(self.new_classifiers)
 
         folder = Path(folder)
         folder.mkdir(parents=True, exist_ok=True)
