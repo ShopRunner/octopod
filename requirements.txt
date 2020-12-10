@@ -5,6 +5,7 @@ numpy
 pillow==6.2.1
 scikit-learn
 sentencepiece!=0.1.92  # Version 0.1.92 was yanked from PyPI
+sphinx < 3.0.0  # https://github.com/sphinx-doc/sphinx/issues/7795
 sphinx-rtd-theme==0.4.3
 transformers==2.3.0
 torch

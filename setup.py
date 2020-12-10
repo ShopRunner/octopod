@@ -30,6 +30,7 @@ setup(
         'scikit-learn',
         'torch',
         'torchvision==0.2.1',
+        'transformers<3.0.0',
         'wildebeest',
     ],
     extras_requires={
@@ -38,6 +39,7 @@ setup(
             'flake8-docstrings',
             'flake8-import-order',
             'm2r',
+            'pandas',
             'pydocstyle<4.0.0',
             'pytest',
             'pytest-cov',
