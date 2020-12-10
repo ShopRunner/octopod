@@ -371,8 +371,8 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
             place where state dictionaries are stored
         bert_model_id: int
             unique id for pretrained BERT text model
-        resnet_model_id: int
-            unique id for pretrained image model
+        resnet_model_id_dict: dict
+            dict with unique id's for pretrained image model
 
         Side Effects
         ------------
@@ -424,7 +424,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
                 )
                 self.image_dense_layers[key].load_state_dict(
                     torch.load(
-                        folder / f'image_dense_layers_dict_{model_id}.pth',
+                        folder / f'dense_layers_dict_{model_id}.pth',
                         map_location=lambda storage,
                         loc: storage
                     )
