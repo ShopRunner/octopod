@@ -287,7 +287,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
             - folder / f'bert_dict_{model_id}.pth'
             - folder / f'dropout_dict_{model_id}.pth'
             - folder / f'image_resnets_dict_{model_id}.pth'
-            - folder / f'dense_layers_dict_{model_id}.pth'
+            - folder / f'image_dense_layers_dict_{model_id}.pth'
             - folder / f'ensemble_layers_dict_{model_id}.pth'
             - folder / f'classifiers_dict_{model_id}.pth'
 
@@ -302,7 +302,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
 
             self.image_resnets.load_state_dict(
                 torch.load(folder / f'image_resnets_dict_{model_id}.pth'))
-            self.dense_layers.load_state_dict(
+            self.image_dense_layers.load_state_dict(
                 torch.load(folder / f'image_dense_layers_dict_{model_id}.pth'))
 
             self.ensemble_layers.load_state_dict(
@@ -333,7 +333,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
                     loc: storage
                 )
             )
-            self.dense_layers.load_state_dict(
+            self.image_dense_layers.load_state_dict(
                 torch.load(
                     folder / f'image_dense_layers_dict_{model_id}.pth',
                     map_location=lambda storage,
@@ -424,7 +424,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
                 )
                 self.image_dense_layers[key].load_state_dict(
                     torch.load(
-                        folder / f'dense_layers_dict_{model_id}.pth',
+                        folder / f'image_dense_layers_dict_{model_id}.pth',
                         map_location=lambda storage,
                         loc: storage
                     )
