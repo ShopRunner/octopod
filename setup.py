@@ -30,7 +30,7 @@ setup(
         'scikit-learn',
         'torch',
         'torchvision==0.2.1',
-        'transformers<3.0.0'
+        'transformers<3.0.0',
         'wildebeest',
     ],
     extras_requires={
