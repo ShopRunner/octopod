@@ -374,10 +374,10 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
         resnet_model_id_dict: dict
             dict with unique id's for pretrained image model,
             e.g.
-            ```    
+            ```
             resnet_model_id_dict = {
                 'task1_task2': 'model_id1',
-                'task3_task4': 'model_id2', 
+                'task3_task4': 'model_id2',
                 'task5': 'model_id3'
             }
             ```
