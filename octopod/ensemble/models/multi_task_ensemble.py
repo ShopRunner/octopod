@@ -287,7 +287,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
             - folder / f'bert_dict_{model_id}.pth'
             - folder / f'dropout_dict_{model_id}.pth'
             - folder / f'image_resnets_dict_{model_id}.pth'
-            - folder / f'dense_layers_dict_{model_id}.pth'
+            - folder / f'image_dense_layers_dict_{model_id}.pth'
             - folder / f'ensemble_layers_dict_{model_id}.pth'
             - folder / f'classifiers_dict_{model_id}.pth'
 
@@ -302,7 +302,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
 
             self.image_resnets.load_state_dict(
                 torch.load(folder / f'image_resnets_dict_{model_id}.pth'))
-            self.dense_layers.load_state_dict(
+            self.image_dense_layers.load_state_dict(
                 torch.load(folder / f'image_dense_layers_dict_{model_id}.pth'))
 
             self.ensemble_layers.load_state_dict(
@@ -333,7 +333,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
                     loc: storage
                 )
             )
-            self.dense_layers.load_state_dict(
+            self.image_dense_layers.load_state_dict(
                 torch.load(
                     folder / f'image_dense_layers_dict_{model_id}.pth',
                     map_location=lambda storage,
@@ -371,8 +371,16 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
             place where state dictionaries are stored
         bert_model_id: int
             unique id for pretrained BERT text model
-        resnet_model_id: int
-            unique id for pretrained image model
+        resnet_model_id_dict: dict
+            dict with unique id's for pretrained image model,
+            e.g.
+            ```
+            resnet_model_id_dict = {
+                'task1_task2': 'model_id1',
+                'task3_task4': 'model_id2',
+                'task5': 'model_id3'
+            }
+            ```
 
         Side Effects
         ------------
@@ -380,6 +388,7 @@ class BertResnetEnsembleForMultiTaskClassification(nn.Module):
             - folder / f'bert_dict_{bert_model_id}.pth'
             - folder / f'dropout_dict_{bert_model_id}.pth'
             - folder / f'resnet_dict_{resnet_model_id}.pth'
+                for each resnet_model_id in the resnet_model_id_dict
             - folder / f'dense_layers_dict_{resnet_model_id}.pth'
         """
         folder = Path(folder)
