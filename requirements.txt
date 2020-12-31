@@ -5,7 +5,7 @@
 #    pip-compile
 #
 boto3==1.16.46
-    # via creevey
+    # via wildebeest
 botocore==1.19.46
     # via
     #   boto3
@@ -16,8 +16,6 @@ chardet==4.0.0
     # via requests
 click==7.1.2
     # via sacremoses
-creevey==2.3.0
-    # via octopod (setup.py)
 cycler==0.10.0
     # via matplotlib
 fastprogress==1.0.0
@@ -32,10 +30,10 @@ jmespath==0.10.0
     #   botocore
 joblib==1.0.0
     # via
-    #   creevey
     #   octopod (setup.py)
     #   sacremoses
     #   scikit-learn
+    #   wildebeest
 kiwisolver==1.3.1
     # via matplotlib
 matplotlib==3.3.3
@@ -53,19 +51,17 @@ numpy==1.19.4
     #   torchvision
     #   transformers
 opencv-contrib-python==4.4.0.46
-    # via creevey
+    # via wildebeest
 packaging==20.8
     # via transformers
 pandas==1.2.0
-    # via creevey
+    # via wildebeest
 pillow==6.2.2
     # via
-    #   creevey
     #   matplotlib
     #   octopod (setup.py)
     #   torchvision
-protobuf==3.14.0
-    # via transformers
+    #   wildebeest
 pyparsing==2.4.7
     # via
     #   matplotlib
@@ -83,18 +79,18 @@ regex==2020.11.13
     #   transformers
 requests==2.25.1
     # via
-    #   creevey
     #   transformers
+    #   wildebeest
 retrying==1.3.3
-    # via creevey
+    # via wildebeest
 s3transfer==0.3.3
     # via boto3
 sacremoses==0.0.43
     # via transformers
 scikit-learn==0.24.0
     # via
-    #   creevey
     #   octopod (setup.py)
+    #   wildebeest
 scipy==1.6.0
     # via scikit-learn
 sentencepiece==0.1.91
@@ -104,14 +100,13 @@ sentencepiece==0.1.91
 six==1.15.0
     # via
     #   cycler
-    #   protobuf
     #   python-dateutil
     #   retrying
     #   sacremoses
     #   torchvision
 threadpoolctl==2.1.0
     # via scikit-learn
-tokenizers==0.9.3
+tokenizers==0.7.0
     # via transformers
 torch==1.7.1
     # via
@@ -121,10 +116,10 @@ torchvision==0.2.1
     # via octopod (setup.py)
 tqdm==4.55.0
     # via
-    #   creevey
     #   sacremoses
     #   transformers
-transformers==3.5.1
+    #   wildebeest
+transformers==2.11.0
     # via octopod (setup.py)
 typing-extensions==3.7.4.3
     # via torch
@@ -132,3 +127,5 @@ urllib3==1.26.2
     # via
     #   botocore
     #   requests
+wildebeest==5.0.0
+    # via octopod (setup.py)
