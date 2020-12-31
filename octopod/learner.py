@@ -120,6 +120,8 @@ class MultiTaskLearner(object):
             start_time = time.time()
             self.model.train()
 
+            overall_training_loss = 0.0
+
             subpbar = progress_bar(self.train_dataloader, parent=pbar)
             for step, batch in enumerate(subpbar):
                 task_type, (x, y) = batch
@@ -135,6 +137,8 @@ class MultiTaskLearner(object):
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)
+                
+                overall_training_loss += current_loss.item() * num_rows
 
                 optimizer.zero_grad()
                 current_loss.backward()
@@ -156,8 +160,15 @@ class MultiTaskLearner(object):
                 else:
                     scheduler.step()
 
-            str_stats = []
+            overall_training_loss = overall_training_loss/self.train_dataloader.total_samples
 
+            stats = [overall_training_loss, overall_val_loss]
+            str_stats = []
+            for stat in stats:
+                str_stats.append(
+                    'NA' if stat is None else str(stat) if isinstance(stat, int) else f'{stat:.6f}'
+                )
+            
             for task in self.tasks:
                 str_stats.append(f'{self.smooth_train_losses[task]:.6f}')
                 str_stats.append(f'{val_loss_dict[task]:.6f}')
@@ -186,15 +197,13 @@ class MultiTaskLearner(object):
             else current_loss
         )
 
-    def _report_smooth_train_loss(self):
+    def _report_smooth_train_loss(self, pbar):
         return ''.join(
             [
                 f'    {task}_train_loss: {loss:.4f}'
                 for task, loss in self.smooth_train_losses.items()
             ]
         )
-
-
 
     def validate(self, device='cuda:0', pbar=None):
         """
