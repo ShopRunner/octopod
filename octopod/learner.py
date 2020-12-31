@@ -115,7 +115,7 @@ class MultiTaskLearner(object):
         headers.append('time')
         pbar.write(headers, table=True)
 
-        smooth_train_losses = {}
+        self.smooth_train_losses = {}
         for epoch in pbar:
             start_time = time.time()
             self.model.train()
@@ -142,18 +142,8 @@ class MultiTaskLearner(object):
                 if step_scheduler_on_batch:
                     scheduler.step()
 
-                smooth_train_losses[task_type] = (
-                    SMOOTH_LOSS_ALPHA * current_loss.item()
-                    + (1 - SMOOTH_LOSS_ALPHA) * smooth_train_losses[task_type]
-                    if task_type in smooth_train_losses
-                    else current_loss.item()
-                )
-                subpbar.comment = "".join(
-                    [
-                        f"    {task}_train_loss: {loss:.4f}"
-                        for task, loss in smooth_train_losses.items()
-                    ]
-                )
+                self._update_smooth_train_loss(task_type, current_loss.item())
+                subpbar.comment = self._report_smooth_train_loss()
 
             overall_val_loss, val_loss_dict, metrics_scores = self.validate(
                 device,
@@ -169,7 +159,7 @@ class MultiTaskLearner(object):
             str_stats = []
 
             for task in self.tasks:
-                str_stats.append(f'{smooth_train_losses[task]:.6f}')
+                str_stats.append(f'{self.smooth_train_losses[task]:.6f}')
                 str_stats.append(f'{val_loss_dict[task]:.6f}')
                 str_stats.append(
                     f"{metrics_scores[task][self.metric_function_dict[task].__name__]:.6f}"
@@ -187,6 +177,24 @@ class MultiTaskLearner(object):
         if best_model:
             self.model.load_state_dict(best_model_wts)
             print(f'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}')
+
+    def _update_smooth_train_loss(self, task_type, current_loss):
+        self.smooth_train_losses[task_type] = (
+            SMOOTH_LOSS_ALPHA * current_loss
+            + (1 - SMOOTH_LOSS_ALPHA) * self.smooth_train_losses[task_type]
+            if task_type in self.smooth_train_losses
+            else current_loss
+        )
+
+    def _report_smooth_train_loss(self):
+        return ''.join(
+            [
+                f'    {task}_train_loss: {loss:.4f}'
+                for task, loss in self.smooth_train_losses.items()
+            ]
+        )
+
+
 
     def validate(self, device='cuda:0', pbar=None):
         """
