@@ -197,7 +197,7 @@ class MultiTaskLearner(object):
             else current_loss
         )
 
-    def _report_smooth_train_loss(self, pbar):
+    def _report_smooth_train_loss(self):
         return ''.join(
             [
                 f'    {task}_train_loss: {loss:.4f}'
