@@ -26,7 +26,7 @@ setup(
         'matplotlib',
         'numpy',
         'Pillow<7.0.0',
-        'transformers>=2.3.0,<4',
+        'transformers>=2.3.0,<4',  # V4 makes breaking changes
         'sentencepiece!=0.1.92',
         'scikit-learn',
         'torch',
