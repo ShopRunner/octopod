@@ -5,3 +5,4 @@ Pull Request Checklist
  - [ ] CHANGELOG has been updated
  - [ ] Version in `_version.py` has been updated
  - [ ] README has been updated (if applicable)
+ - [ ] `requirements.txt` and `requirements-dev.txt` have been recompiled if requirements in `setup.py` or `requirements-dev.in` changed.

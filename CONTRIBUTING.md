@@ -33,7 +33,7 @@ Steps
     virtualenv venv
     source venv/bin/activate
     pip install -r requirements-dev.txt
-    pip install -r requirements.txt
+    pip install -e .
 ```
 5. Develop your feature
    
