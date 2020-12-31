@@ -11,13 +11,17 @@ attrs==20.3.0
 cfgv==3.2.0
     # via pre-commit
 click==7.1.2
-    # via pip-tools
+    # via
+    #   -c requirements.txt
+    #   pip-tools
 coverage==5.3.1
     # via pytest-cov
 distlib==0.3.1
     # via virtualenv
 filelock==3.0.12
-    # via virtualenv
+    # via
+    #   -c requirements.txt
+    #   virtualenv
 flake8-docstrings==1.5.0
     # via -r requirements-dev.in
 flake8-import-order==0.18.1
@@ -35,7 +39,9 @@ mccabe==0.6.1
 nodeenv==1.5.0
     # via pre-commit
 packaging==20.8
-    # via pytest
+    # via
+    #   -c requirements.txt
+    #   pytest
 pip-tools==5.5.0
     # via -r requirements-dev.in
 pluggy==0.13.1
@@ -55,7 +61,9 @@ pydocstyle==3.0.0
 pyflakes==2.2.0
     # via flake8
 pyparsing==2.4.7
-    # via packaging
+    # via
+    #   -c requirements.txt
+    #   packaging
 pytest-cov==2.10.1
     # via -r requirements-dev.in
 pytest==6.2.1
@@ -66,6 +74,7 @@ pyyaml==5.3.1
     # via pre-commit
 six==1.15.0
     # via
+    #   -c requirements.txt
     #   pydocstyle
     #   virtualenv
 snowballstemmer==2.0.0
