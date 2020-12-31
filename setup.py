@@ -24,24 +24,13 @@ setup(
         'creevey',
         'fastprogress',
         'joblib',
+        'matplotlib',
         'numpy',
         'Pillow<7.0.0',
-        'transformers>=2.3.0',
+        'transformers>=2.3.0,<4',
         'sentencepiece!=0.1.92',
         'scikit-learn',
         'torch',
         'torchvision==0.2.1',
     ],
-    extras_requires={
-        'dev': [
-            'flake8',
-            'flake8-docstrings',
-            'flake8-import-order',
-            'm2r',
-            'pydocstyle<4.0.0',
-            'pytest',
-            'pytest-cov',
-            'sphinx-rtd-theme==0.4.3'
-        ]
-    },
 )
