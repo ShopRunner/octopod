@@ -9,6 +9,8 @@ from octopod.learner_utils import (DEFAULT_LOSSES_DICT,
                                    DEFAULT_METRIC_DICT,
                                    )
 
+SMOOTH_LOSS_ALPHA = 0.2
+
 
 class MultiTaskLearner(object):
     """
@@ -105,7 +107,7 @@ class MultiTaskLearner(object):
         current_best_loss = np.iinfo(np.intp).max
 
         pbar = master_bar(range(num_epochs))
-        headers = ['train_loss', 'val_loss']
+        headers = []
         for task in self.tasks:
             headers.append(f'{task}_train_loss')
             headers.append(f'{task}_val_loss')
@@ -113,16 +115,12 @@ class MultiTaskLearner(object):
         headers.append('time')
         pbar.write(headers, table=True)
 
+        smooth_train_losses = {}
         for epoch in pbar:
             start_time = time.time()
             self.model.train()
 
-            training_loss_dict = {task: 0.0 for task in self.tasks}
-
-            overall_training_loss = 0.0
-
             subpbar = progress_bar(self.train_dataloader, parent=pbar)
-            loss_recorder = {}
             for step, batch in enumerate(subpbar):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
@@ -138,32 +136,23 @@ class MultiTaskLearner(object):
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)
 
-                scaled_loss = current_loss.item() * num_rows
-
-                training_loss_dict[task_type] += scaled_loss
-
-                loss_recorder[task_type] = current_loss.item()
-                subpbar.comment = ''.join(
-                    [
-                        f'    {task} {loss:.4f}'
-                        for task, loss in loss_recorder.items()
-                    ]
-                )
-
-                overall_training_loss += scaled_loss
-
                 optimizer.zero_grad()
                 current_loss.backward()
                 optimizer.step()
                 if step_scheduler_on_batch:
                     scheduler.step()
 
-            overall_training_loss = overall_training_loss/self.train_dataloader.total_samples
-
-            for task in self.tasks:
-                training_loss_dict[task] = (
-                    training_loss_dict[task]
-                    / len(self.train_dataloader.loader_dict[task].dataset)
+                smooth_train_losses[task_type] = (
+                    SMOOTH_LOSS_ALPHA * current_loss.item()
+                    + (1 - SMOOTH_LOSS_ALPHA) * smooth_train_losses[task_type]
+                    if task_type in smooth_train_losses
+                    else current_loss.item()
+                )
+                subpbar.comment = "".join(
+                    [
+                        f"    {task}_train_loss: {loss:.4f}"
+                        for task, loss in smooth_train_losses.items()
+                    ]
                 )
 
             overall_val_loss, val_loss_dict, metrics_scores = self.validate(
@@ -178,14 +167,9 @@ class MultiTaskLearner(object):
                     scheduler.step()
 
             str_stats = []
-            stats = [overall_training_loss, overall_val_loss]
-            for stat in stats:
-                str_stats.append(
-                    'NA' if stat is None else str(stat) if isinstance(stat, int) else f'{stat:.6f}'
-                )
 
             for task in self.tasks:
-                str_stats.append(f'{training_loss_dict[task]:.6f}')
+                str_stats.append(f'{smooth_train_losses[task]:.6f}')
                 str_stats.append(f'{val_loss_dict[task]:.6f}')
                 str_stats.append(
                     f"{metrics_scores[task][self.metric_function_dict[task].__name__]:.6f}"
