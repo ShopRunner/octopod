@@ -88,8 +88,6 @@ class MultiTaskLearner(object):
             PyTorch learning rate scheduler
         step_scheduler_on_batch: bool
             flag of whether to step scheduler on batch (if True) or on epoch (if False)
-        loss_function: function
-            function to calculate loss with in model
         optimizer: torch.optim
             PyTorch optimzer
         device: str (defaults to 'cuda:0')
