@@ -121,8 +121,7 @@ class MultiTaskLearner(object):
 
             overall_training_loss = 0.0
 
-            subpbar = progress_bar(self.train_dataloader, parent=pbar)
-            for step, batch in enumerate(subpbar):
+            for step, batch in enumerate(progress_bar(self.train_dataloader, parent=pbar)):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
                 y = y.to(device)
@@ -140,11 +139,6 @@ class MultiTaskLearner(object):
                 scaled_loss = current_loss.item() * num_rows
 
                 training_loss_dict[task_type] += scaled_loss
-
-                loss_report = ""
-                for task_type, loss in training_loss_dict.items():
-                    loss_report += (f'    {task_type} {loss:.4f}')
-                subpbar.comment = loss_report
 
                 overall_training_loss += scaled_loss
 
