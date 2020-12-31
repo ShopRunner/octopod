@@ -137,7 +137,7 @@ class MultiTaskLearner(object):
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)
-                
+
                 overall_training_loss += current_loss.item() * num_rows
 
                 optimizer.zero_grad()
