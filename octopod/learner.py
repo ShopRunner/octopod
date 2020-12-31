@@ -168,7 +168,7 @@ class MultiTaskLearner(object):
                 str_stats.append(
                     'NA' if stat is None else str(stat) if isinstance(stat, int) else f'{stat:.6f}'
                 )
-            
+
             for task in self.tasks:
                 str_stats.append(f'{self.smooth_train_losses[task]:.6f}')
                 str_stats.append(f'{val_loss_dict[task]:.6f}')
