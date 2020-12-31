@@ -107,7 +107,7 @@ class MultiTaskLearner(object):
         current_best_loss = np.iinfo(np.intp).max
 
         pbar = master_bar(range(num_epochs))
-        headers = []
+        headers = ['train_loss', 'val_loss']
         for task in self.tasks:
             headers.append(f'{task}_train_loss')
             headers.append(f'{task}_val_loss')
