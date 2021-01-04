@@ -125,8 +125,8 @@ class MultiTaskLearner(object):
 
             overall_training_loss = 0.0
 
-            subpbar = enumerate(progress_bar(self.train_dataloader, parent=pbar))
-            for _, batch in subpbar:
+            subpbar = progress_bar(self.train_dataloader, parent=pbar)
+            for _, batch in enumerate(subpbar):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
                 y = y.to(device)
