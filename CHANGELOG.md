@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
+# [3.0.0] - 2020-01-04
+ ### Added
+  - Report smoothed training losses in progress bar during fitting.
+ ### Changed
+  - Report exponentially weighted moving average rather than simple average of training loss over batches at the end of each epoch.
+
 # [2.2.6] - 2020-12-31
  ### Fixed
   - Added `matplotlib` dependency to display progress bars in notebooks
