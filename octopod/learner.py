@@ -99,11 +99,15 @@ class MultiTaskLearner(object):
             from the final epoch of the training cycle.
         smooth_loss_alpha: float
             Training loss values displayed during fitting and at the end of each epoch are
-            exponentially weighted moving averages over batches. This parameter controls how much
-            weight is given to the current batch. It must be in the `(0, 1]` interval. This number
-            balances two concerns: higher values help ensure that the reported loss reflects what
-            the model has learned during the current epoch, while lower values reduce noise in
-            estimating the training loss from a single epoch.
+            exponentially weighted moving averages over batches. Using an exponentially weighted
+            average over batches is a compromise between reporting the value from the most recent
+            batch, which is highly relevant but noisy, and reporting a simple average over batches,
+            which is more stable but reflects the value of the loss at the beginning of the epoch
+            as much as at the end. `smooth_loss_alpha` controls how much weight is given to the
+            current batch. It must be in the `(0, 1]` interval. Higher values are more like
+            reporting only the most recent batch, while lower values are more like giving all
+            batches equal weight, so this value controls the tradeoff between stability and
+            relevance.
         """
         if not 0 < smooth_loss_alpha <= 1:
             raise ValueError("`smooth_loss_alpha` must be in (0, 1]")
