@@ -105,6 +105,9 @@ class MultiTaskLearner(object):
             the model has learned during the current epoch, while lower values reduce noise in
             estimating the training loss from a single epoch.
         """
+        if not 0 < smooth_loss_alpha <= 1:
+            raise ValueError("`smooth_loss_alpha` must be in (0, 1]")
+
         self.model = self.model.to(device)
 
         current_best_loss = np.iinfo(np.intp).max
