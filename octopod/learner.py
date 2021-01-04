@@ -9,8 +9,6 @@ from octopod.learner_utils import (DEFAULT_LOSSES_DICT,
                                    DEFAULT_METRIC_DICT,
                                    )
 
-SMOOTH_LOSS_ALPHA = 0.2
-
 
 class MultiTaskLearner(object):
     """
@@ -41,7 +39,6 @@ class MultiTaskLearner(object):
         functions. Instead the desired activation functions are applied when needed.
         So we use 'categorical_cross_entropy' and 'bce_logits' loss functions which apply
         softmax and sigmoid activations to their inputs before calculating the loss.
-
     metric_function_dict: dict
         dictionary where keys are task names and values are metric calculation functions.
         If the input is a string matching a supported metric function `multi_class_acc`
@@ -77,7 +74,8 @@ class MultiTaskLearner(object):
         step_scheduler_on_batch,
         optimizer,
         device='cuda:0',
-        best_model=False
+        best_model=False,
+        smooth_loss_alpha=0.2
     ):
         """
         Fit the PyTorch model
@@ -99,6 +97,13 @@ class MultiTaskLearner(object):
             The default is `False`, which will keep the final model from the training run.
             `True` will keep the best model from the training run instead of the model
             from the final epoch of the training cycle.
+        smooth_loss_alpha: float
+            Training loss values displayed during fitting and at the end of each epoch are
+            exponentially weighted moving averages over batches. This parameter controls how much
+            weight is given to the current batch. It must be in the `(0, 1]` interval. This number
+            balances two concerns: higher values help ensure that the reported loss reflects what
+            the model has learned during the current epoch, while lower values reduce noise in
+            estimating the training loss from a single epoch.
         """
         self.model = self.model.to(device)
 
@@ -113,14 +118,15 @@ class MultiTaskLearner(object):
         headers.append('time')
         pbar.write(headers, table=True)
 
-        self.smooth_train_losses = {}
+        self.smooth_training_loss_dict = {}
         for epoch in pbar:
             start_time = time.time()
             self.model.train()
 
             overall_training_loss = 0.0
 
-            for step, batch in enumerate(progress_bar(self.train_dataloader, parent=pbar)):
+            subpbar = enumerate(progress_bar(self.train_dataloader, parent=pbar))
+            for _, batch in subpbar:
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
                 y = y.to(device)
@@ -143,7 +149,7 @@ class MultiTaskLearner(object):
                 if step_scheduler_on_batch:
                     scheduler.step()
 
-                self._update_smooth_train_loss(task_type, current_loss.item())
+                self._update_smooth_train_loss(task_type, current_loss.item(), smooth_loss_alpha)
                 subpbar.comment = self._report_smooth_train_loss()
 
             overall_val_loss, val_loss_dict, metrics_scores = self.validate(
@@ -167,7 +173,7 @@ class MultiTaskLearner(object):
                 )
 
             for task in self.tasks:
-                str_stats.append(f'{self.smooth_train_losses[task]:.6f}')
+                str_stats.append(f'{self.smooth_training_loss_dict[task]:.6f}')
                 str_stats.append(f'{val_loss_dict[task]:.6f}')
                 str_stats.append(
                     f"{metrics_scores[task][self.metric_function_dict[task].__name__]:.6f}"
@@ -186,11 +192,11 @@ class MultiTaskLearner(object):
             self.model.load_state_dict(best_model_wts)
             print(f'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}')
 
-    def _update_smooth_train_loss(self, task_type, current_loss):
-        self.smooth_train_losses[task_type] = (
-            SMOOTH_LOSS_ALPHA * current_loss
-            + (1 - SMOOTH_LOSS_ALPHA) * self.smooth_train_losses[task_type]
-            if task_type in self.smooth_train_losses
+    def _update_smooth_train_loss(self, task_type, current_loss, smooth_loss_alpha):
+        self.smooth_training_loss_dict[task_type] = (
+            smooth_loss_alpha * current_loss
+            + (1 - smooth_loss_alpha) * self.smooth_training_loss_dict[task_type]
+            if task_type in self.smooth_training_loss_dict
             else current_loss
         )
 
@@ -198,7 +204,7 @@ class MultiTaskLearner(object):
         return ''.join(
             [
                 f'    {task}_train_loss: {loss:.4f}'
-                for task, loss in self.smooth_train_losses.items()
+                for task, loss in self.smooth_training_loss_dict.items()
             ]
         )
 
