@@ -23,9 +23,10 @@ setup(
     install_requires=[
         'fastprogress',
         'joblib',
+        'matplotlib',
         'numpy',
         'Pillow<7.0.0',
-        'transformers>=2.3.0',
+        'transformers>=2.3.0,<4',  # V4 makes breaking changes
         'sentencepiece!=0.1.92',
         'scikit-learn',
         'torch',
@@ -33,17 +34,4 @@ setup(
         'transformers<3.0.0',
         'wildebeest',
     ],
-    extras_requires={
-        'dev': [
-            'flake8',
-            'flake8-docstrings',
-            'flake8-import-order',
-            'm2r',
-            'pandas',
-            'pydocstyle<4.0.0',
-            'pytest',
-            'pytest-cov',
-            'sphinx-rtd-theme==0.4.3'
-        ]
-    },
 )
