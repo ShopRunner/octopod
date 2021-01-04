@@ -156,7 +156,9 @@ class MultiTaskLearner(object):
                 if step_scheduler_on_batch:
                     scheduler.step()
 
-                self._update_smooth_training_loss_dict(task_type, current_loss.item(), smooth_loss_alpha)
+                self._update_smooth_training_loss_dict(
+                    task_type, current_loss.item(), smooth_loss_alpha
+                )
                 subpbar.comment = self._report_smooth_training_loss()
 
             overall_val_loss, val_loss_dict, metrics_scores = self.validate(
