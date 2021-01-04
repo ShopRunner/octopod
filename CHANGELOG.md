@@ -10,8 +10,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
   - Report exponentially weighted moving average rather than simple average of training loss over batches at the end of each epoch.
 
 # [2.2.6] - 2020-12-31
- ### Added
-  - `matplotlib` dependency
+ ### Fixed
+  - Added `matplotlib` dependency to display progress bars in notebooks
+  - Removed parameter that no longer exists from `MultiTaskLearner.fit` docstring
  ### Changed
   - Use `pip-tools`
 
