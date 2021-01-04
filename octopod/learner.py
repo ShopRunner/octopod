@@ -149,8 +149,8 @@ class MultiTaskLearner(object):
                 if step_scheduler_on_batch:
                     scheduler.step()
 
-                self._update_smooth_train_loss(task_type, current_loss.item(), smooth_loss_alpha)
-                subpbar.comment = self._report_smooth_train_loss()
+                self._update_smooth_training_loss_dict(task_type, current_loss.item(), smooth_loss_alpha)
+                subpbar.comment = self._report_smooth_training_loss()
 
             overall_val_loss, val_loss_dict, metrics_scores = self.validate(
                 device,
@@ -192,7 +192,7 @@ class MultiTaskLearner(object):
             self.model.load_state_dict(best_model_wts)
             print(f'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}')
 
-    def _update_smooth_train_loss(self, task_type, current_loss, smooth_loss_alpha):
+    def _update_smooth_training_loss_dict(self, task_type, current_loss, smooth_loss_alpha):
         self.smooth_training_loss_dict[task_type] = (
             smooth_loss_alpha * current_loss
             + (1 - smooth_loss_alpha) * self.smooth_training_loss_dict[task_type]
@@ -200,7 +200,7 @@ class MultiTaskLearner(object):
             else current_loss
         )
 
-    def _report_smooth_train_loss(self):
+    def _report_smooth_training_loss(self):
         return ''.join(
             [
                 f'    {task}_train_loss: {loss:.4f}'
