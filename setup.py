@@ -30,7 +30,7 @@ setup(
         'scikit-learn',
         'torch',
         'torchvision==0.2.1',
-        'transformers>=2.3.0,<4.0.0',  # V4 makes breaking changes
+        'transformers>=2.3.0,<3.0.0',  # we have had issues training models with V3
         'wildebeest',
     ],
 )
