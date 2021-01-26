@@ -1,5 +1,6 @@
 import numpy as np
 from PIL import Image
+from sklearn import preprocessing
 import torch
 from torch.utils.data import Dataset
 
@@ -34,6 +35,7 @@ class OctopodImageDataset(Dataset):
                  crop_transform='train'):
         self.x = x
         self.y = y
+        self.label_mapping = self.__label_mapping__()
 
         if transform in ('train', 'val'):
             self.transform = full_img_transforms[transform]
@@ -48,6 +50,7 @@ class OctopodImageDataset(Dataset):
     def __getitem__(self, index):
         """Return tuple of images as PyTorch tensors and and tensor of labels"""
         label = self.y[index]
+        label = self.label_mapping[label]
         full_img = Image.open(self.x[index]).convert('RGB')
 
         cropped_img = center_crop_pil_image(full_img)
@@ -62,6 +65,12 @@ class OctopodImageDataset(Dataset):
 
     def __len__(self):
         return len(self.x)
+
+    def __label_mapping__(self):
+        le = preprocessing.LabelEncoder()
+        le.fit(self.y)
+        return dict(zip(le.classes_,le.transform(le.classes_)))
+
 
 
 class OctopodImageDatasetMultiLabel(OctopodImageDataset):
