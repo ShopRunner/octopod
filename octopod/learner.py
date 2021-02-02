@@ -66,6 +66,7 @@ class MultiTaskLearner(object):
         self.tasks = [*task_dict]
         self.loss_function_dict = self._get_loss_functions(loss_function_dict)
         self.metric_function_dict = self._get_metric_functions(metric_function_dict)
+        self._check_all_labels_present()
 
     def fit(
         self,
@@ -432,6 +433,15 @@ class MultiTaskLearner(object):
 
             raise Exception(f'make sure all tasks are contained in the {input_str} dictionary '
                             f'missing tasks are {missing_tasks}')
+
+    def _check_all_labels_present(self):
+        # check that all categories are in both the train and val sets for each task
+        for task in self.task_dict:
+            if self.train_dataloader.label_mappings[task] != self.val_dataloader.label_mappings[task]:
+                raise Exception(f'Mapping mismatch in {task} task. Check that all categories are '
+                                'represented in the train and val datasets for each task. '
+                                f'train classes {self.train_dataloader.label_mappings[task]}'
+                                f'val classes {self.val_dataloader.label_mappings[task]}')
 
 
 class MultiInputMultiTaskLearner(MultiTaskLearner):

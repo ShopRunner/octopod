@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn import preprocessing
 import torch
 from torch.utils.data import Dataset
 
@@ -23,6 +24,7 @@ class OctopodTextDataset(Dataset):
         self.y = y
         self.tokenizer = tokenizer
         self.max_seq_length = max_seq_length
+        self.label_encoder, self.label_mapping = self._encode_labels()
 
     def __getitem__(self, index):
         """Return text as PyTorch tensor of token ids and tensor of labels"""
@@ -42,12 +44,22 @@ class OctopodTextDataset(Dataset):
 
         x_input = torch.from_numpy(np.array(input_ids))
 
-        y_output = torch.from_numpy(np.array(self.y[index])).long()
+        label = self.y[index]
+        label = self.label_encoder.transform([label])[0]
+
+        y_output = torch.from_numpy(np.array(label)).long()
 
         return x_input, y_output
 
     def __len__(self):
         return len(self.x)
+
+    def _encode_labels(self):
+        """Encodes y labels using sklearn to create allow for string or numeric inputs"""
+        le = preprocessing.LabelEncoder()
+        le.fit(self.y)
+        mapping_dict = dict(zip(le.transform(le.classes_), le.classes_))
+        return le, mapping_dict
 
 
 class OctopodTextDatasetMultiLabel(OctopodTextDataset):
@@ -86,6 +98,17 @@ class OctopodTextDatasetMultiLabel(OctopodTextDataset):
 
         x_input = torch.from_numpy(np.array(input_ids))
 
-        y_output = torch.FloatTensor(self.y[index])
+        label = self.y[index]
+        label = list(self.label_encoder.transform(label)[0])
+
+        y_output = torch.FloatTensor(label)
 
         return x_input, y_output
+
+    def _encode_labels(self):
+        """Encodes y labels using sklearn to create allow for string or numeric inputs"""
+        mlb = preprocessing.MultiLabelBinarizer()
+        mlb.fit(self.y)
+        mapping_dict = dict(zip(list(range(0, len(mlb.classes_))), mlb.classes_))
+
+        return mlb, mapping_dict

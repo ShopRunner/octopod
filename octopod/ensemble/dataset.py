@@ -1,5 +1,6 @@
 import numpy as np
 from PIL import Image
+from sklearn import preprocessing
 import torch
 from torch.utils.data import Dataset
 
@@ -45,6 +46,7 @@ class OctopodEnsembleDataset(Dataset):
         self.y = y
         self.tokenizer = tokenizer
         self.max_seq_length = max_seq_length
+        self.label_encoder, self.label_mapping = self._encode_labels()
 
         if transform == 'train' or 'val':
             self.transform = full_img_transforms[transform]
@@ -83,7 +85,10 @@ class OctopodEnsembleDataset(Dataset):
         full_img = self.transform(full_img)
         cropped_img = self.crop_transform(cropped_img)
 
-        y_output = torch.from_numpy(np.array(self.y[index])).long()
+        label = self.y[index]
+        label = self.label_encoder.transform([label])[0]
+
+        y_output = torch.from_numpy(np.array(label)).long()
 
         return {'bert_text': bert_text,
                 'full_img': full_img,
@@ -91,6 +96,13 @@ class OctopodEnsembleDataset(Dataset):
 
     def __len__(self):
         return len(self.text_inputs)
+
+    def _encode_labels(self):
+        """Encodes y labels using sklearn to create allow for string or numeric inputs"""
+        le = preprocessing.LabelEncoder()
+        le.fit(self.y)
+        mapping_dict = dict(zip(le.transform(le.classes_), le.classes_))
+        return le, mapping_dict
 
 
 class OctopodEnsembleDatasetMultiLabel(OctopodEnsembleDataset):
@@ -147,8 +159,19 @@ class OctopodEnsembleDatasetMultiLabel(OctopodEnsembleDataset):
         full_img = self.transform(full_img)
         cropped_img = self.crop_transform(cropped_img)
 
-        y_output = torch.FloatTensor(self.y[index])
+        label = self.y[index]
+        label = list(self.label_encoder.transform(label)[0])
+
+        y_output = torch.FloatTensor(label)
 
         return {'bert_text': bert_text,
                 'full_img': full_img,
                 'crop_img': cropped_img}, y_output
+
+    def _encode_labels(self):
+        """Encodes y labels using sklearn to create allow for string or numeric inputs"""
+        mlb = preprocessing.MultiLabelBinarizer()
+        mlb.fit(self.y)
+        mapping_dict = dict(zip(list(range(0, len(mlb.classes_))), mlb.classes_))
+
+        return mlb, mapping_dict
