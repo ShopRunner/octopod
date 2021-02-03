@@ -4,9 +4,10 @@ from torch.utils.data import DataLoader
 from transformers import BertTokenizer
 
 from octopod import MultiDatasetLoader
+from octopod.ensemble import OctopodEnsembleDataset, OctopodEnsembleDatasetMultiLabel
 from octopod.text.dataset import OctopodTextDataset, OctopodTextDatasetMultiLabel
 from octopod.vision.dataset import OctopodImageDataset, OctopodImageDatasetMultiLabel
-from octopod.ensemble import OctopodEnsembleDataset, OctopodEnsembleDatasetMultiLabel
+
 
 @pytest.fixture()
 def test_no_loss_dict():
@@ -92,6 +93,7 @@ def test_train_val_loaders():
 
     return dataset_loader
 
+
 @pytest.fixture()
 def mixed_labels():
     df_string = pd.DataFrame({'image_loc': ['sample_data/tonks.jpeg', 'sample_data/tonks.jpeg'],
@@ -122,6 +124,7 @@ def mixed_labels():
     dataset_loader2 = MultiDatasetLoader(loader_dict=dataloaders_dict)
 
     return dataset_loader, dataset_loader2
+
 
 @pytest.fixture()
 def multi_label_mixed_labels():
@@ -154,6 +157,7 @@ def multi_label_mixed_labels():
 
     return dataset_loader, dataset_loader2
 
+
 @pytest.fixture()
 def mixed_labels_text():
     df_string = pd.DataFrame({'fake_text': ['sample_data/tonks.jpeg', 'sample_data/tonks.jpeg'],
@@ -162,8 +166,7 @@ def mixed_labels_text():
                            'category': [1, 2]})
 
     max_seq_length = 128
-    bert_tok = BertTokenizer.from_pretrained(
-    'bert-base-uncased', do_lower_case=True)
+    bert_tok = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
     task1_dataset = OctopodTextDataset(
         x=df_string['fake_text'],
@@ -189,6 +192,7 @@ def mixed_labels_text():
     dataset_loader2 = MultiDatasetLoader(loader_dict=dataloaders_dict)
 
     return dataset_loader, dataset_loader2
+
 
 @pytest.fixture()
 def multi_label_mixed_labels_text():
@@ -226,6 +230,7 @@ def multi_label_mixed_labels_text():
 
     return dataset_loader, dataset_loader2
 
+
 @pytest.fixture()
 def mixed_labels_ensemble():
     df_string = pd.DataFrame({'image_loc': ['sample_data/tonks.jpeg', 'sample_data/tonks.jpeg'],
@@ -236,8 +241,7 @@ def mixed_labels_ensemble():
                            'category': [1, 2]})
 
     max_seq_length = 128
-    bert_tok = BertTokenizer.from_pretrained(
-    'bert-base-uncased', do_lower_case=True)
+    bert_tok = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
     task1_dataset = OctopodEnsembleDataset(
         text_inputs=df_string['fake_text'],
@@ -270,8 +274,9 @@ def mixed_labels_ensemble():
 
     return dataset_loader, dataset_loader2
 
+
 @pytest.fixture()
-def mixed_labels_ensemble():
+def mixed_multi_label_ensemble():
     df_string = pd.DataFrame({'image_loc': ['sample_data/tonks.jpeg', 'sample_data/tonks.jpeg'],
                               'fake_text': ['sample_data/tonks.jpeg', 'sample_data/tonks.jpeg'],
                               'category': [['cat', 'dog'], ['dog']]})
@@ -313,3 +318,27 @@ def mixed_labels_ensemble():
     dataset_loader2 = MultiDatasetLoader(loader_dict=dataloaders_dict)
 
     return dataset_loader, dataset_loader2
+
+
+@pytest.fixture()
+def task_dicts_string_labels():
+    image_task_dict = {
+        'tasks': {
+            'task1': 2,
+            'task2': 2
+        }
+    }
+
+    task_dict = {'task1': 2, 'task2': 2}
+
+    return task_dict, image_task_dict
+
+
+@pytest.fixture()
+def multi_label_loss_acc_dicts():
+    loss_dict = {'task1': 'bce_logits',
+                 'task2': 'bce_logits'}
+    acc_dict = {'task1': 'multi_label_acc',
+                'task2': 'multi_label_acc'}
+
+    return loss_dict, acc_dict
