@@ -298,7 +298,7 @@ def test_w_string_multilabel_not_matching_categories_multilabel_text(multi_label
                                                                      multi_label_loss_acc_dicts):
     train_dataset_loader, val_dataset_loader = multi_label_mixed_labels_text
     val_dataset_loader.label_mappings['task1'] = {0: 'blue', 3: 'green'}
-    
+
     task_dict, _ = task_dicts_string_labels
     loss_dict, acc_dict = multi_label_loss_acc_dicts
 

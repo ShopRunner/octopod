@@ -437,7 +437,7 @@ class MultiTaskLearner(object):
     def _check_all_labels_present(self):
         # check that all categories are in both the train and val sets for each task
         for task in self.task_dict:
-            if self.train_dataloader.label_mappings[task] != self.val_dataloader.label_mappings[task]:
+            if self.train_dataloader.label_mappings[task] != self.val_dataloader.label_mappings[task]: # noqa
                 raise Exception(f'Mapping mismatch in {task} task. Check that all categories are '
                                 'represented in the train and val datasets for each task. '
                                 f'train classes {self.train_dataloader.label_mappings[task]}'

@@ -52,4 +52,3 @@ class MultiDatasetLoader(object):
         for key in self.loader_dict.keys():
             mapping_dict[key] = self.loader_dict[key].dataset.label_mapping
         return mapping_dict
-

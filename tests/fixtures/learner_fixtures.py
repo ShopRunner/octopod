@@ -285,8 +285,7 @@ def mixed_multi_label_ensemble():
                            'category': [[1, 2], [2]]})
 
     max_seq_length = 128
-    bert_tok = BertTokenizer.from_pretrained(
-    'bert-base-uncased', do_lower_case=True)
+    bert_tok = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
     task1_dataset = OctopodEnsembleDatasetMultiLabel(
         text_inputs=df_string['fake_text'],
