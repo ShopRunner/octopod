@@ -13,7 +13,8 @@ class OctopodTextDataset(Dataset):
     x: pandas Series
         the text to be used
     y: list
-        A list of lists of dummy-encoded categories
+        A list of lists of dummy-encoded or string categories
+        will be encoded using an sklearn label encoder
     tokenizer: pretrained BERT Tokenizer
         BERT tokenizer likely from `transformers`
     max_seq_length: int (defaults to 128)
@@ -71,9 +72,10 @@ class OctopodTextDatasetMultiLabel(OctopodTextDataset):
     x: pandas Series
         the text to be used
     y: list
-        a list of binary encoded categories with length equal to number of
-        classes in the multi-label task. For a 4 class multi-label task
-        a sample list would be [1,0,0,1]
+        a list of binary encoded categories or string categories
+        with length equal to number of classes in the multi-label task.
+        For a 4 class multi-label task a sample list would be [1,0,0,1]
+        will be encoded using an sklearn label encoder
     tokenizer: pretrained BERT Tokenizer
         BERT tokenizer likely from `transformers`
     max_seq_length: int (defaults to 128)

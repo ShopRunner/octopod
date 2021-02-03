@@ -19,7 +19,8 @@ class OctopodEnsembleDataset(Dataset):
     img_inputs: pandas Series
         the paths to images to be used
     y: list
-        A list of lists of dummy-encoded categories
+        A list of lists of dummy-encoded categories or strings,
+        which will be encoded using a sklearn label encoder
     tokenizer: pretrained BERT Tokenizer
         BERT tokenizer likely from `transformers`
     max_seq_length: int (defaults to 128)
@@ -116,9 +117,10 @@ class OctopodEnsembleDatasetMultiLabel(OctopodEnsembleDataset):
     img_inputs: pandas Series
         the paths to images to be used
     y: list
-        a list of binary encoded categories with length equal to number of
+        a list of binary encoded categories or strings with length equal to number of
         classes in the multi-label task. For a 4 class multi-label task
-        a sample list would be [1,0,0,1]
+        a sample list would be [1,0,0,1], which will be encoded
+        using a sklearn label encoder
     tokenizer: pretrained BERT Tokenizer
         BERT tokenizer likely from `transformers`
     max_seq_length: int (defaults to 128)
