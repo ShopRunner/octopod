@@ -144,10 +144,12 @@ def test_learner_with_multi_class_and_label_acc(test_acc_dict_all_tasks_diff_los
     assert 'multi_label_accuracy' in str(learn.metric_function_dict['task2'])
 
 
-def test_learner_w_string_and_int_label_datasets_success_image(mixed_labels):
+def test_learner_w_string_and_int_label_datasets_success_image(mixed_labels,
+                                                               task_dicts_string_labels):
+
     train_dataset_loader, val_dataset_loader = mixed_labels
 
-    task_dict = {'task1': 2, 'task2': 2}
+    task_dict, _ = task_dicts_string_labels
 
     model = ResnetForMultiTaskClassification(
         new_task_dict=task_dict)
@@ -164,11 +166,12 @@ def test_learner_w_string_and_int_label_datasets_success_image(mixed_labels):
     assert learn.val_dataloader.label_mappings['task2'] == {0: 1, 1: 2}
 
 
-def test_learner_w_string_datasets_not_matching_categoies_image(mixed_labels):
+def test_learner_w_string_datasets_not_matching_categories_image(mixed_labels,
+                                                                 task_dicts_string_labels):
     train_dataset_loader, val_dataset_loader = mixed_labels
     val_dataset_loader.label_mappings['task1'] = {0: 'blue', 3: 'green'}
 
-    task_dict = {'task1': 2, 'task2': 2}
+    task_dict, _ = task_dicts_string_labels
 
     model = ResnetForMultiTaskClassification(
         new_task_dict=task_dict)
@@ -181,14 +184,14 @@ def test_learner_w_string_datasets_not_matching_categoies_image(mixed_labels):
     assert ('Mapping mismatch in task1 task. Check that all categories' in str(e.value)) is True
 
 
-def test_learner_w_multilabel_string_and_int_label_datasets_image(multi_label_mixed_labels):
+def test_learner_w_multilabel_string_and_int_label_datasets_image(multi_label_mixed_labels,
+                                                                  task_dicts_string_labels,
+                                                                  multi_label_loss_acc_dicts):
     train_dataset_loader, val_dataset_loader = multi_label_mixed_labels
 
-    task_dict = {'task1': 2, 'task2': 2}
-    loss_dict = {'task1': 'bce_logits',
-                 'task2': 'bce_logits'}
-    acc_dict = {'task1': 'multi_label_acc',
-                'task2': 'multi_label_acc'}
+    task_dict, _ = task_dicts_string_labels
+    loss_dict, acc_dict = multi_label_loss_acc_dicts
+
     model = ResnetForMultiTaskClassification(
         new_task_dict=task_dict)
     learn = MultiInputMultiTaskLearner(model,
@@ -205,15 +208,14 @@ def test_learner_w_multilabel_string_and_int_label_datasets_image(multi_label_mi
     assert learn.val_dataloader.label_mappings['task2'] == {0: 1, 1: 2}
 
 
-def test_learner_w_string_multilabel_datasets_not_matching_categories_multilabel_image(multi_label_mixed_labels):
+def test_w_string_multilabel_not_matching_categories_multilabel_image(multi_label_mixed_labels,
+                                                                      task_dicts_string_labels,
+                                                                      multi_label_loss_acc_dicts):
     train_dataset_loader, val_dataset_loader = multi_label_mixed_labels
-    val_dataset_loader.label_mappings['task1'] = {0: 'blue', 3: 'green','wuit':'wiut'}
+    val_dataset_loader.label_mappings['task1'] = {0: 'blue', 3: 'green'}
 
-    task_dict = {'task1': 2, 'task2': 2}
-    loss_dict = {'task1': 'bce_logits',
-                 'task2': 'bce_logits'}
-    acc_dict = {'task1': 'multi_label_acc',
-                'task2': 'multi_label_acc'}
+    task_dict, _ = task_dicts_string_labels
+    loss_dict, acc_dict = multi_label_loss_acc_dicts
 
     model = ResnetForMultiTaskClassification(
         new_task_dict=task_dict)
@@ -228,11 +230,11 @@ def test_learner_w_string_multilabel_datasets_not_matching_categories_multilabel
     assert ('Mapping mismatch in task1 task. Check that all categories' in str(e.value)) is True
 
 
-
-def test_learner_w_string_and_int_label_datasets_success_text(mixed_labels_text):
+def test_learner_w_string_and_int_label_datasets_success_text(mixed_labels_text,
+                                                              task_dicts_string_labels):
     train_dataset_loader, val_dataset_loader = mixed_labels_text
 
-    task_dict = {'task1': 2, 'task2': 2}
+    task_dict, _ = task_dicts_string_labels
 
     model = BertForMultiTaskClassification.from_pretrained('bert-base-uncased',
                                                            new_task_dict=task_dict)
@@ -249,11 +251,12 @@ def test_learner_w_string_and_int_label_datasets_success_text(mixed_labels_text)
     assert learn.val_dataloader.label_mappings['task2'] == {0: 1, 1: 2}
 
 
-def test_learner_w_string_datasets_not_matching_categoies_text(mixed_labels_text):
+def test_learner_w_string_datasets_not_matching_categoies_text(mixed_labels_text,
+                                                               task_dicts_string_labels):
     train_dataset_loader, val_dataset_loader = mixed_labels_text
     val_dataset_loader.label_mappings['task1'] = {0: 'blue', 3: 'green'}
 
-    task_dict = {'task1': 2, 'task2': 2}
+    task_dict, _ = task_dicts_string_labels
 
     model = BertForMultiTaskClassification.from_pretrained('bert-base-uncased',
                                                            new_task_dict=task_dict)
@@ -266,14 +269,14 @@ def test_learner_w_string_datasets_not_matching_categoies_text(mixed_labels_text
     assert ('Mapping mismatch in task1 task. Check that all categories' in str(e.value)) is True
 
 
-def test_learner_w_multilabel_string_and_int_label_datasets_text(multi_label_mixed_labels_text):
+def test_learner_w_multilabel_string_and_int_label_datasets_text(multi_label_mixed_labels_text,
+                                                                 task_dicts_string_labels,
+                                                                 multi_label_loss_acc_dicts):
     train_dataset_loader, val_dataset_loader = multi_label_mixed_labels_text
 
-    task_dict = {'task1': 2, 'task2': 2}
-    loss_dict = {'task1': 'bce_logits',
-                 'task2': 'bce_logits'}
-    acc_dict = {'task1': 'multi_label_acc',
-                'task2': 'multi_label_acc'}
+    task_dict, _ = task_dicts_string_labels
+    loss_dict, acc_dict = multi_label_loss_acc_dicts
+
     model = ResnetForMultiTaskClassification(
         new_task_dict=task_dict)
     learn = MultiInputMultiTaskLearner(model,
@@ -290,15 +293,14 @@ def test_learner_w_multilabel_string_and_int_label_datasets_text(multi_label_mix
     assert learn.val_dataloader.label_mappings['task2'] == {0: 1, 1: 2}
 
 
-def test_learner_w_string_multilabel_datasets_not_matching_categories_multilabel_text(multi_label_mixed_labels_text):
+def test_w_string_multilabel_not_matching_categories_multilabel_text(multi_label_mixed_labels_text,
+                                                                     task_dicts_string_labels,
+                                                                     multi_label_loss_acc_dicts):
     train_dataset_loader, val_dataset_loader = multi_label_mixed_labels_text
     val_dataset_loader.label_mappings['task1'] = {0: 'blue', 3: 'green'}
-
-    task_dict = {'task1': 2, 'task2': 2}
-    loss_dict = {'task1': 'bce_logits',
-                 'task2': 'bce_logits'}
-    acc_dict = {'task1': 'multi_label_acc',
-                'task2': 'multi_label_acc'}
+    
+    task_dict, _ = task_dicts_string_labels
+    loss_dict, acc_dict = multi_label_loss_acc_dicts
 
     model = ResnetForMultiTaskClassification(
         new_task_dict=task_dict)
@@ -313,19 +315,10 @@ def test_learner_w_string_multilabel_datasets_not_matching_categories_multilabel
     assert ('Mapping mismatch in task1 task. Check that all categories' in str(e.value)) is True
 
 
-#### Ensemble
-
-def test_learner_w_string_and_int_label_datasets_success_ensemble(mixed_labels_ensemble):
+def test_learner_w_string_and_int_label_datasets_success_ensemble(mixed_labels_ensemble,
+                                                                  task_dicts_string_labels):
     train_dataset_loader, val_dataset_loader = mixed_labels_ensemble
-
-    image_task_dict = {
-        'tasks': {
-            'task1': 2,
-            'task2': 2
-        }  
-    }
-
-    task_dict = {'task1': 2, 'task2': 2}
+    task_dict, image_task_dict = task_dicts_string_labels
 
     model = BertResnetEnsembleForMultiTaskClassification(image_task_dict=image_task_dict)
 
@@ -341,18 +334,12 @@ def test_learner_w_string_and_int_label_datasets_success_ensemble(mixed_labels_e
     assert learn.val_dataloader.label_mappings['task2'] == {0: 1, 1: 2}
 
 
-def test_learner_w_string_datasets_not_matching_categoies_text(mixed_labels_ensemble):
+def test_learner_w_string_datasets_not_matching_categoies_ensemble(mixed_labels_ensemble,
+                                                                   task_dicts_string_labels):
     train_dataset_loader, val_dataset_loader = mixed_labels_ensemble
+    task_dict, image_task_dict = task_dicts_string_labels
+
     val_dataset_loader.label_mappings['task1'] = {0: 'blue', 3: 'green'}
-
-    image_task_dict = {
-        'tasks': {
-            'task1': 2,
-            'task2': 2
-        }  
-    }
-
-    task_dict = {'task1': 2, 'task2': 2}
 
     model = BertResnetEnsembleForMultiTaskClassification(image_task_dict=image_task_dict)
 
@@ -364,21 +351,12 @@ def test_learner_w_string_datasets_not_matching_categoies_text(mixed_labels_ense
     assert ('Mapping mismatch in task1 task. Check that all categories' in str(e.value)) is True
 
 
-def test_learner_w_multilabel_string_and_int_label_datasets_ensemble(multi_label_mixed_labels_text):
-    train_dataset_loader, val_dataset_loader = multi_label_mixed_labels_text
-
-    loss_dict = {'task1': 'bce_logits',
-                 'task2': 'bce_logits'}
-    acc_dict = {'task1': 'multi_label_acc',
-                'task2': 'multi_label_acc'}
-    image_task_dict = {
-        'tasks': {
-            'task1': 2,
-            'task2': 2
-        }
-    }
-
-    task_dict = {'task1': 2, 'task2': 2}
+def test_learner_w_multilabel_string_and_int_label_datasets_ensemble(mixed_multi_label_ensemble,
+                                                                     task_dicts_string_labels,
+                                                                     multi_label_loss_acc_dicts):
+    train_dataset_loader, val_dataset_loader = mixed_multi_label_ensemble
+    task_dict, image_task_dict = task_dicts_string_labels
+    loss_dict, acc_dict = multi_label_loss_acc_dicts
 
     model = BertResnetEnsembleForMultiTaskClassification(image_task_dict=image_task_dict)
 
@@ -396,23 +374,14 @@ def test_learner_w_multilabel_string_and_int_label_datasets_ensemble(multi_label
     assert learn.val_dataloader.label_mappings['task2'] == {0: 1, 1: 2}
 
 
-def test_learner_w_string_multilabel_datasets_not_matching_categories_multilabel_ensemble(multi_label_mixed_labels_text):
-    train_dataset_loader, val_dataset_loader = multi_label_mixed_labels_text
+def test_w_string_multilabel_not_match_categories_multilabel_ensemble(mixed_multi_label_ensemble,
+                                                                      task_dicts_string_labels,
+                                                                      multi_label_loss_acc_dicts):
+    train_dataset_loader, val_dataset_loader = mixed_multi_label_ensemble
     val_dataset_loader.label_mappings['task1'] = {0: 'blue', 3: 'green'}
 
-    loss_dict = {'task1': 'bce_logits',
-                 'task2': 'bce_logits'}
-    acc_dict = {'task1': 'multi_label_acc',
-                'task2': 'multi_label_acc'}
-
-    image_task_dict = {
-        'tasks': {
-            'task1': 2,
-            'task2': 2
-        }
-    }
-
-    task_dict = {'task1': 2, 'task2': 2}
+    task_dict, image_task_dict = task_dicts_string_labels
+    loss_dict, acc_dict = multi_label_loss_acc_dicts
 
     model = BertResnetEnsembleForMultiTaskClassification(image_task_dict=image_task_dict)
 
