@@ -142,7 +142,6 @@ def mixed_labels(df_string, df_int):
     return gen_train_val_dataloaders_helper(task1_dataset, task2_dataset)
 
 
-
 @pytest.fixture()
 def multi_label_mixed_labels(df_str_multi_label, df_int_multi_label):
     df_string = df_str_multi_label
@@ -246,7 +245,6 @@ def mixed_labels_ensemble(df_string, df_int):
     return gen_train_val_dataloaders_helper(task1_dataset, task2_dataset)
 
 
-
 @pytest.fixture()
 def mixed_multi_label_ensemble(df_str_multi_label, df_int_multi_label):
     df_string = df_str_multi_label
@@ -275,7 +273,6 @@ def mixed_multi_label_ensemble(df_str_multi_label, df_int_multi_label):
         crop_transform='val'
 
     )
-
 
     return gen_train_val_dataloaders_helper(task1_dataset, task2_dataset)
 

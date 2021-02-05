@@ -444,9 +444,9 @@ class MultiTaskLearner(object):
         for task in self.task_dict:
             if self.train_dataloader.label_mappings[task] != self.val_dataloader.label_mappings[task]: # noqa
                 raise ValueError(f'Mapping mismatch in {task} task. Check that all categories are '
-                                'represented in the train and val datasets for each task. '
-                                f'train classes {self.train_dataloader.label_mappings[task]}'
-                                f'val classes {self.val_dataloader.label_mappings[task]}')
+                                 'represented in the train and val datasets for each task. '
+                                 f'train classes {self.train_dataloader.label_mappings[task]}'
+                                 f'val classes {self.val_dataloader.label_mappings[task]}')
 
 
 class MultiInputMultiTaskLearner(MultiTaskLearner):
