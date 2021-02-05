@@ -171,7 +171,7 @@ class OctopodEnsembleDatasetMultiLabel(OctopodEnsembleDataset):
                 'crop_img': cropped_img}, y_output
 
     def _encode_labels(self):
-        """Encodes y labels using sklearn to create allow for string or numeric inputs"""
+        """Encodes string or numeric y labels to integers using MultiLabelBinarizer"""
         mlb = preprocessing.MultiLabelBinarizer()
         mlb.fit(self.y)
         mapping_dict = dict(zip(list(range(0, len(mlb.classes_))), mlb.classes_))
