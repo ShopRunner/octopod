@@ -176,7 +176,7 @@ def test_learner_w_string_datasets_not_matching_categories_image(mixed_labels,
     model = ResnetForMultiTaskClassification(
         new_task_dict=task_dict)
 
-    with pytest.raises(Exception) as e:
+    with pytest.raises(ValueError) as e:
         MultiInputMultiTaskLearner(model,
                                    train_dataset_loader,
                                    val_dataset_loader,
@@ -220,7 +220,7 @@ def test_w_string_multilabel_not_matching_categories_multilabel_image(multi_labe
     model = ResnetForMultiTaskClassification(
         new_task_dict=task_dict)
 
-    with pytest.raises(Exception) as e:
+    with pytest.raises(ValueError) as e:
         MultiInputMultiTaskLearner(model,
                                    train_dataset_loader,
                                    val_dataset_loader,
@@ -261,7 +261,7 @@ def test_learner_w_string_datasets_not_matching_categoies_text(mixed_labels_text
     model = BertForMultiTaskClassification.from_pretrained('bert-base-uncased',
                                                            new_task_dict=task_dict)
 
-    with pytest.raises(Exception) as e:
+    with pytest.raises(ValueError) as e:
         MultiInputMultiTaskLearner(model,
                                    train_dataset_loader,
                                    val_dataset_loader,
@@ -305,7 +305,7 @@ def test_w_string_multilabel_not_matching_categories_multilabel_text(multi_label
     model = ResnetForMultiTaskClassification(
         new_task_dict=task_dict)
 
-    with pytest.raises(Exception) as e:
+    with pytest.raises(ValueError) as e:
         MultiInputMultiTaskLearner(model,
                                    train_dataset_loader,
                                    val_dataset_loader,
@@ -343,7 +343,7 @@ def test_learner_w_string_datasets_not_matching_categoies_ensemble(mixed_labels_
 
     model = BertResnetEnsembleForMultiTaskClassification(image_task_dict=image_task_dict)
 
-    with pytest.raises(Exception) as e:
+    with pytest.raises(ValueError) as e:
         MultiInputMultiTaskLearner(model,
                                    train_dataset_loader,
                                    val_dataset_loader,
@@ -385,7 +385,7 @@ def test_w_string_multilabel_not_match_categories_multilabel_ensemble(mixed_mult
 
     model = BertResnetEnsembleForMultiTaskClassification(image_task_dict=image_task_dict)
 
-    with pytest.raises(Exception) as e:
+    with pytest.raises(ValueError) as e:
         MultiInputMultiTaskLearner(model,
                                    train_dataset_loader,
                                    val_dataset_loader,

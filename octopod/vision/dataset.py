@@ -84,10 +84,11 @@ class OctopodImageDatasetMultiLabel(OctopodImageDataset):
     x: pandas Series
         file paths to stored images
     y: list
-        a list of binary encoded categories  or strings with length equal to number of
+        a list of lists of binary encoded categories or strings with length equal to number of
         classes in the multi-label task. For a 4 class multi-label task
-        a sample list would be [1,0,0,1] or list of strings which will be encoded
-        using a sklearn label encoder
+        a sample list would be [1,0,0,1], A string example would be ['cat','dog'],
+        (if the classes were ['cat','frog','rabbit','dog]), which will be encoded
+        using a sklearn label encoder to [1,0,0,1].
     transform: str or list of PyTorch transforms
         specifies how to preprocess the full image for a Octopod image model
         To use the built-in Octopod image transforms, use the strings: `train` or `val`

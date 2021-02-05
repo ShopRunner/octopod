@@ -51,6 +51,11 @@ class MultiTaskLearner(object):
         for that task.
 
         See `learner_utils.loss_utils_config` for examples.
+
+    NOTES
+    -----
+        The label mappings from the train and validation datasets for each task are expected to have
+        all the same labels present maps. If they do not then an error will be thrown.
     """
     def __init__(self,
                  model,
@@ -438,7 +443,7 @@ class MultiTaskLearner(object):
         # check that all categories are in both the train and val sets for each task
         for task in self.task_dict:
             if self.train_dataloader.label_mappings[task] != self.val_dataloader.label_mappings[task]: # noqa
-                raise Exception(f'Mapping mismatch in {task} task. Check that all categories are '
+                raise ValueError(f'Mapping mismatch in {task} task. Check that all categories are '
                                 'represented in the train and val datasets for each task. '
                                 f'train classes {self.train_dataloader.label_mappings[task]}'
                                 f'val classes {self.val_dataloader.label_mappings[task]}')

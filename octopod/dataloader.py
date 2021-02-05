@@ -49,6 +49,6 @@ class MultiDatasetLoader(object):
     def _gen_label_mappings(self):
 
         mapping_dict = {}
-        for key in self.loader_dict.keys():
-            mapping_dict[key] = self.loader_dict[key].dataset.label_mapping
+        for key, loader_dict in self.loader_dict.items():
+            mapping_dict[key] = loader_dict.dataset.label_mapping
         return mapping_dict
