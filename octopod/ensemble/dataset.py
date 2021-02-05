@@ -99,7 +99,7 @@ class OctopodEnsembleDataset(Dataset):
         return len(self.text_inputs)
 
     def _encode_labels(self):
-        """Encodes y labels using sklearn to create allow for string or numeric inputs"""
+        """Encodes string or numeric y labels to integers using LabelEncoder"""
         le = preprocessing.LabelEncoder()
         le.fit(self.y)
         mapping_dict = dict(zip(le.transform(le.classes_), le.classes_))
