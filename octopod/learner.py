@@ -55,7 +55,7 @@ class MultiTaskLearner(object):
     NOTES
     -----
         The label mappings from the train and validation datasets for each task are expected to have
-        all the same labels present maps. If they do not then an error will be thrown.
+        all the same labels present maps. If they do not then a ValueError will be thrown.
     """
     def __init__(self,
                  model,
