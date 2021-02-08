@@ -163,7 +163,7 @@ class OctopodEnsembleDatasetMultiLabel(OctopodEnsembleDataset):
         cropped_img = self.crop_transform(cropped_img)
 
         label = self.y[index]
-        label = list(self.label_encoder.transform(label)[0])
+        label = list(self.label_encoder.transform([label])[0])
 
         y_output = torch.FloatTensor(label)
 

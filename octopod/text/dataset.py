@@ -103,7 +103,7 @@ class OctopodTextDatasetMultiLabel(OctopodTextDataset):
         x_input = torch.from_numpy(np.array(input_ids))
 
         label = self.y[index]
-        label = list(self.label_encoder.transform(label)[0])
+        label = list(self.label_encoder.transform([label])[0])
 
         y_output = torch.FloatTensor(label)
 

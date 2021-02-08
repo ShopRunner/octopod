@@ -102,7 +102,7 @@ class OctopodImageDatasetMultiLabel(OctopodImageDataset):
     def __getitem__(self, index):
         """Return tuple of images as PyTorch tensors and and tensor of labels"""
         label = self.y[index]
-        label = list(self.label_encoder.transform(label)[0])
+        label = list(self.label_encoder.transform([label])[0])
         full_img = Image.open(self.x[index]).convert('RGB')
 
         cropped_img = center_crop_pil_image(full_img)
