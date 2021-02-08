@@ -19,9 +19,11 @@ class MultiTaskLearner(object):
     model: torch.nn.Module
         PyTorch model to use with the Learner
     train_dataloader: MultiDatasetLoader
-        dataloader for all of the training data
+        dataloader for all of the training data. Set of labels must match `val_dataloader`
+        or a ValueError will be thrown.
     val_dataloader: MultiDatasetLoader
-        dataloader for all of the validation data
+        dataloader for all of the validation data. Set of labels must match `train_dataloader`
+        or a ValueError will be thrown.
     task_dict: dict
         dictionary with all of the tasks as keys and the number of unique labels as the values
     loss_function_dict: dict
@@ -51,11 +53,6 @@ class MultiTaskLearner(object):
         for that task.
 
         See `learner_utils.loss_utils_config` for examples.
-
-    NOTES
-    -----
-        The label mappings from the train and validation datasets for each task are expected to have
-        all the same labels present maps. If they do not then a ValueError will be thrown.
     """
     def __init__(self,
                  model,

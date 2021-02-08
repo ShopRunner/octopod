@@ -117,7 +117,7 @@ class OctopodEnsembleDatasetMultiLabel(OctopodEnsembleDataset):
     img_inputs: pandas Series
         the paths to images to be used
     y: list
-        a list of binary encoded categories or strings with length equal to number of
+        a list of lists of binary encoded categories or strings with length equal to number of
         classes in the multi-label task. For a 4 class multi-label task
         a sample list would be [1,0,0,1], A string example would be ['cat','dog'],
         (if the classes were ['cat','frog','rabbit','dog]), which will be encoded
