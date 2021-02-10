@@ -19,9 +19,11 @@ class MultiTaskLearner(object):
     model: torch.nn.Module
         PyTorch model to use with the Learner
     train_dataloader: MultiDatasetLoader
-        dataloader for all of the training data
+        dataloader for all of the training data. Set of labels must match `val_dataloader`
+        or a ValueError will be thrown.
     val_dataloader: MultiDatasetLoader
-        dataloader for all of the validation data
+        dataloader for all of the validation data. Set of labels must match `train_dataloader`
+        or a ValueError will be thrown.
     task_dict: dict
         dictionary with all of the tasks as keys and the number of unique labels as the values
     loss_function_dict: dict
@@ -66,6 +68,7 @@ class MultiTaskLearner(object):
         self.tasks = [*task_dict]
         self.loss_function_dict = self._get_loss_functions(loss_function_dict)
         self.metric_function_dict = self._get_metric_functions(metric_function_dict)
+        self._check_all_labels_present()
 
     def fit(
         self,
@@ -432,6 +435,15 @@ class MultiTaskLearner(object):
 
             raise Exception(f'make sure all tasks are contained in the {input_str} dictionary '
                             f'missing tasks are {missing_tasks}')
+
+    def _check_all_labels_present(self):
+        # check that all categories are in both the train and val sets for each task
+        for task in self.task_dict:
+            if self.train_dataloader.label_mappings[task] != self.val_dataloader.label_mappings[task]: # noqa
+                raise ValueError(f'Mapping mismatch in {task} task. Check that all categories are '
+                                 'represented in the train and val datasets for each task. '
+                                 f'train classes {self.train_dataloader.label_mappings[task]}'
+                                 f'val classes {self.val_dataloader.label_mappings[task]}')
 
 
 class MultiInputMultiTaskLearner(MultiTaskLearner):

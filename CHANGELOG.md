@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
+# [3.1.0] - 2020-02-03
+ ### Changed
+  - Datasets can now take string or encoded labels using sklearn label encoders.
+ ### Added
+  - Tests for new functionality in the Dataloaders for image, text, & ensemble
+
 # [3.0.1] - 2020-01-13
  ### Fixed
   - `transformers` was listed twice in setup.py

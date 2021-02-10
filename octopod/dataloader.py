@@ -15,6 +15,7 @@ class MultiDatasetLoader(object):
     def __init__(self, loader_dict, shuffle=True):
         self.loader_dict = loader_dict
         self.shuffle = shuffle
+        self.label_mappings = self._gen_label_mappings()
 
         total_samples = 0
         for key in self.loader_dict.keys():
@@ -44,3 +45,10 @@ class MultiDatasetLoader(object):
             num_batches += len(self.loader_dict[key])
 
         return num_batches
+
+    def _gen_label_mappings(self):
+
+        mapping_dict = {}
+        for key, loader_dict in self.loader_dict.items():
+            mapping_dict[key] = loader_dict.dataset.label_mapping
+        return mapping_dict

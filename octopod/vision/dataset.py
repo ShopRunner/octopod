@@ -1,5 +1,6 @@
 import numpy as np
 from PIL import Image
+from sklearn import preprocessing
 import torch
 from torch.utils.data import Dataset
 
@@ -16,8 +17,9 @@ class OctopodImageDataset(Dataset):
     x: pandas Series
         file paths to stored images
     y: list
-        A list of dummy-encoded categories
-        For instance, y might be [0,1,2,0] for a 3 class problem with 4 samples
+        A list of dummy-encoded categories or strings
+        For instance, y might be [0,1,2,0] for a 3 class problem with 4 samples,
+        or strings which will be encoded using a sklearn label encoder
     transform: str or list of PyTorch transforms
         specifies how to preprocess the full image for a Octopod image model
         To use the built-in Octopod image transforms, use the strings: `train` or `val`
@@ -34,6 +36,7 @@ class OctopodImageDataset(Dataset):
                  crop_transform='train'):
         self.x = x
         self.y = y
+        self.label_encoder, self.label_mapping = self._encode_labels()
 
         if transform in ('train', 'val'):
             self.transform = full_img_transforms[transform]
@@ -48,6 +51,7 @@ class OctopodImageDataset(Dataset):
     def __getitem__(self, index):
         """Return tuple of images as PyTorch tensors and and tensor of labels"""
         label = self.y[index]
+        label = self.label_encoder.transform([label])[0]
         full_img = Image.open(self.x[index]).convert('RGB')
 
         cropped_img = center_crop_pil_image(full_img)
@@ -63,6 +67,13 @@ class OctopodImageDataset(Dataset):
     def __len__(self):
         return len(self.x)
 
+    def _encode_labels(self):
+        """Encodes y labels using sklearn to create allow for string or numeric inputs"""
+        le = preprocessing.LabelEncoder()
+        le.fit(self.y)
+        mapping_dict = dict(zip(le.transform(le.classes_), le.classes_))
+        return le, mapping_dict
+
 
 class OctopodImageDatasetMultiLabel(OctopodImageDataset):
     """
@@ -73,9 +84,11 @@ class OctopodImageDatasetMultiLabel(OctopodImageDataset):
     x: pandas Series
         file paths to stored images
     y: list
-        a list of binary encoded categories with length equal to number of
+        a list of lists of binary encoded categories or strings with length equal to number of
         classes in the multi-label task. For a 4 class multi-label task
-        a sample list would be [1,0,0,1]
+        a sample list would be [1,0,0,1], A string example would be ['cat','dog'],
+        (if the classes were ['cat','frog','rabbit','dog]), which will be encoded
+        using a sklearn label encoder to [1,0,0,1].
     transform: str or list of PyTorch transforms
         specifies how to preprocess the full image for a Octopod image model
         To use the built-in Octopod image transforms, use the strings: `train` or `val`
@@ -89,6 +102,7 @@ class OctopodImageDatasetMultiLabel(OctopodImageDataset):
     def __getitem__(self, index):
         """Return tuple of images as PyTorch tensors and and tensor of labels"""
         label = self.y[index]
+        label = list(self.label_encoder.transform([label])[0])
         full_img = Image.open(self.x[index]).convert('RGB')
 
         cropped_img = center_crop_pil_image(full_img)
@@ -100,3 +114,11 @@ class OctopodImageDatasetMultiLabel(OctopodImageDataset):
 
         return {'full_img': full_img,
                 'crop_img': cropped_img}, label
+
+    def _encode_labels(self):
+        """Encodes y labels using sklearn to create allow for string or numeric inputs"""
+        mlb = preprocessing.MultiLabelBinarizer()
+        mlb.fit(self.y)
+        mapping_dict = dict(zip(list(range(0, len(mlb.classes_))), mlb.classes_))
+
+        return mlb, mapping_dict
