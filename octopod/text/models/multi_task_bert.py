@@ -3,10 +3,11 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-from transformers.modeling_bert import BertModel, BertPreTrainedModel
+from transformers.modeling_bert import BertPooler
+from transformers.modeling_distilbert import DistilBertModel, DistilBertPreTrainedModel
 
 
-class BertForMultiTaskClassification(BertPreTrainedModel):
+class BertForMultiTaskClassification(DistilBertPreTrainedModel):
     """
     PyTorch BERT class for multitask learning. This model allows you to load
     in some pretrained tasks in addition to creating new ones.
@@ -54,8 +55,8 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
     """
     def __init__(self, config, pretrained_task_dict=None, new_task_dict=None, dropout=1e-1):
         super(BertForMultiTaskClassification, self).__init__(config)
-        self.bert = BertModel(config)
-
+        self.bert = DistilBertModel(config)
+        self.bert_pooler = BertPooler(config)
         self.dropout = torch.nn.Dropout(dropout)
 
         if pretrained_task_dict is not None:
@@ -82,17 +83,17 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
         ----------
         A dictionary mapping each task to its logits
         """
-        outputs = self.bert(tokenized_input)
-
-        pooled_output = self.dropout(outputs[1])
+        outputs = self.bert(tokenized_input)[0]
+        pooled_output = self.bert_pooler(outputs)
+        pooled_w_dropout = self.dropout(pooled_output)
 
         logit_dict = {}
         if hasattr(self, 'pretrained_classifiers'):
             for key, classifier in self.pretrained_classifiers.items():
-                logit_dict[key] = classifier(pooled_output)
+                logit_dict[key] = classifier(pooled_w_dropout)
         if hasattr(self, 'new_classifiers'):
             for key, classifier in self.new_classifiers.items():
-                logit_dict[key] = classifier(pooled_output)
+                logit_dict[key] = classifier(pooled_w_dropout)
 
         return logit_dict
 

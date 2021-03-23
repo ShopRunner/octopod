@@ -1,4 +1,5 @@
 import copy
+import os
 import time
 
 from fastprogress.fastprogress import format_time, master_bar, progress_bar
@@ -194,6 +195,8 @@ class MultiTaskLearner(object):
             str_stats.append(format_time(time.time() - start_time))
 
             pbar.write(str_stats, table=True)
+            os.write(1, ' '.join(str_stats).encode())
+            os.write(1, '\n'.encode())
 
             if best_model and overall_val_loss < current_best_loss:
                 current_best_loss = overall_val_loss
@@ -202,7 +205,10 @@ class MultiTaskLearner(object):
 
         if best_model:
             self.model.load_state_dict(best_model_wts)
-            print(f'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}')
+            best_model_str = 'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}'
+            print(best_model_str)
+            os.write(1, best_model_str.encode())
+            os.write(1, '\n'.encode())
 
     def _update_smooth_training_loss_dict(self, task_type, current_loss, smooth_loss_alpha):
         self.smooth_training_loss_dict[task_type] = (
@@ -272,8 +278,8 @@ class MultiTaskLearner(object):
                 val_loss_dict[task_type] += scaled_loss
                 overall_val_loss += scaled_loss
 
-                y_pred = output[task_type].cpu().numpy()
-                y_true = y.cpu().numpy()
+                y_pred = output[task_type].detach().cpu().numpy()
+                y_true = y.detach().cpu().numpy()
 
                 preds_dict = self._update_preds_dict(preds_dict, task_type, y_true, y_pred)
 
@@ -324,8 +330,8 @@ class MultiTaskLearner(object):
 
                 output = self.model(x)
 
-                y_pred = output[task_type].cpu().numpy()
-                y_true = y.cpu().numpy()
+                y_pred = output[task_type].detach().cpu().numpy()
+                y_true = y.detach().cpu().numpy()
 
                 preds_dict = self._update_preds_dict(preds_dict, task_type, y_true, y_pred)
 
