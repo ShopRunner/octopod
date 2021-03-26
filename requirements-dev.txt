@@ -70,7 +70,7 @@ pytest==6.2.1
     # via
     #   -r requirements-dev.in
     #   pytest-cov
-pyyaml==5.3.1
+pyyaml==5.4
     # via pre-commit
 six==1.15.0
     # via
