@@ -3,17 +3,23 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
-# [3.1.0] - 2020-02-03
+# [3.1.1] - 2021-02-03
+  ### Fixed
+  - sphinx and m2r were no longer in requirements files so docs failed added sphinx and had to update to m2r2 because m2r is not actively supported
+  ### Fixed
+  - Changelog dates were still for 2020
+
+# [3.1.0] - 2021-02-03
  ### Changed
   - Datasets can now take string or encoded labels using sklearn label encoders.
  ### Added
   - Tests for new functionality in the Dataloaders for image, text, & ensemble
 
-# [3.0.1] - 2020-01-13
+# [3.0.1] - 2021-01-13
  ### Fixed
   - `transformers` was listed twice in setup.py
 
-# [3.0.0] - 2020-01-04
+# [3.0.0] - 2021-01-04
  ### Added
   - Report smoothed training losses in progress bar during fitting.
  ### Changed
