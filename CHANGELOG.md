@@ -6,7 +6,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 # [3.1.1] - 2021-02-03
   ### Fixed
   - sphinx and m2r were no longer in requirements files so docs failed added sphinx and had to update to m2r2 because m2r is not actively supported
-  ### Fixed
   - Changelog dates were still for 2020
 
 # [3.1.0] - 2021-02-03
