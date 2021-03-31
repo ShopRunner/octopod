@@ -3,7 +3,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
-# [3.1.1] - 2021-02-03
+
+# [3.1.2] - 2021-03-31
+  ### Fixed
+  - Rebuild reqirements.txt to use m2r2
+
+# [3.1.1] - 2021-03-31
   ### Fixed
   - sphinx and m2r were no longer in requirements files so docs failed added sphinx and had to update to m2r2 because m2r is not actively supported
   - Changelog dates were still for 2020
