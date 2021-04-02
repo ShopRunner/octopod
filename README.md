@@ -2,6 +2,7 @@
 
 # Octopod
 
+[![PyPI version](https://badge.fury.io/py/octopod.svg)](https://badge.fury.io/py/octopod)
 [![Workflows Passing](https://github.com/ShopRunner/octopod/workflows/Python%20package/badge.svg)](https://github.com/ShopRunner/octopod/actions/workflows/prod.yaml)
 [![Documentation Status](https://readthedocs.org/projects/octopod/badge/?version=latest)](https://octopod.readthedocs.io/en/latest/?badge=latest)
 
