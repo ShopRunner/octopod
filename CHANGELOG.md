@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
+# [3.1.3] - 2021-04-02
+  ### Added
+  - CI testing and documentation badges to `README.md`
+
 # [3.1.2] - 2021-03-31
   ### Fixed
   - Rebuild reqirements.txt to use m2r2
@@ -50,7 +54,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 # [2.2.2] - 2020-10-29
  ### Fixed
   - Update creevey to new name wildebeest
-  
+
 # [2.2.1] - 2020-10-29
 ### Added
  - note to notebook tutorials about potential out-of-memory issue when `DataLoaders` have too high a value for `num_workers`
