@@ -59,7 +59,7 @@ torchvision==0.2.1        # via octopod (setup.py)
 tqdm==4.55.0              # via sacremoses, transformers, wildebeest
 transformers==2.11.0      # via octopod (setup.py)
 typing-extensions==3.7.4.3  # via torch
-urllib3==1.26.2           # via botocore, requests
+urllib3==1.26.4           # via botocore, requests
 wildebeest==5.0.0         # via octopod (setup.py)
 
 # The following packages are considered to be unsafe in a requirements file:
