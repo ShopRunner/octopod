@@ -3,8 +3,10 @@
 flake8
 flake8-docstrings
 flake8-import-order
+m2r2
 pip-tools
 pre-commit
 pydocstyle<4.0.0
 pytest
 pytest-cov
+sphinx-rtd-theme
