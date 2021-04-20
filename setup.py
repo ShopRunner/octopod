@@ -23,13 +23,11 @@ setup(
     install_requires=[
         'fastprogress',
         'joblib',
-        'm2r2',
         'matplotlib',
         'numpy',
         'Pillow<7.0.0',
         'sentencepiece!=0.1.92',
         'scikit-learn',
-        'sphinx-rtd-theme',
         'torch',
         'torchvision==0.2.1',
         'transformers>=2.3.0,<3.0.0',  # we have had issues training models with V3

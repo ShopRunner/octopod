@@ -1,10 +1,11 @@
-FROM nvcr.io/nvidia/pytorch:20.02-py3
+FROM pytorch/pytorch:1.8.1-cuda11.1-cudnn8-devel
 MAINTAINER data-science@shoprunner.com
 
 USER root
 
 RUN apt-get update \
-    && apt install -y libgl1-mesa-glx \
+    && apt-get install -y libgl1-mesa-glx \
+    && apt-get install -y libglib2.0-0 \
     && apt-get clean
 
 COPY requirements.txt /octopod/
