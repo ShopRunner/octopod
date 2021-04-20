@@ -25,7 +25,7 @@ setup(
         'joblib',
         'matplotlib',
         'numpy',
-        'Pillow<7.0.0',
+        'Pillow<9.0.0',
         'sentencepiece!=0.1.92',
         'scikit-learn',
         'torch',

@@ -56,7 +56,7 @@ packaging==20.9
     # via transformers
 pandas==1.2.4
     # via wildebeest
-pillow==6.2.2
+pillow==8.1.1
     # via
     #   matplotlib
     #   octopod (setup.py)
