@@ -37,7 +37,7 @@ Steps
 ```
 5. Develop your feature
    
-6. Submit a PR to master! Someone will review your code and merge your code into master when it is approved. 
+6. Submit a PR to main! Someone will review your code and merge your code into main when it is approved. 
    
 PR Checklist
 +++++++++++++
