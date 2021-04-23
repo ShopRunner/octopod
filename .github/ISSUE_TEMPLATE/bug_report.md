@@ -1,5 +1,5 @@
 ---
-name: "Bug Report \U0001F41B"
+name: "Bug Report"
 about: Create a report to help us improve
 title: "[BUG]"
 labels: bug, invalid
@@ -23,7 +23,7 @@ assignees: ''
 
 > Add PyTorch version, OS, Python version, CUDA/cuDNN version, GPU models, etc.
 
-**Screenshots or GIFs**
+**Screenshots**
 
 > If applicable, add screenshots or GIFs to help explain your problem.
 
