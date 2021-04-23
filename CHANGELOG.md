@@ -3,17 +3,41 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
-# [3.1.0] - 2020-02-03
+# [3.1.5] - 2021-04-14
+  ### Changed
+  - base `Dockerfile` image to one with `python@3.8` and `torch@1.8.1`
+  - recompiled requirements
+  - added `python@3.9` to GitHub workflows
+  - documentation requirements has been moved to `requirements-dev.txt`
+
+# [3.1.4] - 2021-04-02
+  ### Added
+  - PyPI version badge to `README.md`
+
+# [3.1.3] - 2021-04-02
+  ### Added
+  - CI testing and documentation badges to `README.md`
+
+# [3.1.2] - 2021-03-31
+  ### Fixed
+  - Rebuild reqirements.txt to use m2r2
+
+# [3.1.1] - 2021-03-31
+  ### Fixed
+  - sphinx and m2r were no longer in requirements files so docs failed added sphinx and had to update to m2r2 because m2r is not actively supported
+  - Changelog dates were still for 2020
+
+# [3.1.0] - 2021-02-03
  ### Changed
   - Datasets can now take string or encoded labels using sklearn label encoders.
  ### Added
   - Tests for new functionality in the Dataloaders for image, text, & ensemble
 
-# [3.0.1] - 2020-01-13
+# [3.0.1] - 2021-01-13
  ### Fixed
   - `transformers` was listed twice in setup.py
 
-# [3.0.0] - 2020-01-04
+# [3.0.0] - 2021-01-04
  ### Added
   - Report smoothed training losses in progress bar during fitting.
  ### Changed
@@ -41,7 +65,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 # [2.2.2] - 2020-10-29
  ### Fixed
   - Update creevey to new name wildebeest
-  
+
 # [2.2.1] - 2020-10-29
 ### Added
  - note to notebook tutorials about potential out-of-memory issue when `DataLoaders` have too high a value for `num_workers`

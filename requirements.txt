@@ -4,9 +4,9 @@
 #
 #    pip-compile
 #
-boto3==1.16.46
+boto3==1.17.51
     # via wildebeest
-botocore==1.19.46
+botocore==1.20.51
     # via
     #   boto3
     #   s3transfer
@@ -28,7 +28,7 @@ jmespath==0.10.0
     # via
     #   boto3
     #   botocore
-joblib==1.0.0
+joblib==1.0.1
     # via
     #   octopod (setup.py)
     #   sacremoses
@@ -36,9 +36,9 @@ joblib==1.0.0
     #   wildebeest
 kiwisolver==1.3.1
     # via matplotlib
-matplotlib==3.3.3
+matplotlib==3.4.1
     # via octopod (setup.py)
-numpy==1.19.4
+numpy==1.20.2
     # via
     #   fastprogress
     #   matplotlib
@@ -50,11 +50,11 @@ numpy==1.19.4
     #   torch
     #   torchvision
     #   transformers
-opencv-contrib-python==4.4.0.46
+opencv-contrib-python==4.5.1.48
     # via wildebeest
-packaging==20.8
+packaging==20.9
     # via transformers
-pandas==1.2.0
+pandas==1.2.4
     # via wildebeest
 pillow==6.2.2
     # via
@@ -71,9 +71,9 @@ python-dateutil==2.8.1
     #   botocore
     #   matplotlib
     #   pandas
-pytz==2020.5
+pytz==2021.1
     # via pandas
-regex==2020.11.13
+regex==2021.4.4
     # via
     #   sacremoses
     #   transformers
@@ -83,17 +83,17 @@ requests==2.25.1
     #   wildebeest
 retrying==1.3.3
     # via wildebeest
-s3transfer==0.3.3
+s3transfer==0.3.7
     # via boto3
-sacremoses==0.0.43
+sacremoses==0.0.44
     # via transformers
-scikit-learn==0.24.0
+scikit-learn==0.24.1
     # via
     #   octopod (setup.py)
     #   wildebeest
-scipy==1.6.0
+scipy==1.6.2
     # via scikit-learn
-sentencepiece==0.1.91
+sentencepiece==0.1.95
     # via
     #   octopod (setup.py)
     #   transformers
@@ -108,13 +108,13 @@ threadpoolctl==2.1.0
     # via scikit-learn
 tokenizers==0.7.0
     # via transformers
-torch==1.7.1
+torch==1.8.1
     # via
     #   octopod (setup.py)
     #   torchvision
 torchvision==0.2.1
     # via octopod (setup.py)
-tqdm==4.55.0
+tqdm==4.60.0
     # via
     #   sacremoses
     #   transformers
@@ -123,7 +123,7 @@ transformers==2.11.0
     # via octopod (setup.py)
 typing-extensions==3.7.4.3
     # via torch
-urllib3==1.26.2
+urllib3==1.26.4
     # via
     #   botocore
     #   requests
