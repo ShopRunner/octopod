@@ -2,9 +2,9 @@
 
 ## How to Contribute
 
-We welcome contributions in the form of issues or pull requests! 
+We welcome contributions in the form of issues or pull requests!
 
-We want this to be a place where all are welcome to discuss and contribute, so please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms. Find the Code of Conduct in the ``CONDUCT.md`` file on GitHub or in the Code of Conduct section of read the docs.
+We want this to be a place where all are welcome to discuss and contribute, so please note that this project is released with a Contributor Code of Conduct. By participating in this project you agree to abide by its terms. Find the Code of Conduct in the ``CODE-OF-CONDUCT.md`` file on GitHub or in the Code of Conduct section of read the docs.
 
 If you have a problem using Octopod or see a possible improvement, open an issue in the GitHub issue tracker. Please be as specific as you can.
 
@@ -36,9 +36,9 @@ Steps
     pip install -e .
 ```
 5. Develop your feature
-   
-6. Submit a PR to master! Someone will review your code and merge your code into master when it is approved. 
-   
+
+6. Submit a PR to master! Someone will review your code and merge your code into master when it is approved.
+
 PR Checklist
 +++++++++++++
 
@@ -68,7 +68,7 @@ PR Checklist
 Style Guidelines
 ++++++++++++++++++++++++++
 
-For the most part, this library follows PEP8 with a couple of exceptions. 
+For the most part, this library follows PEP8 with a couple of exceptions.
 
 - Indent with 4 spaces
 - Lines can be 100 characters long
