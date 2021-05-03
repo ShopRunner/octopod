@@ -14,7 +14,7 @@ WORKDIR /octopod
 RUN python -m pip install -U --no-cache-dir pip
 RUN pip install -r requirements.txt
 
-COPY setup.py README.md LICENSE.txt requirements.txt /octopod/
+COPY setup.py README.md LICENSE requirements.txt /octopod/
 COPY octopod/_version.py /octopod/octopod/
 
 RUN pip install -e .

@@ -6,7 +6,7 @@ with open('octopod/_version.py') as version_file:
 with open('README.md') as r:
     readme = r.read()
 
-with open('LICENSE.txt') as l:
+with open('LICENSE') as l:
     license = l.read()
 
 setup(
@@ -18,7 +18,7 @@ setup(
     author='Nicole Carlson, Michael Sugimura',
     url='https://github.com/shoprunner/octopod',
     license='BSD-3-Clause',
-    data_files=[('', ['LICENSE.txt'])],
+    data_files=[('', ['LICENSE'])],
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[
         'fastprogress',
