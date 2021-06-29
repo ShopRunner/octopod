@@ -1,9 +1,9 @@
 import numpy as np
 from PIL import Image
+from io import BytesIO
 from sklearn import preprocessing
 import torch
 from torch.utils.data import Dataset
-
 from octopod.vision.config import cropped_transforms, full_img_transforms
 from octopod.vision.helpers import center_crop_pil_image
 
@@ -38,6 +38,8 @@ class OctopodImageDataset(Dataset):
         self.y = y
         self.label_encoder, self.label_mapping = self._encode_labels()
 
+        self._from_s3 = x[0].startswith('s3://')
+
         if transform in ('train', 'val'):
             self.transform = full_img_transforms[transform]
         else:
@@ -52,7 +54,15 @@ class OctopodImageDataset(Dataset):
         """Return tuple of images as PyTorch tensors and and tensor of labels"""
         label = self.y[index]
         label = self.label_encoder.transform([label])[0]
-        full_img = Image.open(self.x[index]).convert('RGB')
+
+        if self._from_s3:
+            x_split = self.x[index].split('/')
+            bucket = x_split[2]
+            key = '/'.join(x_split[3:])
+            file_byte_string = self.s3.get_object(Bucket=bucket, Key=key)['Body'].read()
+            full_img = Image.open(BytesIO(file_byte_string))
+        else:
+            full_img = Image.open(fpath).convert('RGB')
 
         cropped_img = center_crop_pil_image(full_img)
 
