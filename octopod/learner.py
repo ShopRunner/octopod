@@ -73,12 +73,13 @@ class MultiTaskLearner(object):
     def fit(
         self,
         num_epochs,
+        num_early_stopping_epochs,
         scheduler,
         step_scheduler_on_batch,
         optimizer,
         device='cuda:0',
         best_model=False,
-        smooth_loss_alpha=0.2
+        smooth_loss_alpha=0.2,
     ):
         """
         Fit the PyTorch model
@@ -87,6 +88,8 @@ class MultiTaskLearner(object):
         ----------
         num_epochs: int
             number of epochs to train
+        num_early_stopping_epochs: int
+            stop training after no improvements seen in validation loss after this many epochs
         scheduler: torch.optim.lr_scheduler
             PyTorch learning rate scheduler
         step_scheduler_on_batch: bool
@@ -129,6 +132,8 @@ class MultiTaskLearner(object):
         pbar.write(headers, table=True)
 
         self.smooth_training_loss_dict = {}
+        num_epochs_no_improvement = 0
+
         for epoch in pbar:
             start_time = time.time()
             self.model.train()
@@ -195,10 +200,16 @@ class MultiTaskLearner(object):
 
             pbar.write(str_stats, table=True)
 
-            if best_model and overall_val_loss < current_best_loss:
+            if overall_val_loss < current_best_loss:
+                num_epochs_no_improvement = 0
                 current_best_loss = overall_val_loss
-                best_model_wts = copy.deepcopy(self.model.state_dict())
-                best_model_epoch = epoch
+                if best_model:
+                    best_model_wts = copy.deepcopy(self.model.state_dict())
+                    best_model_epoch = epoch
+            else:
+                num_epochs_no_improvement += 1
+                if num_epochs_no_improvement >= num_early_stopping_epochs:
+                    break
 
         if best_model:
             self.model.load_state_dict(best_model_wts)
