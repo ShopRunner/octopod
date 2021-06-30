@@ -32,7 +32,7 @@ class OctopodImageDataset(Dataset):
     def __init__(self,
                  x,
                  y,
-                 s3_bucket=None
+                 s3_bucket=None,
                  transform='train',
                  crop_transform='train'):
         self.x = x
