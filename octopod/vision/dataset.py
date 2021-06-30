@@ -38,6 +38,8 @@ class OctopodImageDataset(Dataset):
         self.x = x
         self.y = y
         self.s3_bucket = s3_bucket
+        self.s3_client = None if self.s3_bucket is None else boto3.client('s3')
+
         self.label_encoder, self.label_mapping = self._encode_labels()
 
         if transform in ('train', 'val'):
@@ -56,7 +58,7 @@ class OctopodImageDataset(Dataset):
         label = self.label_encoder.transform([label])[0]
 
         if self.s3_bucket is not None:
-            file_byte_string = self.s3.get_object(
+            file_byte_string = self.s3_client.get_object(
                 Bucket=self.s3_bucket, Key=self.x[index])['Body'].read()
             full_img = Image.open(BytesIO(file_byte_string)).convert('RGB')
         else:
