@@ -3,6 +3,7 @@ from PIL import Image
 from io import BytesIO
 from sklearn import preprocessing
 import torch
+import boto3
 from torch.utils.data import Dataset
 from octopod.vision.config import cropped_transforms, full_img_transforms
 from octopod.vision.helpers import center_crop_pil_image
