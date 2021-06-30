@@ -55,7 +55,7 @@ class OctopodImageDataset(Dataset):
         label = self.y[index]
         label = self.label_encoder.transform([label])[0]
 
-        if self._from_s3:
+        if self.s3_bucket is not None:
             file_byte_string = self.s3.get_object(
                 Bucket=self.s3_bucket, Key=self.x[index])['Body'].read()
             full_img = Image.open(BytesIO(file_byte_string)).convert('RGB')
