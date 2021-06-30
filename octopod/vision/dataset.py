@@ -60,7 +60,7 @@ class OctopodImageDataset(Dataset):
                 Bucket=self.s3_bucket, Key=self.x[index])['Body'].read()
             full_img = Image.open(BytesIO(file_byte_string)).convert('RGB')
         else:
-            full_img = Image.open(fpath).convert('RGB')
+            full_img = Image.open(self.x[index]).convert('RGB')
 
         cropped_img = center_crop_pil_image(full_img)
 
