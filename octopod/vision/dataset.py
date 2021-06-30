@@ -32,13 +32,13 @@ class OctopodImageDataset(Dataset):
     def __init__(self,
                  x,
                  y,
+                 s3_bucket=None
                  transform='train',
                  crop_transform='train'):
         self.x = x
         self.y = y
+        self.s3_bucket = s3_bucket
         self.label_encoder, self.label_mapping = self._encode_labels()
-
-        self._from_s3 = x[0].startswith('s3://')
 
         if transform in ('train', 'val'):
             self.transform = full_img_transforms[transform]
@@ -56,11 +56,9 @@ class OctopodImageDataset(Dataset):
         label = self.label_encoder.transform([label])[0]
 
         if self._from_s3:
-            x_split = self.x[index].split('/')
-            bucket = x_split[2]
-            key = '/'.join(x_split[3:])
-            file_byte_string = self.s3.get_object(Bucket=bucket, Key=key)['Body'].read()
-            full_img = Image.open(BytesIO(file_byte_string))
+            file_byte_string = self.s3.get_object(
+                Bucket=self.s3_bucket, Key=self.x[index])['Body'].read()
+            full_img = Image.open(BytesIO(file_byte_string)).convert('RGB')
         else:
             full_img = Image.open(fpath).convert('RGB')
 
