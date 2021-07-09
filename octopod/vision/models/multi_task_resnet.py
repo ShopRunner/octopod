@@ -3,7 +3,7 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-from torchvision import models as torch_modelsd
+from torchvision import models as torch_models
 
 from octopod.vision.helpers import _dense_block, _Identity
 
