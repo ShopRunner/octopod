@@ -3,9 +3,11 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-from torchvision import models as torch_models
+from torchvision import models as torch_modelsd
 
 from octopod.vision.helpers import _dense_block, _Identity
+
+
 
 
 class ResnetForMultiTaskClassification(nn.Module):
@@ -49,14 +51,23 @@ class ResnetForMultiTaskClassification(nn.Module):
         flag for whether or not to load in pretrained weights for ResNet50.
         useful for the first round of training before there are fine tuned weights
     """
-    def __init__(self, pretrained_task_dict=None, new_task_dict=None, load_pretrained_resnet=False):
+    def __init__(
+        self,
+        pretrained_task_dict=None,
+        new_task_dict=None,
+        use_cropped_image=True,
+        load_pretrained_resnet=False):
+
         super(ResnetForMultiTaskClassification, self).__init__()
 
         self.resnet = torch_models.resnet50(pretrained=load_pretrained_resnet)
         self.resnet.fc = _Identity()
 
+        self.use_cropped_image = use_cropped_image
+        output_size_multiplier = 2 if self.use_cropped_image else 1
+
         self.dense_layers = nn.Sequential(
-            _dense_block(2048*2, 1024, 2e-3),
+            _dense_block(2048*output_size_multiplier, 1024, 2e-3),
             _dense_block(1024, 512, 2e-3),
             _dense_block(512, 256, 2e-3),
         )
@@ -87,16 +98,20 @@ class ResnetForMultiTaskClassification(nn.Module):
         ----------
         A dictionary mapping each task to its logits
         """
-        full_img = self.resnet(x['full_img']).squeeze()
-        crop_img = self.resnet(x['crop_img']).squeeze()
+        if self.use_cropped_image:
+            full_img = self.resnet(x['full_img']).squeeze()
+            crop_img = self.resnet(x['crop_img']).squeeze()
 
-        if x[next(iter(x))].shape[0] == 1:
-            # if batch size is 1, or a single image, during inference
-            full_crop_combined = torch.cat((full_img, crop_img), 0).unsqueeze(0)
+            if x[next(iter(x))].shape[0] == 1:
+                # if batch size is 1, or a single image, during inference
+                dense_layer_input = torch.cat((full_img, crop_img), 0).unsqueeze(0)
+            else:
+                dense_layer_input = torch.cat((full_img, crop_img), 1)
+
         else:
-            full_crop_combined = torch.cat((full_img, crop_img), 1)
+            dense_layer_input = self.resnet(x).squeeze()
 
-        dense_layer_output = self.dense_layers(full_crop_combined)
+        dense_layer_output = self.dense_layers(dense_layer_input)
 
         logit_dict = {}
         if hasattr(self, 'pretrained_classifiers'):

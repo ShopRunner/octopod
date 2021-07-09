@@ -34,11 +34,13 @@ class OctopodImageDataset(Dataset):
                  x,
                  y,
                  s3_bucket=None,
+                 use_cropped_image=True,
                  transform='train',
                  crop_transform='train'):
         self.x = x
         self.y = y
         self.s3_bucket = s3_bucket
+        self.use_cropped_image = use_cropped_image
         self.s3_client = None if self.s3_bucket is None else boto3.client('s3')
 
         self.label_encoder, self.label_mapping = self._encode_labels()
@@ -65,15 +67,16 @@ class OctopodImageDataset(Dataset):
         else:
             full_img = Image.open(self.x[index]).convert('RGB')
 
-        cropped_img = center_crop_pil_image(full_img)
-
         full_img = self.transform(full_img)
-        cropped_img = self.crop_transform(cropped_img)
-
         label = torch.from_numpy(np.array(label)).long()
 
-        return {'full_img': full_img,
-                'crop_img': cropped_img}, label
+        if self.use_cropped_image:
+            cropped_img = center_crop_pil_image(full_img)
+            cropped_img = self.crop_transform(cropped_img)
+            return {'full_img': full_img,
+                    'crop_img': cropped_img}, label
+        else:
+            return full_img, label
 
     def __len__(self):
         return len(self.x)
