@@ -76,7 +76,7 @@ class OctopodImageDataset(Dataset):
             return {'full_img': full_img,
                     'crop_img': cropped_img}, label
         else:
-            return full_img, label
+            return {'full_img': full_img}, label
 
     def __len__(self):
         return len(self.x)
