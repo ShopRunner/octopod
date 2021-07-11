@@ -9,7 +9,6 @@ from octopod.vision.helpers import _dense_block, _Identity
 
 
 
-
 class ResnetForMultiTaskClassification(nn.Module):
     """
     PyTorch image attribute model. This model allows you to load
@@ -109,7 +108,7 @@ class ResnetForMultiTaskClassification(nn.Module):
                 dense_layer_input = torch.cat((full_img, crop_img), 1)
 
         else:
-            dense_layer_input = self.resnet(x).squeeze()
+            dense_layer_input = self.resnet(x['full_img']).squeeze()
 
         dense_layer_output = self.dense_layers(dense_layer_input)
 
