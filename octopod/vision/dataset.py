@@ -51,6 +51,8 @@ class OctopodImageDataset(Dataset):
         self.s3_client = None if self.s3_bucket is None else boto3.client('s3')
         self.label_encoder, self.label_mapping = self._encode_labels()
 
+        os.makedirs(self.cache_dir, exist_ok=True)
+
         if transform in ('train', 'val'):
             self.transform = full_img_transforms[transform]
         else:
