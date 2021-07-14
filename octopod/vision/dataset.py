@@ -89,34 +89,29 @@ class OctopodImageDataset(Dataset):
             if self.s3_bucket is not None:
                 file_byte_string = self.s3_client.get_object(
                     Bucket=self.s3_bucket, Key=self.x[index])['Body'].read()
-                temp = BytesIO(file_byte_string)
-                try:
-                    full_img = Image.open(temp).convert('RGB')
-                except Exception as e:
-                    print(e)
-                    print(np.min(temp))
-                    print(np.max(temp))
+                full_img = Image.open(BytesIO(file_byte_string)).convert('RGB')
             else:
                 full_img = Image.open(self.x[index]).convert('RGB')
 
+        if self.use_cropped_image:
+            # process cropped image
+            if index in self.x_cropped_cache:
+                # if this image has already been preprocessed and cached, load its vector
+                cropped_img = self._load_cached_image(index, self.x_cropped_cache)
+            else:
+                # otherwise, crop preprocess and cache
+                cropped_img = center_crop_pil_image(full_img)
+                cropped_img = self.crop_transform(cropped_img)
+                self._cache_image(cropped_img, index, self.x_cropped_cache, '_cropped')
+
             full_img = self.transform(full_img)
             self._cache_image(full_img, index, self.x_cache)
+            return {'full_img': full_img,
+                    'crop_img': cropped_img}, label
 
-        if not self.use_cropped_image:
-            return {'full_img': full_img}, label
-
-        # process cropped image
-        if index in self.x_cropped_cache:
-            # if this image has already been preprocessed and cached, load its vector
-            cropped_img = self._load_cached_image(index, self.x_cropped_cache)
-        else:
-            # otherwise, crop preprocess and cache
-            cropped_img = center_crop_pil_image(full_img)
-            cropped_img = self.crop_transform(cropped_img)
-            self._cache_image(cropped_img, index, self.x_cropped_cache, '_cropped')
-
-        return {'full_img': full_img,
-                'crop_img': cropped_img}, label
+        full_img = self.transform(full_img)
+        self._cache_image(full_img, index, self.x_cache)
+        return {'full_img': full_img}, label
 
     def __len__(self):
         return len(self.x)
