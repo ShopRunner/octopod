@@ -89,7 +89,13 @@ class OctopodImageDataset(Dataset):
             if self.s3_bucket is not None:
                 file_byte_string = self.s3_client.get_object(
                     Bucket=self.s3_bucket, Key=self.x[index])['Body'].read()
-                full_img = Image.open(BytesIO(file_byte_string)).convert('RGB')
+                temp = BytesIO(file_byte_string)
+                try:
+                    full_img = Image.open(temp).convert('RGB')
+                except Exception as e:
+                    print(e)
+                    print(np.min(temp))
+                    print(np.max(temp))
             else:
                 full_img = Image.open(self.x[index]).convert('RGB')
 
