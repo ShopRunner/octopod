@@ -6,7 +6,7 @@
 [![Workflows Passing](https://github.com/ShopRunner/octopod/workflows/Python%20package/badge.svg)](https://github.com/ShopRunner/octopod/actions/workflows/prod.yaml)
 [![Documentation Status](https://readthedocs.org/projects/octopod/badge/?version=latest)](https://octopod.readthedocs.io/en/latest/?badge=latest)
 
-Octopod is a general purpose deep learning library developed by the ShopRunner Data Science team to train multi-task image, text, or ensemble (image + text) models.
+Octopod is a general-purpose deep learning library developed by the ShopRunner Data Science team to train multi-task image, text, or ensemble (image + text) models.
 
 What differentiates our library is that you can train a multi-task model with different datasets for each of your tasks. For example, you could train one model to label dress length for dresses and pants length for pants.
 
