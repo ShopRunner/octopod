@@ -296,8 +296,7 @@ class MultiTaskLearner(object):
 
         for task in self.tasks:
             val_loss_dict[task] = (
-                    val_loss_dict[task]
-                    / len(self.val_dataloader.loader_dict[task].dataset)
+                val_loss_dict[task] / len(self.val_dataloader.loader_dict[task].dataset)
             )
 
         for task in metrics_scores.keys():
