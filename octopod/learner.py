@@ -130,7 +130,6 @@ class MultiTaskLearner(object):
 
         self.smooth_training_loss_dict = {}
         self.smooth_training_item_cnt_dict = {}
-        
         for epoch in pbar:
             start_time = time.time()
             self.model.train()
@@ -152,9 +151,7 @@ class MultiTaskLearner(object):
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)
-
-                #overall_training_loss += current_loss.item() * num_rows
-    
+                
                 optimizer.zero_grad()
                 current_loss.backward()
                 optimizer.step()
@@ -176,8 +173,7 @@ class MultiTaskLearner(object):
                     scheduler.step(overall_val_loss)
                 else:
                     scheduler.step()
-
-            #overall_training_loss = overall_training_loss/self.train_dataloader.total_samples
+                    
             overall_training_loss = self._calculate_overall_loss()
 
             stats = [overall_training_loss, overall_val_loss]
@@ -213,6 +209,7 @@ class MultiTaskLearner(object):
             @Param: smooth_training_loss_dict(task_type: smoothened loss)
             @Param: smooth_training_item_cnt_dict(task: no of records)
         '''
+        
         overall_loss_total = sum(
                 self.smooth_training_item_cnt_dict[task] * self.smooth_training_loss_dict[task]
                 for task in self.smooth_training_loss_dict
@@ -227,6 +224,7 @@ class MultiTaskLearner(object):
             if task_type in self.smooth_training_loss_dict
             else current_loss
         )
+        
         # Record number of total sample trained for the task type
         self.smooth_training_item_cnt_dict[task_type] =(
             no_of_row + self.smooth_training_item_cnt_dict[task_type]
