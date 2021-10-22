@@ -173,7 +173,7 @@ class MultiTaskLearner(object):
                     scheduler.step(overall_val_loss)
                 else:
                     scheduler.step()
-                    
+
             overall_training_loss = self._calculate_overall_loss()
 
             stats = [overall_training_loss, overall_val_loss]
@@ -202,19 +202,13 @@ class MultiTaskLearner(object):
         if best_model:
             self.model.load_state_dict(best_model_wts)
             print(f'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}')
-    
+
     def _calculate_overall_loss(self):
-        '''
-            The Method calculates the combined loss for all the task for completed epoch
-            @Param: smooth_training_loss_dict(task_type: smoothened loss)
-            @Param: smooth_training_item_cnt_dict(task: no of records)
-        '''
-        
         overall_loss_total = sum(
                 self.smooth_training_item_cnt_dict[task] * self.smooth_training_loss_dict[task]
                 for task in self.smooth_training_loss_dict
             ) 
-        
+
         return overall_loss_total/sum(self.smooth_training_item_cnt_dict.values())
     
     def _update_smooth_training_loss_dict(self, task_type, current_loss, smooth_loss_alpha, no_of_row):
@@ -224,7 +218,7 @@ class MultiTaskLearner(object):
             if task_type in self.smooth_training_loss_dict
             else current_loss
         )
-        
+
         # Record number of total sample trained for the task type
         self.smooth_training_item_cnt_dict[task_type] =(
             no_of_row + self.smooth_training_item_cnt_dict[task_type]
