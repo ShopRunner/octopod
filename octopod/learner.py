@@ -151,7 +151,7 @@ class MultiTaskLearner(object):
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)
-                
+
                 optimizer.zero_grad()
                 current_loss.backward()
                 optimizer.step()
@@ -205,13 +205,15 @@ class MultiTaskLearner(object):
 
     def _calculate_overall_loss(self):
         overall_loss_total = sum(
-                self.smooth_training_item_cnt_dict[task] * self.smooth_training_loss_dict[task]
-                for task in self.smooth_training_loss_dict
-            ) 
+            self.smooth_training_item_cnt_dict[task] 
+            * self.smooth_training_loss_dict[task]
+              for task in self.smooth_training_loss_dict
+            )
 
         return overall_loss_total/sum(self.smooth_training_item_cnt_dict.values())
     
-    def _update_smooth_training_loss_dict(self, task_type, current_loss, smooth_loss_alpha, no_of_row):
+    def _update_smooth_training_loss_dict(self, task_type, current_loss,
+                                          smooth_loss_alpha, no_of_row):
         self.smooth_training_loss_dict[task_type] = (
             smooth_loss_alpha * current_loss
             + (1 - smooth_loss_alpha) * self.smooth_training_loss_dict[task_type]
