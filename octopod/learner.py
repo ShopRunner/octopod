@@ -71,14 +71,14 @@ class MultiTaskLearner(object):
         self._check_all_labels_present()
 
     def fit(
-        self,
-        num_epochs,
-        scheduler,
-        step_scheduler_on_batch,
-        optimizer,
-        device='cuda:0',
-        best_model=False,
-        smooth_loss_alpha=0.2
+            self,
+            num_epochs,
+            scheduler,
+            step_scheduler_on_batch,
+            optimizer,
+            device='cuda:0',
+            best_model=False,
+            smooth_loss_alpha=0.2
     ):
         """
         Fit the PyTorch model
@@ -205,13 +205,12 @@ class MultiTaskLearner(object):
 
     def _calculate_overall_loss(self):
         overall_loss_total = sum(
-            self.smooth_training_item_cnt_dict[task] 
-            * self.smooth_training_loss_dict[task]
-              for task in self.smooth_training_loss_dict
-            )
+            self.smooth_training_item_cnt_dict[task] * self.smooth_training_loss_dict[task]
+            for task in self.smooth_training_loss_dict
+        )
 
-        return overall_loss_total/sum(self.smooth_training_item_cnt_dict.values())
-    
+        return overall_loss_total / sum(self.smooth_training_item_cnt_dict.values())
+
     def _update_smooth_training_loss_dict(self, task_type, current_loss,
                                           smooth_loss_alpha, no_of_row):
         self.smooth_training_loss_dict[task_type] = (
@@ -222,7 +221,7 @@ class MultiTaskLearner(object):
         )
 
         # Record number of total sample trained for the task type
-        self.smooth_training_item_cnt_dict[task_type] =(
+        self.smooth_training_item_cnt_dict[task_type] = (
             no_of_row + self.smooth_training_item_cnt_dict[task_type]
             if task_type in self.smooth_training_item_cnt_dict
             else no_of_row
@@ -271,7 +270,7 @@ class MultiTaskLearner(object):
 
         with torch.no_grad():
             for step, batch in enumerate(
-                progress_bar(self.val_dataloader, parent=pbar, leave=(pbar is not None))
+                    progress_bar(self.val_dataloader, parent=pbar, leave=(pbar is not None))
             ):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
@@ -297,8 +296,8 @@ class MultiTaskLearner(object):
 
         for task in self.tasks:
             val_loss_dict[task] = (
-                val_loss_dict[task]
-                / len(self.val_dataloader.loader_dict[task].dataset)
+                    val_loss_dict[task]
+                    / len(self.val_dataloader.loader_dict[task].dataset)
             )
 
         for task in metrics_scores.keys():
