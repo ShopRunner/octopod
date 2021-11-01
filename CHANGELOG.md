@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 # [3.1.6] - 2021-10-22
   ### Changed
-  - Optimized the total loss functions 
+  - Use a running average for total training loss as well as individual task training loss
   
 # [3.1.5] - 2021-04-14
   ### Changed
