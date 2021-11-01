@@ -71,14 +71,14 @@ class MultiTaskLearner(object):
         self._check_all_labels_present()
 
     def fit(
-            self,
-            num_epochs,
-            scheduler,
-            step_scheduler_on_batch,
-            optimizer,
-            device='cuda:0',
-            best_model=False,
-            smooth_loss_alpha=0.2
+        self,
+        num_epochs,
+        scheduler,
+        step_scheduler_on_batch,
+        optimizer,
+        device='cuda:0',
+        best_model=False,
+        smooth_loss_alpha=0.2
     ):
         """
         Fit the PyTorch model
@@ -270,7 +270,7 @@ class MultiTaskLearner(object):
 
         with torch.no_grad():
             for step, batch in enumerate(
-                    progress_bar(self.val_dataloader, parent=pbar, leave=(pbar is not None))
+                progress_bar(self.val_dataloader, parent=pbar, leave=(pbar is not None))
             ):
                 task_type, (x, y) = batch
                 x = self._return_input_on_device(x, device)
