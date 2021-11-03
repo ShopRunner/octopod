@@ -129,7 +129,6 @@ class MultiTaskLearner(object):
         pbar.write(headers, table=True)
 
         self.smooth_training_loss_dict = {}
-        self.smooth_training_item_cnt_dict = {}
         for epoch in pbar:
             start_time = time.time()
             self.model.train()
@@ -204,12 +203,8 @@ class MultiTaskLearner(object):
             print(f'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}')
 
     def _calculate_overall_loss(self):
-        overall_loss_total = sum(
-            self.smooth_training_item_cnt_dict[task] * self.smooth_training_loss_dict[task]
-            for task in self.smooth_training_loss_dict
-        )
-
-        return overall_loss_total / sum(self.smooth_training_item_cnt_dict.values())
+        
+        return sum(self.smooth_training_loss_dict.values()) / len(self.smooth_training_loss_dict)
 
     def _update_smooth_training_loss_dict(self, task_type, current_loss,
                                           smooth_loss_alpha, no_of_row):
@@ -218,13 +213,6 @@ class MultiTaskLearner(object):
             + (1 - smooth_loss_alpha) * self.smooth_training_loss_dict[task_type]
             if task_type in self.smooth_training_loss_dict
             else current_loss
-        )
-
-        # Record number of total sample trained for the task type
-        self.smooth_training_item_cnt_dict[task_type] = (
-            no_of_row + self.smooth_training_item_cnt_dict[task_type]
-            if task_type in self.smooth_training_item_cnt_dict
-            else no_of_row
         )
 
     def _report_smooth_training_loss(self):
