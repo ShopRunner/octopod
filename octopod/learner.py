@@ -158,7 +158,7 @@ class MultiTaskLearner(object):
                     scheduler.step()
 
                 self._update_smooth_training_loss_dict(
-                    task_type, current_loss.item(), smooth_loss_alpha, num_rows
+                    task_type, current_loss.item(), smooth_loss_alpha
                 )
                 subpbar.comment = self._report_smooth_training_loss()
 
@@ -203,11 +203,9 @@ class MultiTaskLearner(object):
             print(f'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}')
 
     def _calculate_overall_loss(self):
-        
         return sum(self.smooth_training_loss_dict.values()) / len(self.smooth_training_loss_dict)
 
-    def _update_smooth_training_loss_dict(self, task_type, current_loss,
-                                          smooth_loss_alpha, no_of_row):
+    def _update_smooth_training_loss_dict(self, task_type, current_loss, smooth_loss_alpha):
         self.smooth_training_loss_dict[task_type] = (
             smooth_loss_alpha * current_loss
             + (1 - smooth_loss_alpha) * self.smooth_training_loss_dict[task_type]
