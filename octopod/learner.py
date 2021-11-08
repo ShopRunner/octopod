@@ -151,8 +151,6 @@ class MultiTaskLearner(object):
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)
 
-                overall_training_loss += current_loss.item() * num_rows
-
                 optimizer.zero_grad()
                 current_loss.backward()
                 optimizer.step()
@@ -175,7 +173,7 @@ class MultiTaskLearner(object):
                 else:
                     scheduler.step()
 
-            overall_training_loss = overall_training_loss/self.train_dataloader.total_samples
+            overall_training_loss = self._calculate_overall_loss()
 
             stats = [overall_training_loss, overall_val_loss]
             str_stats = []
@@ -203,6 +201,9 @@ class MultiTaskLearner(object):
         if best_model:
             self.model.load_state_dict(best_model_wts)
             print(f'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}')
+
+    def _calculate_overall_loss(self):
+        return sum(self.smooth_training_loss_dict.values()) / len(self.smooth_training_loss_dict)
 
     def _update_smooth_training_loss_dict(self, task_type, current_loss, smooth_loss_alpha):
         self.smooth_training_loss_dict[task_type] = (
@@ -281,8 +282,7 @@ class MultiTaskLearner(object):
 
         for task in self.tasks:
             val_loss_dict[task] = (
-                val_loss_dict[task]
-                / len(self.val_dataloader.loader_dict[task].dataset)
+                val_loss_dict[task] / len(self.val_dataloader.loader_dict[task].dataset)
             )
 
         for task in metrics_scores.keys():
