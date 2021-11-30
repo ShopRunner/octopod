@@ -141,8 +141,6 @@ class MultiTaskLearner(object):
                 x = self._return_input_on_device(x, device)
                 y = y.to(device)
 
-                num_rows = self._get_num_rows(x)
-
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)
