@@ -143,10 +143,6 @@ class MultiTaskLearner(object):
 
                 num_rows = self._get_num_rows(x)
 
-                if num_rows == 1:
-                    # skip batches of size 1
-                    continue
-
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)

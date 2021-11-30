@@ -36,7 +36,10 @@ class MultiDatasetLoader(object):
             random.shuffle(named_batches)
 
         for key in named_batches:
-            yield key, next(iterators[key])
+            items = next(iterators[key])
+            if self._get_num_rows(items[0]) == 1:
+                continue
+            yield key, items
 
     def __len__(self):
         num_batches = 0
@@ -52,3 +55,6 @@ class MultiDatasetLoader(object):
         for key, loader_dict in self.loader_dict.items():
             mapping_dict[key] = loader_dict.dataset.label_mapping
         return mapping_dict
+
+    def _get_num_rows(self, x):
+        return x[next(iter(x))].size(0)
