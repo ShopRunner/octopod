@@ -280,13 +280,13 @@ class MultiTaskLearner(object):
             )
 
         for task in metrics_scores.keys():
+            if task in preds_dict:
+                y_true = preds_dict[task]['y_true']
+                y_raw_pred = preds_dict[task]['y_pred']
 
-            y_true = preds_dict[task]['y_true']
-            y_raw_pred = preds_dict[task]['y_pred']
+                metric_score, y_preds = self.metric_function_dict[task](y_true, y_raw_pred)
 
-            metric_score, y_preds = self.metric_function_dict[task](y_true, y_raw_pred)
-
-            metrics_scores[task][self.metric_function_dict[task].__name__] = metric_score
+                metrics_scores[task][self.metric_function_dict[task].__name__] = metric_score
 
         return overall_val_loss, val_loss_dict, metrics_scores
 
