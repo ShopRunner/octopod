@@ -49,9 +49,11 @@ class MultiDatasetLoader(object):
 
     def _get_no_of_batches(self, key, threshold_batch_size=1):
         """
-        The method ignores the batches that has number of records below the threshold_batch_size
+        The method ignores the batches that has number of records below the
+        threshold_batch_size
         Say if the threshold_batch_size is set as 2,
-            and total no of data is 130 and batch size 64, then 66 % 64 <= 2, and would return 130 //64 == 1
+            and total no of data is 130 and batch size 64, then 66 % 64 <= 2,
+            and would return 130 //64 == 1
             and if batch size is 134 , then 134 % 64 > 2, then would return len(dataset) == 2
         Parameters
         ----------
