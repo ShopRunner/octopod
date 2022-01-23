@@ -220,7 +220,7 @@ class MultiTaskLearner(object):
         Evaluate the model on a validation set
 
         Parameters
-        ---------- 
+        ----------
         loss_function: function
             function to calculate loss with in model
         device: str (defaults to 'cuda:0')
