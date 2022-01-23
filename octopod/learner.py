@@ -220,7 +220,7 @@ class MultiTaskLearner(object):
         Evaluate the model on a validation set
 
         Parameters
-        ----------
+        ---------- 
         loss_function: function
             function to calculate loss with in model
         device: str (defaults to 'cuda:0')
@@ -279,14 +279,13 @@ class MultiTaskLearner(object):
                 val_loss_dict[task] / len(self.val_dataloader.loader_dict[task].dataset)
             )
 
-        for task in metrics_scores.keys():
-            if task in preds_dict:
-                y_true = preds_dict[task]['y_true']
-                y_raw_pred = preds_dict[task]['y_pred']
+        for task in preds_dict.keys():
+            y_true = preds_dict[task]['y_true']
+            y_raw_pred = preds_dict[task]['y_pred']
 
-                metric_score, y_preds = self.metric_function_dict[task](y_true, y_raw_pred)
+            metric_score, y_preds = self.metric_function_dict[task](y_true, y_raw_pred)
 
-                metrics_scores[task][self.metric_function_dict[task].__name__] = metric_score
+            metrics_scores[task][self.metric_function_dict[task].__name__] = metric_score
 
         return overall_val_loss, val_loss_dict, metrics_scores
 
