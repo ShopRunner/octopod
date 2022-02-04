@@ -141,12 +141,6 @@ class MultiTaskLearner(object):
                 x = self._return_input_on_device(x, device)
                 y = y.to(device)
 
-                num_rows = self._get_num_rows(x)
-
-                if num_rows == 1:
-                    # skip batches of size 1
-                    continue
-
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)
@@ -285,8 +279,7 @@ class MultiTaskLearner(object):
                 val_loss_dict[task] / len(self.val_dataloader.loader_dict[task].dataset)
             )
 
-        for task in metrics_scores.keys():
-
+        for task in preds_dict.keys():
             y_true = preds_dict[task]['y_true']
             y_raw_pred = preds_dict[task]['y_pred']
 
