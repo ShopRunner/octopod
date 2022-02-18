@@ -24,7 +24,7 @@ setup(
         'fastprogress',
         'ipywidgets',  # needed for progress bars in Jupyter
         'joblib',
-        'markupsafe<2.1',
+        'markupsafe<2.1',  # 2.1.0 couldn't be found in CI/CD
         'matplotlib',
         'numpy',
         'Pillow<7.0.0',
