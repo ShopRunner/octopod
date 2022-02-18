@@ -24,6 +24,7 @@ setup(
         'fastprogress',
         'ipywidgets',  # needed for progress bars in Jupyter
         'joblib',
+        'markupsafe<2.1',
         'matplotlib',
         'numpy',
         'Pillow<7.0.0',
