@@ -13,7 +13,7 @@ setup(
     name='octopod',
     version=__version__,
     description='General purpose multi-task classification library',
-    long_description=readme + '\n\n\nLicense\n-------\n' + license,
+    long_description=readme+'\n\n\nLicense\n-------\n'+license,
     long_description_content_type='text/markdown',
     author='Nicole Carlson, Michael Sugimura',
     url='https://github.com/shoprunner/octopod',
