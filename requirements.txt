@@ -142,7 +142,7 @@ nest-asyncio==1.5.4
     #   notebook
 notebook==6.4.8
     # via widgetsnbextension
-numpy==1.20.2
+numpy==1.21.0
     # via
     #   fastprogress
     #   matplotlib
