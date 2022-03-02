@@ -275,7 +275,7 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
             del self.pretrained_classifiers
         self.new_classifiers = hold_new_classifiers
 
-    def import_model(self, folder, model_id, model_name=None):
+    def import_model(self, folder, file):
             """
             Imports the entire model state dict from a specific folder.
 
@@ -289,9 +289,9 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
             ----------
             folder: str or Path
                 place to store state dictionaries
-            file:
+            file: str
                 filename for the exported model object
             """
             folder = Path(folder)
-            self.model.load_state_dict(torch.load(folder / f'bert_dict_{model_id}.pth'))
+            self.model.load_state_dict(torch.load(folder / file))
 
