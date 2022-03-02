@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
+# [3.1.8] - 2022-03-02
+  ### Added
+  - Added an `import_model` method to the class BertForMultiTaskClassification in multi_task_bert.py that allows a file that was created with `export` to be 
+  easily imported
+
 # [3.1.7] - 2022-02-18
   ### Changed
   - Added `ipywidgets` to requirements to support Jupyter out of the box
