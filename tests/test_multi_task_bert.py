@@ -57,11 +57,11 @@ def test_exporting_and_importing_works_correctly():
         pretrained_task_dict=task_dict
     )
 
-    new_model.import_model(torch.load(
-        test_dir / f'multi_task_bert_{model_id}.pth',
-        map_location=lambda storage,
-        loc: storage
-    ))
+    new_model.import_model(
+        folder = test_dir,
+        file =  f'multi_task_bert_{model_id}.pth',
+
+    )
     shutil.rmtree(test_dir)
 
     for original_val, new_val in zip(model.state_dict().values(), new_model.state_dict().values()):
