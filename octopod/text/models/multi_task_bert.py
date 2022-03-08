@@ -10,26 +10,35 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
     """
     PyTorch BERT class for multitask learning. This model allows you to load
     in some pretrained tasks in addition to creating new ones.
+
     Examples
     --------
     To instantiate a completely new instance of BertForMultiTaskClassification
     and load the weights into this architecture you can use the `from_pretrained`
     method of the base class by specifying the name of the weights to load, e.g.::
+
         model = BertForMultiTaskClassification.from_pretrained(
             'bert-base-uncased',
             new_task_dict=new_task_dict
         )
+
         # DO SOME TRAINING
+
         model.save(SOME_FOLDER, SOME_MODEL_ID)
+
     To instantiate an instance of BertForMultiTaskClassification that has layers for
     pretrained tasks and new tasks, you would do the following::
+
         model = BertForMultiTaskClassification.from_pretrained(
             'bert-base-uncased',
             pretrained_task_dict=pretrained_task_dict,
             new_task_dict=new_task_dict
         )
+
         model.load(SOME_FOLDER, SOME_MODEL_DICT)
+
         # DO SOME TRAINING
+
     Parameters
     ----------
     config: json file
@@ -63,10 +72,12 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
     def forward(self, tokenized_input):
         """
         Defines forward pass for Bert model
+
         Parameters
         ----------
         tokenized_input: torch tensor of integers
             integers represent tokens for each word
+
         Returns
         ----------
         A dictionary mapping each task to its logits
@@ -119,14 +130,17 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
         Saves the model state dicts to a specific folder.
         Each part of the model is saved separately to allow for
         new classifiers to be added later.
+
         Note: if the model has `pretrained_classifiers` and `new_classifers`,
         they will be combined into the `pretrained_classifiers_dict`.
+
         Parameters
         ----------
         folder: str or Path
             place to store state dictionaries
         model_id: int
             unique id for this model
+
         Side Effects
         ------------
         saves three files:
@@ -163,12 +177,14 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
     def load(self, folder, model_id):
         """
         Loads the model state dicts from a specific folder.
+
         Parameters
         ----------
         folder: str or Path
             place where state dictionaries are stored
         model_id: int
             unique id for this model
+
         Side Effects
         ------------
         loads from three files:
@@ -210,8 +226,10 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
     def export(self, folder, model_id, model_name=None):
         """
         Exports the entire model state dict to a specific folder.
+
         Note: if the model has `pretrained_classifiers` and `new_classifers`,
         they will be combined into the `pretrained_classifiers` attribute before being saved.
+
         Parameters
         ----------
         folder: str or Path
@@ -220,6 +238,7 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
             unique id for this model
         model_name: str (defaults to None)
             Name to store model under, if None, will default to `multi_task_bert_{model_id}.pth`
+
         Side Effects
         ------------
         saves one file:
@@ -252,7 +271,7 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
         else:
             del self.pretrained_classifiers
         self.new_classifiers = hold_new_classifiers
-        
+
     def import_model(self, folder, file):
         """
         Imports the entire model state dict from a specific folder.
