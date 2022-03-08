@@ -10,35 +10,26 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
     """
     PyTorch BERT class for multitask learning. This model allows you to load
     in some pretrained tasks in addition to creating new ones.
-
     Examples
     --------
     To instantiate a completely new instance of BertForMultiTaskClassification
     and load the weights into this architecture you can use the `from_pretrained`
     method of the base class by specifying the name of the weights to load, e.g.::
-
         model = BertForMultiTaskClassification.from_pretrained(
             'bert-base-uncased',
             new_task_dict=new_task_dict
         )
-
         # DO SOME TRAINING
-
         model.save(SOME_FOLDER, SOME_MODEL_ID)
-
     To instantiate an instance of BertForMultiTaskClassification that has layers for
     pretrained tasks and new tasks, you would do the following::
-
         model = BertForMultiTaskClassification.from_pretrained(
             'bert-base-uncased',
             pretrained_task_dict=pretrained_task_dict,
             new_task_dict=new_task_dict
         )
-
         model.load(SOME_FOLDER, SOME_MODEL_DICT)
-
         # DO SOME TRAINING
-
     Parameters
     ----------
     config: json file
@@ -52,10 +43,7 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
     dropout: float
         dropout percentage for Dropout layer
     """
-
-    def __init__(
-        self, config, pretrained_task_dict=None, new_task_dict=None, dropout=1e-1
-    ):
+    def __init__(self, config, pretrained_task_dict=None, new_task_dict=None, dropout=1e-1):
         super(BertForMultiTaskClassification, self).__init__(config)
         self.bert = BertModel(config)
 
@@ -75,12 +63,10 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
     def forward(self, tokenized_input):
         """
         Defines forward pass for Bert model
-
         Parameters
         ----------
         tokenized_input: torch tensor of integers
             integers represent tokens for each word
-
         Returns
         ----------
         A dictionary mapping each task to its logits
@@ -133,17 +119,14 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
         Saves the model state dicts to a specific folder.
         Each part of the model is saved separately to allow for
         new classifiers to be added later.
-
         Note: if the model has `pretrained_classifiers` and `new_classifers`,
         they will be combined into the `pretrained_classifiers_dict`.
-
         Parameters
         ----------
         folder: str or Path
             place to store state dictionaries
         model_id: int
             unique id for this model
-
         Side Effects
         ------------
         saves three files:
@@ -163,25 +146,29 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
         folder = Path(folder)
         folder.mkdir(parents=True, exist_ok=True)
 
-        torch.save(self.bert.state_dict(), folder / f'bert_dict_{model_id}.pth')
-        torch.save(self.dropout.state_dict(), folder / f'dropout_dict_{model_id}.pth')
+        torch.save(
+            self.bert.state_dict(),
+            folder / f'bert_dict_{model_id}.pth'
+        )
+        torch.save(
+            self.dropout.state_dict(),
+            folder / f'dropout_dict_{model_id}.pth'
+        )
 
         torch.save(
             classifiers_to_save.state_dict(),
-            folder / f'pretrained_classifiers_dict_{model_id}.pth',
+            folder / f'pretrained_classifiers_dict_{model_id}.pth'
         )
 
     def load(self, folder, model_id):
         """
         Loads the model state dicts from a specific folder.
-
         Parameters
         ----------
         folder: str or Path
             place where state dictionaries are stored
         model_id: int
             unique id for this model
-
         Side Effects
         ------------
         loads from three files:
@@ -193,9 +180,7 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
 
         if torch.cuda.is_available():
             self.bert.load_state_dict(torch.load(folder / f'bert_dict_{model_id}.pth'))
-            self.dropout.load_state_dict(
-                torch.load(folder / f'dropout_dict_{model_id}.pth')
-            )
+            self.dropout.load_state_dict(torch.load(folder / f'dropout_dict_{model_id}.pth'))
             self.pretrained_classifiers.load_state_dict(
                 torch.load(folder / f'pretrained_classifiers_dict_{model_id}.pth')
             )
@@ -203,32 +188,30 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
             self.bert.load_state_dict(
                 torch.load(
                     folder / f'bert_dict_{model_id}.pth',
-                    map_location=lambda storage, loc: storage,
+                    map_location=lambda storage,
+                    loc: storage
                 )
             )
             self.dropout.load_state_dict(
                 torch.load(
                     folder / f'dropout_dict_{model_id}.pth',
-                    map_location=lambda storage, loc: storage,
+                    map_location=lambda storage,
+                    loc: storage
                 )
             )
             self.pretrained_classifiers.load_state_dict(
                 torch.load(
                     folder / f'pretrained_classifiers_dict_{model_id}.pth',
-                    map_location=lambda storage, loc: storage,
+                    map_location=lambda storage,
+                    loc: storage
                 )
             )
 
     def export(self, folder, model_id, model_name=None):
         """
         Exports the entire model state dict to a specific folder.
-
-        Note: to import_model a model based on the export from this method,
-        use the import_model method
-
         Note: if the model has `pretrained_classifiers` and `new_classifers`,
         they will be combined into the `pretrained_classifiers` attribute before being saved.
-
         Parameters
         ----------
         folder: str or Path
@@ -237,7 +220,6 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
             unique id for this model
         model_name: str (defaults to None)
             Name to store model under, if None, will default to `multi_task_bert_{model_id}.pth`
-
         Side Effects
         ------------
         saves one file:
@@ -261,13 +243,16 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
         folder = Path(folder)
         folder.mkdir(parents=True, exist_ok=True)
 
-        torch.save(self.state_dict(), folder / model_name)
+        torch.save(
+            self.state_dict(),
+            folder / model_name
+        )
         if hold_pretrained_classifiers is not None:
             self.pretrained_classifiers = hold_pretrained_classifiers
         else:
             del self.pretrained_classifiers
         self.new_classifiers = hold_new_classifiers
-
+        
     def import_model(self, folder, file):
         """
         Imports the entire model state dict from a specific folder.
