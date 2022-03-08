@@ -290,4 +290,4 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
             filename for the exported model object
         """
         folder = Path(folder)
-        self.bert.load_state_dict(torch.load(folder / file))
+        self.load_state_dict(torch.load(folder / file))
