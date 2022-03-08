@@ -38,6 +38,36 @@ def test_exporting_and_loading_works_correctly():
         assert torch.equal(original_val, new_val)
 
 
+def test_exporting_and_importing_works_correctly():
+    task_dict = {'fake_attribute': 10}
+
+    model = BertForMultiTaskClassification.from_pretrained(
+        'bert-base-uncased',
+        new_task_dict=task_dict
+    )
+
+    model_id = 28
+
+    test_dir = Path() / tempfile.mkdtemp()
+
+    model.export(test_dir, model_id)
+
+    new_model = BertForMultiTaskClassification.from_pretrained(
+        'bert-base-uncased',
+        pretrained_task_dict=task_dict
+    )
+
+    new_model.import_model(torch.load(
+        test_dir / f'multi_task_bert_{model_id}.pth',
+        map_location=lambda storage,
+        loc: storage
+    ))
+    shutil.rmtree(test_dir)
+
+    for original_val, new_val in zip(model.state_dict().values(), new_model.state_dict().values()):
+        assert torch.equal(original_val, new_val)
+
+
 def test_exporting_does_not_modify_original():
     task_dict = {'fake_attribute': 10}
 
