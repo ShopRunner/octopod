@@ -58,8 +58,8 @@ def test_exporting_and_importing_works_correctly():
     )
 
     new_model.import_model(
-        folder = test_dir,
-        file =  f'multi_task_bert_{model_id}.pth',
+        folder=test_dir,
+        file=f'multi_task_bert_{model_id}.pth',
 
     )
     shutil.rmtree(test_dir)
