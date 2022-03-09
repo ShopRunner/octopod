@@ -279,8 +279,6 @@ class BertForMultiTaskClassification(BertPreTrainedModel):
         Note: to export a model based on the import_model from this method,
         use the export method
 
-        Note: if the model has `pretrained_classifiers` and `new_classifers`,
-        they will be combined into the `pretrained_classifiers` attribute before being saved.
 
         Parameters
         ----------
