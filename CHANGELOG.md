@@ -5,8 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 # [3.2.0] - 2022-03-08
   ### Added
-  - Added an `import_model` method to the class BertForMultiTaskClassification in multi_task_bert.py that allows a file that was created with `export` to be 
-  easily imported
+  - Added an `import_model` method to the class BertForMultiTaskClassification in multi_task_bert.py that allows a file that was created with `export` to be easily imported
 
 # [3.1.7] - 2022-02-18
   ### Changed
