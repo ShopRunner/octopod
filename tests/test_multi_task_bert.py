@@ -16,7 +16,7 @@ def test_exporting_and_importing_works_correctly():
         new_task_dict=task_dict
     )
 
-    model_id = 28
+    model_id = 27
 
     test_dir = Path() / tempfile.mkdtemp()
 
