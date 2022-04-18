@@ -27,11 +27,11 @@ setup(
         'markupsafe<2.1',  # 2.1 drops support for Python 3.6
         'matplotlib',
         'numpy',
-        'Pillow<7.0.0',
+        'Pillow>-=9,<10.0.0',
         'sentencepiece!=0.1.92',
         'scikit-learn',
         'torch',
-        'torchvision==0.2.1',
+        'torchvision==0.6.0',
         'transformers>=2.3.0,<3.0.0',  # we have had issues training models with V3
         'wildebeest',
     ],
