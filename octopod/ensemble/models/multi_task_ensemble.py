@@ -10,6 +10,7 @@ if Version(transformers.__version__) < Version('3.0'):
 else:
     from transformers import BertConfig, BertModel
 
+
 from octopod.exc import OctopodError
 from octopod.vision.helpers import _dense_block, _Identity
 
