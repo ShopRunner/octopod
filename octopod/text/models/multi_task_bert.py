@@ -4,6 +4,7 @@ from pathlib import Path
 from packaging.version import Version
 import torch
 import torch.nn as nn
+import transformers # noqa
 if Version(transformers.__version__) < Version('3.0'): # noqa F821
     from transformers.modeling_bert import BertConfig, BertModel
 else:

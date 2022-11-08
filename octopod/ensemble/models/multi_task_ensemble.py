@@ -5,7 +5,8 @@ from packaging.version import Version
 import torch
 import torch.nn as nn
 from torchvision import models as torch_models
-if Version(transformers.__version__) < Version('3.0'):  # noqa F821
+import transformers # noqa
+if Version(transformers.__version__) < Version('3.0'): # noqa F821
     from transformers.modeling_bert import BertConfig, BertModel
 else:
     from transformers import BertConfig, BertModel
