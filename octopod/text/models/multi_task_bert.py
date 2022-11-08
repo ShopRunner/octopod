@@ -6,12 +6,12 @@ import torch
 import torch.nn as nn
 import transformers # noqa
 if Version(transformers.__version__) < Version('3.0'): # noqa F821
-    from transformers.modeling_bert import BertConfig, BertModel
+    from transformers.modeling_bert import  BertModel, BertPreTrainedModel
 else:
-    from transformers import BertConfig, BertModel # noqa F401
+    from transformers import  BertModel, BertPreTrainedModel # noqa F401
 
 
-class BertForMultiTaskClassification(BertModel.BertPreTrainedModel):
+class BertForMultiTaskClassification(BertPreTrainedModel):
     """
     PyTorch BERT class for multitask learning. This model allows you to load
     in some pretrained tasks in addition to creating new ones.
