@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
 
-# [3.3.0] - 2022-03-08
+# [3.3.0] - 2022-11-07
   ### Changed
   - removed pinned transformers library and changed the way that bert is loaded in the text and ensemble modules
 
