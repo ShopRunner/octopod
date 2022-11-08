@@ -21,7 +21,6 @@ setup(
     data_files=[('', ['LICENSE'])],
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[
-        #'colorama<0.4.6', #0.4.6 cant be built with python 3.6, is needed for tqdm and ipython
         'fastprogress',
         'ipywidgets',  # needed for progress bars in Jupyter
         'joblib',

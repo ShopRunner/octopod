@@ -4,10 +4,11 @@ from pathlib import Path
 from packaging.version import Version
 import torch
 import torch.nn as nn
-if Version(transformers.__version__) < Version('3.0'):
+if Version(transformers.__version__) < Version('3.0'): # noqa F821
     from transformers.modeling_bert import BertConfig, BertModel
 else:
-    from transformers import BertConfig, BertModel
+    from transformers import BertConfig, BertModel # noqa F401
+
 
 class BertForMultiTaskClassification(BertModel.BertPreTrainedModel):
     """
