@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 # [3.3.0] - 2022-11-07
   ### Changed
-  - removed pinned transformers library and changed the way that bert is loaded in the text and ensemble modules
+  - removed pinned transformers and torch vision libraries and changed the way that bert is loaded in the text and ensemble modules
 
 # [3.2.0] - 2022-03-08
   ### Added
