@@ -4,6 +4,10 @@
 #
 #    pip-compile
 #
+appnope==0.1.3
+    # via
+    #   ipykernel
+    #   ipython
 asttokens==2.1.0
     # via stack-data
 backcall==0.2.0
@@ -18,11 +22,6 @@ certifi==2022.9.24
     # via requests
 charset-normalizer==2.1.1
     # via requests
-colorama==0.4.5
-    # via
-    #   ipython
-    #   octopod (setup.py)
-    #   tqdm
 contourpy==1.0.6
     # via matplotlib
 cycler==0.11.0
@@ -110,6 +109,8 @@ pandas==1.5.1
     # via wildebeest
 parso==0.8.3
     # via jedi
+pexpect==4.8.0
+    # via ipython
 pickleshare==0.7.5
     # via ipython
 pillow==9.3.0
@@ -122,6 +123,8 @@ prompt-toolkit==3.0.32
     # via ipython
 psutil==5.9.4
     # via ipykernel
+ptyprocess==0.7.0
+    # via pexpect
 pure-eval==0.2.2
     # via stack-data
 pygments==2.13.0
@@ -138,8 +141,6 @@ python-dateutil==2.8.2
     #   pandas
 pytz==2022.6
     # via pandas
-pywin32==305
-    # via jupyter-core
 pyyaml==6.0
     # via
     #   huggingface-hub
@@ -170,7 +171,6 @@ sentencepiece==0.1.97
     # via octopod (setup.py)
 six==1.16.0
     # via
-    #   asttokens
     #   python-dateutil
     #   retrying
 stack-data==0.6.0
@@ -200,7 +200,6 @@ traitlets==5.5.0
     #   ipython
     #   ipywidgets
     #   jupyter-client
-    #   jupyter-core
     #   matplotlib-inline
 transformers==4.24.0
     # via octopod (setup.py)

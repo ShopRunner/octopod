@@ -8,8 +8,6 @@ alabaster==0.7.12
     # via sphinx
 appdirs==1.4.4
     # via virtualenv
-atomicwrites==1.4.1
-    # via pytest
 attrs==21.4.0
     # via pytest
 babel==2.9.0
@@ -26,12 +24,6 @@ charset-normalizer==2.1.1
     #   requests
 click==8.0.4
     # via pip-tools
-colorama==0.4.5
-    # via
-    #   -c requirements.txt
-    #   click
-    #   pytest
-    #   sphinx
 coverage==5.5
     # via pytest-cov
 distlib==0.3.1
