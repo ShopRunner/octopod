@@ -1,16 +1,15 @@
 import copy
-from packaging.version import Version
 from pathlib import Path
 
+from packaging.version import Version
 import torch
 import torch.nn as nn
-
 if Version(transformers.__version__) < Version('3.0'):
     from transformers.modeling_bert import BertConfig, BertModel
 else:
     from transformers import BertConfig, BertModel
 
-class BertForMultiTaskClassification(BertPreTrainedModel):
+class BertForMultiTaskClassification(BertModel.BertPreTrainedModel):
     """
     PyTorch BERT class for multitask learning. This model allows you to load
     in some pretrained tasks in addition to creating new ones.

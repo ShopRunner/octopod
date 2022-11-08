@@ -1,11 +1,10 @@
-from packaging.version import Version
 from pathlib import Path
 
 import joblib
+from packaging.version import Version
 import torch
 import torch.nn as nn
 from torchvision import models as torch_models
-
 if Version(transformers.__version__) < Version('3.0'):
     from transformers.modeling_bert import BertConfig, BertModel
 else:
