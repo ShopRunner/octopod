@@ -3,7 +3,7 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-from transformers.modeling_bert import BertModel, BertPreTrainedModel
+from transformers import BertModel, BertPreTrainedModel
 
 
 class BertForMultiTaskClassification(BertPreTrainedModel):

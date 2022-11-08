@@ -4,7 +4,7 @@ import joblib
 import torch
 import torch.nn as nn
 from torchvision import models as torch_models
-from transformers.modeling_bert import BertConfig, BertModel
+from transformers import BertConfig, BertModel
 
 from octopod.exc import OctopodError
 from octopod.vision.helpers import _dense_block, _Identity
