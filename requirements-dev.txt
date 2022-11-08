@@ -8,26 +8,30 @@ alabaster==0.7.12
     # via sphinx
 appdirs==1.4.4
     # via virtualenv
+atomicwrites==1.4.1
+    # via pytest
 attrs==21.4.0
-    # via
-    #   -c requirements.txt
-    #   pytest
+    # via pytest
 babel==2.9.0
     # via sphinx
-certifi==2020.12.5
+certifi==2022.9.24
     # via
     #   -c requirements.txt
     #   requests
 cfgv==3.2.0
     # via pre-commit
-chardet==4.0.0
+charset-normalizer==2.1.1
     # via
     #   -c requirements.txt
     #   requests
 click==8.0.4
+    # via pip-tools
+colorama==0.4.6
     # via
     #   -c requirements.txt
-    #   pip-tools
+    #   click
+    #   pytest
+    #   sphinx
 coverage==5.5
     # via pytest-cov
 distlib==0.3.1
@@ -37,7 +41,7 @@ docutils==0.16
     #   m2r2
     #   sphinx
     #   sphinx-rtd-theme
-filelock==3.0.12
+filelock==3.8.0
     # via
     #   -c requirements.txt
     #   virtualenv
@@ -51,18 +55,18 @@ flake8-import-order==0.18.1
     # via -r requirements-dev.in
 identify==2.2.3
     # via pre-commit
-idna==2.10
+idna==3.4
     # via
     #   -c requirements.txt
     #   requests
 imagesize==1.2.0
     # via sphinx
+importlib-metadata==4.13.0
+    # via -r requirements-dev.in
 iniconfig==1.1.1
     # via pytest
 jinja2==3.0.3
-    # via
-    #   -c requirements.txt
-    #   sphinx
+    # via sphinx
 m2r2==0.2.7
     # via -r requirements-dev.in
 markupsafe==2.0.1
@@ -72,12 +76,10 @@ markupsafe==2.0.1
 mccabe==0.6.1
     # via flake8
 mistune==0.8.4
-    # via
-    #   -c requirements.txt
-    #   m2r2
+    # via m2r2
 nodeenv==1.6.0
     # via pre-commit
-packaging==20.9
+packaging==21.3
     # via
     #   -c requirements.txt
     #   pytest
@@ -102,11 +104,11 @@ pydocstyle==3.0.0
     #   flake8-docstrings
 pyflakes==2.3.1
     # via flake8
-pygments==2.11.2
+pygments==2.13.0
     # via
     #   -c requirements.txt
     #   sphinx
-pyparsing==2.4.7
+pyparsing==3.0.9
     # via
     #   -c requirements.txt
     #   packaging
@@ -116,17 +118,19 @@ pytest==6.2.3
     #   pytest-cov
 pytest-cov==2.11.1
     # via -r requirements-dev.in
-pytz==2021.1
+pytz==2022.6
     # via
     #   -c requirements.txt
     #   babel
-pyyaml==5.4.1
-    # via pre-commit
-requests==2.25.1
+pyyaml==6.0
+    # via
+    #   -c requirements.txt
+    #   pre-commit
+requests==2.28.1
     # via
     #   -c requirements.txt
     #   sphinx
-six==1.15.0
+six==1.16.0
     # via
     #   -c requirements.txt
     #   pydocstyle
@@ -156,12 +160,14 @@ toml==0.10.2
     #   pep517
     #   pre-commit
     #   pytest
-urllib3==1.26.4
+urllib3==1.26.12
     # via
     #   -c requirements.txt
     #   requests
 virtualenv==20.4.3
     # via pre-commit
+zipp==3.10.0
+    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

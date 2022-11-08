@@ -3,6 +3,7 @@
 flake8
 flake8-docstrings
 flake8-import-order
+importlib-metadata<5.0
 m2r2
 pip-tools
 pre-commit
