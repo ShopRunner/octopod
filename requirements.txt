@@ -103,6 +103,7 @@ packaging==21.3
     #   huggingface-hub
     #   ipykernel
     #   matplotlib
+    #   octopod (setup.py)
     #   transformers
 pandas==1.5.1
     # via wildebeest

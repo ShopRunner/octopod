@@ -27,6 +27,7 @@ setup(
         'markupsafe<2.1',  # 2.1 drops support for Python 3.6
         'matplotlib',
         'numpy',
+        'packaging',
         'Pillow>-=9,<10.0.0',
         'sentencepiece!=0.1.92',
         'scikit-learn',
