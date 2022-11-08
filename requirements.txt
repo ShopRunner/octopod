@@ -18,9 +18,10 @@ certifi==2022.9.24
     # via requests
 charset-normalizer==2.1.1
     # via requests
-colorama==0.4.6
+colorama==0.4.5
     # via
     #   ipython
+    #   octopod (setup.py)
     #   tqdm
 contourpy==1.0.6
     # via matplotlib

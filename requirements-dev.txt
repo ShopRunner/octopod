@@ -26,7 +26,7 @@ charset-normalizer==2.1.1
     #   requests
 click==8.0.4
     # via pip-tools
-colorama==0.4.6
+colorama==0.4.5
     # via
     #   -c requirements.txt
     #   click
