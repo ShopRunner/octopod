@@ -117,6 +117,8 @@ class MultiTaskLearner(object):
 
         self.model = self.model.to(device)
 
+        training_record = {}
+
         current_best_loss = np.iinfo(np.intp).max
 
         pbar = master_bar(range(num_epochs))
@@ -150,6 +152,8 @@ class MultiTaskLearner(object):
                 output = self.model(x)
 
                 current_loss = self.loss_function_dict[task_type](output[task_type], y)
+
+                training_record[epoch] = current_loss
 
                 optimizer.zero_grad()
                 current_loss.backward()
@@ -201,6 +205,8 @@ class MultiTaskLearner(object):
         if best_model:
             self.model.load_state_dict(best_model_wts)
             print(f'Epoch {best_model_epoch} best model saved with loss of {current_best_loss}')
+
+        return training_record
 
     def _calculate_overall_loss(self):
         return sum(self.smooth_training_loss_dict.values()) / len(self.smooth_training_loss_dict)
