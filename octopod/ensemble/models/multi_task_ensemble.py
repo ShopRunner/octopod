@@ -1,10 +1,16 @@
 from pathlib import Path
 
 import joblib
+from packaging.version import Version
 import torch
 import torch.nn as nn
 from torchvision import models as torch_models
-from transformers.modeling_bert import BertConfig, BertModel
+import transformers
+if Version(transformers.__version__) < Version('3.0'):
+    from transformers.modeling_bert import BertConfig, BertModel
+else:
+    from transformers import BertConfig, BertModel
+
 
 from octopod.exc import OctopodError
 from octopod.vision.helpers import _dense_block, _Identity

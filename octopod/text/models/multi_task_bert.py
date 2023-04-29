@@ -1,9 +1,14 @@
 import copy
 from pathlib import Path
 
+from packaging.version import Version
 import torch
 import torch.nn as nn
-from transformers.modeling_bert import BertModel, BertPreTrainedModel
+import transformers
+if Version(transformers.__version__) < Version('3.0'):
+    from transformers.modeling_bert import BertModel, BertPreTrainedModel
+else:
+    from transformers import BertModel, BertPreTrainedModel
 
 
 class BertForMultiTaskClassification(BertPreTrainedModel):

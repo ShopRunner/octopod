@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project uses [Semantic Versioning](http://semver.org/).
 
+
+# [3.3.0] - 2022-11-07
+  ### Changed
+  - removed pinned transformers and torch vision libraries and changed the way that bert is loaded in the text and ensemble modules
+  - removed python 3.6 from pr.yaml since 3.6 stopped being maintained as of 12/2021 and has stopped recieving updates
+  - added python 3.9 to pr.yaml
+
 # [3.2.0] - 2022-03-08
   ### Added
   - Added an `import_model` method to the class BertForMultiTaskClassification in multi_task_bert.py that allows a file that was created with `export` to be easily imported
