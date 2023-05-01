@@ -48,7 +48,7 @@ idna==3.4
     # via requests
 ipykernel==6.17.0
     # via ipywidgets
-ipython==8.6.0
+ipython==8.10.0
     # via
     #   ipykernel
     #   ipywidgets
