@@ -28,7 +28,7 @@ setup(
         'matplotlib',
         'numpy',
         'packaging',
-        'Pillow>-=9,<10.0.0',
+        'Pillow>=9,<10.0.0',
         'sentencepiece!=0.1.92',
         'scikit-learn',
         'torch',
