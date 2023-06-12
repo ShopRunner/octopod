@@ -201,7 +201,7 @@ traitlets==5.5.0
     #   ipywidgets
     #   jupyter-client
     #   matplotlib-inline
-transformers==4.24.0
+transformers==4.30.0
     # via octopod (setup.py)
 typing-extensions==4.4.0
     # via
