@@ -165,7 +165,7 @@ scikit-learn==1.1.3
     # via
     #   octopod (setup.py)
     #   wildebeest
-scipy==1.9.3
+scipy==1.10.0
     # via scikit-learn
 sentencepiece==0.1.97
     # via octopod (setup.py)
